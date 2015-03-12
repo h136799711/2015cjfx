@@ -1,0 +1,5 @@
+1. 用户组  -> 菜单列表 
+	groupid , menuid,, isshow,
+	
+
+	 
