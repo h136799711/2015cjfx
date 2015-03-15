@@ -14,7 +14,7 @@
 			<div class="table-responsive well">
 				<!-- 操作按钮 -->
 				<div class="btn-controls">
-					<a href="{:U('Ucenter/Config/add')}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+					<a href="{:U('Admin/Config/add')}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
 					
 				</div>
 				<!-- 过滤\查询按钮 -->
@@ -24,7 +24,7 @@
 					<div class="btn-group">
 					<volist name="config_groups" id="vo">
 						
-						<a href="{:U('Ucenter/Config/index',array('group'=>$key))}" class="btn btn-default <eq name="Think.get.group" value="$key">active</eq>" >{$vo}</a>
+						<a href="{:U('Admin/Config/index',array('group'=>$key))}" class="btn btn-default <eq name="Think.get.group" value="$key">active</eq>" >{$vo}</a>
 					</volist>
 					</div>
 				</div>
@@ -50,8 +50,8 @@
 								<td>{$vo.name}</td>
 								<td>{$vo.title}</td>
 								<td>
-									<a href="{:U('Ucenter/Config/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>{:L('BTN_EDIT')}</a>
-									<a href="{:U('Ucenter/Config/delete',array('id'=>$vo['id']))}" class="confirm ajax-get btn btn-primary btn-sm"><i class="fa fa-trash-o"></i>{:L('BTN_DELETE')}</a>
+									<a href="{:U('Admin/Config/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>{:L('BTN_EDIT')}</a>
+									<a href="{:U('Admin/Config/delete',array('id'=>$vo['id']))}" class="confirm ajax-get btn btn-primary btn-sm"><i class="fa fa-trash-o"></i>{:L('BTN_DELETE')}</a>
 								</td>
 							</tr>
 						</volist>

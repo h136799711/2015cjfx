@@ -3,9 +3,9 @@
  * (c) Copyright 2014 hebidu. All Rights Reserved. 
  */
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class IndexController extends UcenterController {
+class IndexController extends AdminController {
 
 	//首页
     public function index(){

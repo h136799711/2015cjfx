@@ -5,9 +5,9 @@
 // | Author: 贝贝 <hebiduhebi@163.com>
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class AccountController extends UcenterController{
+class AccountController extends AdminController{
 	
 	public function updatepassword(){
 		$this->display();

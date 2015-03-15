@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class AuthRuleController extends UcenterController {
+class AuthRuleController extends AdminController {
 
 	protected function _initialize() {
 		parent::_initialize();
@@ -22,12 +22,12 @@ class AuthRuleController extends UcenterController {
 		}
 		//
 		if (substr_count('/', $url) == 2) {
-			$url = 'Ucenter/' . $url;
+			$url = 'Admin/' . $url;
 		}
 		
-		$entity = array('module' => 'ucenter', 'title' => $title, 'name' => $url, 'status' => 1, 'condition' => '','type'=>$type);
+		$entity = array('module' => 'Admin', 'title' => $title, 'name' => $url, 'status' => 1, 'condition' => '','type'=>$type);
 		
-		$result = apiCall("Ucenter/AuthRule/add", array($entity));
+		$result = apiCall("Admin/AuthRule/add", array($entity));
 
 		if (!$result['status']) {
 			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
@@ -39,12 +39,12 @@ class AuthRuleController extends UcenterController {
 	
 	public function delete($title,$url,$type){
 		if (substr_count('/', $url) == 2) {
-			$url = 'Ucenter/' . $url;
+			$url = 'Admin/' . $url;
 		}
 		
-		$map = array('module' => 'ucenter', 'title' => $title, 'name' => $url, 'status' => 1,'type'=>$type);
+		$map = array('module' => 'Admin', 'title' => $title, 'name' => $url, 'status' => 1,'type'=>$type);
 		
-		$result = apiCall("Ucenter/AuthRule/pretendDelete", array($map));
+		$result = apiCall("Admin/AuthRule/pretendDelete", array($map));
 
 		if (!$result['status']) {
 			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
@@ -60,12 +60,12 @@ class AuthRuleController extends UcenterController {
 	 */
 	public function save($title,$url,$type,$newEntity){
 		if (substr_count('/', $url) == 2) {
-			$url = 'Ucenter/' . $url;
+			$url = 'Admin/' . $url;
 		}
 		
-		$map = array('module' => 'ucenter', 'title' => $title, 'name' => $url, 'status' => 1,'type'=>$type);
+		$map = array('module' => 'Admin', 'title' => $title, 'name' => $url, 'status' => 1,'type'=>$type);
 		
-		$result = apiCall("Ucenter/AuthRule/save", array($map,$newEntity));
+		$result = apiCall("Admin/AuthRule/save", array($map,$newEntity));
 
 		if (!$result['status']) {
 			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);

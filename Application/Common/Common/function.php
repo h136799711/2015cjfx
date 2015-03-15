@@ -36,6 +36,7 @@ function apiCall($url, $vars, $layer = 'Api') {
 	return R($url, $vars, $layer);
 }
 
+
 /**
  * 记录日志，系统运行过程中可能产生的日志
  * Level取值如下：

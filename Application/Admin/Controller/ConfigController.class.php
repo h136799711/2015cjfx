@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class ConfigController extends UcenterController {
+class ConfigController extends AdminController {
 
 	protected function _initialize() {
 		parent::_initialize();
@@ -27,7 +27,7 @@ class ConfigController extends UcenterController {
 		}
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = 'update_time desc';
-		$result = apiCall('Ucenter/Config/query', array($map, $page, $order));
+		$result = apiCall('Admin/Config/query', array($map, $page, $order));
 		if ($result['status']) {
 			$this -> assign("config_groups", C('CONFIG_GROUP_LIST'));
 			$this -> assign("show", $result['info']['show']);
@@ -48,11 +48,11 @@ class ConfigController extends UcenterController {
 		}else{
 			$config = I('config');
 			$order = 'sort desc';
- 			$result = apiCall("Ucenter/Config/set",array($config,$order));
+ 			$result = apiCall("Admin/Config/set",array($config,$order));
 			if($result['status']){
 				//清除缓存
         		S("config_" . session_id() . '_' . session("uid"),null);
-        		$this->success(L('RESULT_SUCCESS'),U('Ucenter/Config/set'));
+        		$this->success(L('RESULT_SUCCESS'),U('Admin/Config/set'));
 			}else{
 				LogRecord($result['info'], '[INFO]'.__FILE.__LINE__);
 				$this -> error(L('ERR_SYSTEM_BUSY'));
@@ -70,7 +70,7 @@ class ConfigController extends UcenterController {
 			$this -> display();
 		} else {
 			$menu = I('post.');
-			parent::add($menu, U('Ucenter/Config/index'));
+			parent::add($menu, U('Admin/Config/index'));
 		}
 	}
 	

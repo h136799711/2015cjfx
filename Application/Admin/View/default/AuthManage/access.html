@@ -3,8 +3,11 @@
 
 <block name="area_header">
 	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
-	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.full.js"></script>
-	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
+	<link type="text/css" rel="stylesheet" href="__CDN__/jquery-jstree/3.0.9/themes/default/style.min.css" />
+
+	
+	<!--<script type="text/javascript" src="__CDN__/select2/4.0.0/js/select2.full.js"></script>
+	<script type="text/javascript" src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>-->
 	<style type="text/css">
 		.checkbox{
 			margin: 0px;
@@ -25,9 +28,12 @@
 
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation"><a href="{:U('Ucenter/AuthManage/user')}" role="tab">成员授权</a>
+					<li role="presentation"><a href="{:U('Admin/AuthManage/user')}" role="tab">成员授权</a>
 					</li>
-					<li role="presentation" class="active"><a href="{:U('Ucenter/AuthManage/access')}" role="tab">访问授权</a>
+					<li role="presentation" class="active"><a href="{:U('Admin/AuthManage/access')}" role="tab">访问授权</a>
+					</li>
+					<li role="presentation">
+					 <a href="{:U('Admin/AuthManage/apiaccess')}" >API授权</a>
 					</li>
 				</ul>
 
@@ -40,7 +46,7 @@
 					<div role="tabpanel" class="clearfix tab-pane active" id="access">
 						<div class="clearfix">
 							<!-- 过滤\查询按钮 -->
-							<div class="filter-controls pull-right">
+							<div class="filter-controls pull-left">
 								<form action="__SELF__" class="form-inline groupForm" method="post">
 									<div class="form-group-sm">
 										<label class="control-label">用户组</label>
@@ -56,61 +62,37 @@
 
 							<!-- 过滤\查询按钮 -->
 							<div class="filter-controls pull-left clearfix">
-								<form action="__SELF__" class="form-inline moduleForm" method="post">
+								<!--<form action="__SELF__" class="form-inline moduleForm" method="post">
 									<div class="form-group-sm">
 										<label class="control-label">所属模块</label>
 										<select id="modules" name="modulename" class="form-control">
-											<option value="ucenter">ucenter</option>
+											<option value="Admin">Admin</option>
 											<volist name="modules" id="vo">
 												<option <eq name="modulename" value="$vo">selected="selected"</eq> value="{$vo}" >{$vo}</option>
 											</volist>
 										</select>
 									</div>
-								</form>
+								</form>-->
 
 							</div>
 						</div>
 						<form class="clearfix rulesForm form" method="post" enctype="application/x-www-form-urlencoded">
 							<input type="hidden" name="groupid" value="{$groupid}" />
+							<input  type="hidden" name="menulist" value="" id="menulist"  />	
 							<fieldset>
 								<legend>访问权限配置
 							</legend>
 							<div class="form-group">
-								<a target-form="rulesForm" href="{:U('Ucenter/AuthGroup/writeRules')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
-								<a href="{:U('Ucenter/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
-							</div>
-							
-							<volist name="accessTree" id="vo">
-								
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<div class="checkbox">
-														<label>
-															<input type="checkbox" name="rules[]" value="{$vo.id}" id="rules{$vo.id}" onclick="selectSubs('{$vo.id}');" {:strpos($rules,$vo['id'].',') === false?"":"checked='checked'"}/>{$vo.title}
-														</label>
-													</div>
-										</div>
-									<if condition="count($vo['_child']) gt 0">
-										<div class="panel-body">
-											<volist name="vo._child" id="child">
-												<div class="pull-left small">
-													<div class="checkbox">
-														<label>
-															<input class="parent{$vo.id}" type="checkbox" name="rules[]" value="{$child.id}" {:strpos($rules,$vo['id'].',') === false?"":"checked='checked'"} />{$child.title}
-														</label>
-													</div>
-												</div>
-											</volist>
-										</div>
-									</if>
-
+								<a target-form="rulesForm" href="{:U('Admin/AuthGroup/writeMenuList')}" class="ajax-post btn btn-sm btn-primary" ><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
+								<a href="{:U('Admin/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
+							</div>		
+								<div class="menuTree">
+								  {$tree}
 								</div>
-
-							</volist>
 							
 							<div class="form-group">
-								<a target-form="rulesForm" href="{:U('Ucenter/AuthGroup/writeRules')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
-								<a href="{:U('Ucenter/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
+								<a target-form="rulesForm" href="{:U('Admin/AuthGroup/writeRules')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
+								<a href="{:U('Admin/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
 							</div>
 							</fieldset>
 						</form>
@@ -125,6 +107,8 @@
 </block>
 
 <block name="area_footer">
+	
+	<script type="text/javascript" src="__CDN__/jquery-jstree/3.0.9/jstree.min.js"></script>
 	<script type="text/javascript">
 		function selectSubs(id) {
 			if ($("#rules" + id).prop("checked")) {
@@ -134,12 +118,52 @@
 			}
 		}
 
+		
 		$(function() {
-
 			$("#groups").change(function() {
 				$(".groupForm").submit();
 			});
-
+			
+			$(".menuTree") // listen for event
+			  .on('changed.jstree', function (e, data) {
+			    var i, j, r = [];
+			    for(i = 0, j = data.selected.length; i < j; i++) {
+			    	var id = data.instance.get_node(data.selected[i]).id;
+			    	id = id.replace("jstree_","");
+			      r.push(id);
+			    }
+			    $("#menulist").val(r.join(",")+",");
+			    
+			  }).jstree({
+				
+				"types" : {
+//				    "#" : {
+//				      "max_children" : 1, 
+//				      "max_depth" : 4, 
+//				      "valid_children" : ["root"]
+//				    },
+//				    "root" : {
+//				      "valid_children" : ["default"]
+//				    },
+//				    "default" : {
+//				      "valid_children" : ["default","file"]
+//				    },
+					"default" : {
+				        "icon" : "fa fa-glass"
+				      },
+				      "demo" : {
+				        "icon" : "fa fa-ok"
+				      },
+				    "file" : {
+				      "icon" : "fa fa-folder",
+				      "valid_children" : []
+				    }
+				  },
+  
+			  "plugins" : ["checkbox", "state", "types", "wholerow","sort" ]
+			});
+			
+			
 		})
 	</script>
 </block>

@@ -29,7 +29,7 @@ return array(
     // 数据库配置
     'DB_TYPE'                   =>  'mysql',
     'DB_HOST'                   =>  'localhost',
-    'DB_NAME'                   =>  'gooraye_wxapi', //微信api数据库
+    'DB_NAME'                   =>  'boye_2015cjfx', //微信api数据库
     'DB_USER'                   =>  'root',
     'DB_PWD'                    =>  '1',
     'DB_PORT'                   =>  '3306',
@@ -39,7 +39,7 @@ return array(
     'LOG_TYPE'              =>  'Db',
 	'LOG_LEVEL'  =>'EMERG,ALERT,CRIT,ERR', // 只记录EMERG ALERT CRIT ERR 错误
     'LOG_DB_CONFIG'=>array(
-		'dsn'=>'mysql://root:1@127.0.0.1:3306/gooraye_wxapi' //本地日志数据库
+		'dsn'=>'mysql://root:1@127.0.0.1:3306/boye_2015cjfx' //本地日志数据库
 	),
     // Session 配置
     'SESSION_PREFIX' => 'oauth_',

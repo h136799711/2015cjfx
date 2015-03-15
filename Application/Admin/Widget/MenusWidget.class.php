@@ -6,13 +6,13 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Widget;
-use Ucenter\Controller\UcenterController;
+namespace Admin\Widget;
+use Admin\Controller\AdminController;
 
 /*
  * 管理导航菜单
  * */
-class MenusWidget extends UcenterController {
+class MenusWidget extends AdminController {
 	
 	/**
 	 * 左
@@ -30,7 +30,7 @@ class MenusWidget extends UcenterController {
 				if (is_null($develop_mode) || $develop_mode == 0) {
 					$map['is_dev'] = 0;
 				}
-				$result = apiCall('Ucenter/Menu/queryShowingMenu', array($map, ' sort desc '));
+				$result = apiCall('Admin/Menu/queryShowingMenu', array($map, ' sort desc '));
 				if ($result['status']) {
 					$list = $result['info'];
 					$hasSubmenuID = false;
@@ -38,7 +38,7 @@ class MenusWidget extends UcenterController {
 					
 					foreach ($list as &$vo) {
 						$map['pid'] = $vo['id'];
-						$result = apiCall('Ucenter/Menu/queryShowingMenu', array($map, ' sort desc '));
+						$result = apiCall('Admin/Menu/queryShowingMenu', array($map, ' sort desc '));
 						if ($result['status']) {
 							$vo['children'] = $result['info'];
 							if (!$hasSubmenuID && !empty($vo['children']) && count($vo['children']) > 0) {
@@ -76,7 +76,7 @@ class MenusWidget extends UcenterController {
 			if (is_null($develop_mode) || $develop_mode == 0) {
 				$map['is_dev'] = 0;
 			}
-			$result = apiCall('Ucenter/Menu/queryShowingMenu', array($map, ' sort desc '));
+			$result = apiCall('Admin/Menu/queryShowingMenu', array($map, ' sort desc '));
 
 			if ($result['status']) {
 				$list = $result['info'];
@@ -102,7 +102,7 @@ class MenusWidget extends UcenterController {
 		//TODO: 如果为了链接考虑，可以转为Cookie来存取
 		if (session("?activemenuid")) {
 			$map = array('id' => session('activemenuid'));
-			$result = apiCall('Ucenter/Menu/getInfo', array($map));
+			$result = apiCall('Admin/Menu/getInfo', array($map));
 			if ($result['status']) {
 				array_push($breadcrumb, array('title' => $result['info']['title'], 'url' => getURL($result['info']['url'])));
 			} else {

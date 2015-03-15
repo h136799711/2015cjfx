@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 use Think\Db;
 use Org\Database;
 
@@ -14,7 +14,7 @@ use Org\Database;
  * 数据库备份还原控制器
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-class DatabaseController extends UcenterController{
+class DatabaseController extends AdminController{
 	protected function _initialize(){
 		parent::_initialize();
 	}

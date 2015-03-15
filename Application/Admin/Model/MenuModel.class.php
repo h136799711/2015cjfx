@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Model;
+namespace Admin\Model;
 use Think\Model;
 
 class MenuModel extends Model{

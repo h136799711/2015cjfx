@@ -7,7 +7,7 @@
 // |-----------------------------------------------------------------------------------
 
 
-namespace Ucenter\Widget;
+namespace Admin\Widget;
 use Ucenter\Controller\UcenterController;
 
 class PartialsWidget extends UcenterController{
@@ -16,7 +16,7 @@ class PartialsWidget extends UcenterController{
 	 */
 	public function config_set($group){
 		$map = array('group'=>$group);
-		$result = apiCall('Ucenter/Config/queryNoPaging',array($map));
+		$result = apiCall('Admin/Config/queryNoPaging',array($map));
 		if($result['status']){
 			$this->assign("list",$result['info']);
 			echo $this->fetch("Widget/config_set");

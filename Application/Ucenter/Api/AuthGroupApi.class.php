@@ -11,6 +11,7 @@ namespace Ucenter\Api;
 use Ucenter\Model\AuthGroupModel;
 
 class AuthGroupApi extends \Common\Api\Api{
+	
 	//初始化
 	protected function _init(){
 		$this->model = new AuthGroupModel();
@@ -28,7 +29,7 @@ class AuthGroupApi extends \Common\Api\Api{
 		}
 		$result = $this->model->where(array('id'=>$groupid))->save(array('rules'=>$rules));
 		if($result === false){			
-			return $this->apiReturnErr($this->model-getDbError());
+			return $this->apiReturnErr($this->model->getDbError());
 		}else{
 			return $this->apiReturnSuc($result);
 		}
@@ -47,7 +48,7 @@ class AuthGroupApi extends \Common\Api\Api{
 		}
 		$result = $this->model->where(array('id'=>$groupid))->save(array('menulist'=>$menuList));
 		if($result === false){			
-			return $this->apiReturnErr($this->model-getDbError());
+			return $this->apiReturnErr($this->model->getDbError());
 		}else{
 			return $this->apiReturnSuc($result);
 		}

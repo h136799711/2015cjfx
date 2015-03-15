@@ -5,9 +5,9 @@
 // | Author: 贝贝 <hebiduhebi@163.com>
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class MemberController extends UcenterController {
+class MemberController extends AdminController {
 
 	public function index() {
 		$params = array();
@@ -19,7 +19,7 @@ class MemberController extends UcenterController {
 		$page = array('curpage' => I('get.p'), 'size' => C('LIST_ROW'));
 		$order = " last_login_time desc ";
 		$params['nickname'] = I('nickname','','trim');
-		$result = apiCall("Ucenter/Member/query", array($map, $page, $order));
+		$result = apiCall("Admin/Member/query", array($map, $page, $order));
 		
 		if ($result['status']) {
 			
@@ -77,7 +77,7 @@ class MemberController extends UcenterController {
 					'realname'=>'',
 					'idnumber'=>'',
 				);
-				$result = apiCall("Ucenter/Member/add", array($entity));
+				$result = apiCall("Admin/Member/add", array($entity));
                 if(!$result['status']){
                     $this->error('用户添加失败！');
                 } else {
@@ -133,7 +133,7 @@ class MemberController extends UcenterController {
 		$page = array('curpage'=>0,'size'=>20);
 		$order = " last_login_time desc ";
 		
-		$result = apiCall("Ucenter/Member/query", array($map,$page, $order,false,'uid,nickname'));
+		$result = apiCall("Admin/Member/query", array($map,$page, $order,false,'uid,nickname'));
 		
 		if($result['status']){
 			$list = $result['info']['list'];

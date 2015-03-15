@@ -14,9 +14,9 @@
 			<div class="table-responsive well">
 				<!-- 操作按钮 -->
 				<div class="btn-controls">
-					<a class="btn btn-sm  btn-primary" href="{:U('Ucenter/AuthGroup/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
-					<a target-form="selectitem" class="ajax-post btn btn-sm  btn-primary" href="{:U('Ucenter/AuthGroup/enable')}"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>
-					<a target-form="selectitem" class="ajax-post btn btn-sm  btn-primary" href="{:U('Ucenter/AuthGroup/disable')}"><i class="fa fa-minus-circle"></i>{:L('BTN_DISABLE')}</a>
+					<a class="btn btn-sm  btn-primary" href="{:U('Admin/AuthGroup/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+					<a target-form="selectitem" class="ajax-post btn btn-sm  btn-primary" href="{:U('Admin/AuthGroup/enable')}"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>
+					<a target-form="selectitem" class="ajax-post btn btn-sm  btn-primary" href="{:U('Admin/AuthGroup/disable')}"><i class="fa fa-minus-circle"></i>{:L('BTN_DISABLE')}</a>
 				</div>
 				<!-- 过滤\查询按钮 -->
 				<div class="filter-controls">
@@ -53,9 +53,9 @@
 						<volist name="list" id="vo">
 							<tr>
 								<td>
-									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" /><a href="{:U('Ucenter/AuthGroup/edit',array('id'=>$vo['id']))}" >{$vo.title}</a></td>
+									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" /><a href="{:U('Admin/AuthGroup/edit',array('id'=>$vo['id']))}" >{$vo.title}</a></td>
 								<td>{$vo.notes}</td>
-								<td><a href="{:U('Ucenter/AuthManage/access')}" class="btn btn-sm btn-primary">{:L('BTN_NODE_GRANT_AUTHORITY')}</a> <a href="{:U('Ucenter/AuthManage/user')}" class="btn btn-sm  btn-primary">{:L('BTN_MEMBER_GRANT_AUTHORITY')}</a></td>
+								<td><a href="{:U('Admin/AuthManage/access')}" class="btn btn-sm btn-primary">{:L('BTN_NODE_GRANT_AUTHORITY')}</a> <a href="{:U('Admin/AuthManage/user')}" class="btn btn-sm  btn-primary">{:L('BTN_MEMBER_GRANT_AUTHORITY')}</a> <a href="{:U('Admin/AuthManage/apiaccess')}" class="btn btn-sm  btn-primary">API授权</a></td>
 								<td>{$vo.status|getStatus}</td>
 								<td>
 									<a href="{:U(CONTROLLER_NAME .'/enable',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>

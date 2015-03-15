@@ -6,9 +6,10 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Api;
+namespace Admin\Api;
 use Common\Api\Api;
-use Ucenter\Model\UcenterMemberModel;
+use Admin\Model\UcenterMemberModel;
+
 /**
  * 统一用户信息表
  */

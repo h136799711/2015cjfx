@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class LogController extends UcenterController{
+class LogController extends AdminController{
 	
 	
 	protected function _initialize(){
@@ -43,7 +43,7 @@ class LogController extends UcenterController{
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " timestamp desc ";
 		//
-		$result = apiCall('Ucenter/Log/query',array($map,$page,$order,$params));
+		$result = apiCall('Admin/Log/query',array($map,$page,$order,$params));
 		//
 		if($result['status']){
 			$this->assign('startdatetime',$startdatetime);

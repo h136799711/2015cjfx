@@ -43,20 +43,20 @@
 							</div>
 							<div class="form-group form-group-sm ">
 								<div class="input-group clearfix col-xs-12 col-sm-12 col-md-12 col-lg-12">
-									<img onclick="refresh_verify('.verifyimg');" src="{:U('Ucenter/Public/verify',array('r'=>time()))}" class="verifyimg"  alt="验证码" title="点击换一张"/>
+									<img onclick="refresh_verify('.verifyimg');" src="{:U('Admin/Public/verify',array('r'=>time()))}" class="verifyimg"  alt="验证码" title="点击换一张"/>
 								</div>
 							</div>
 							<div class="form-group form-group-sm">
-								<button type="button" url="{:U('Ucenter/Public/checkLogin')}" target-form="loginForm" data-loading-text="{:L('BTN_LOGIN')}..." class="ajax-post btn btn-primary col-xs-12 col-sm-12 col-md-12 col-lg-12" autofocus="autofocus">
+								<button type="button" url="{:U('Admin/Public/checkLogin')}" target-form="loginForm" data-loading-text="{:L('BTN_LOGIN')}..." class="ajax-post btn btn-primary col-xs-12 col-sm-12 col-md-12 col-lg-12" autofocus="autofocus">
 {:L('BTN_LOGIN')}</button>
 							</div>
 						</form>
 
 						<!--<div class="text-center">
-							<button type="button" class="btn btn-link" onclick="myUtils.redirectTo('{:U('Ucenter/Public/register')}');">{:L('BTN_REGISTER')}</button>
+							<button type="button" class="btn btn-link" onclick="myUtils.redirectTo('{:U('Admin/Public/register')}');">{:L('BTN_REGISTER')}</button>
 						</div>
 						<div class="text-center">
-							<button type="button" class="btn btn-link" onclick="myUtils.redirectTo('{:U('Ucenter/Public/forgotPassword')}');">{:L('BTN_FORGET_PWD')}</button>
+							<button type="button" class="btn btn-link" onclick="myUtils.redirectTo('{:U('Admin/Public/forgotPassword')}');">{:L('BTN_FORGET_PWD')}</button>
 						</div>-->
 
 

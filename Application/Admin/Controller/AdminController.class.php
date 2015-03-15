@@ -6,32 +6,32 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 use Common\Controller\CheckLoginController;
 
-class UcenterController extends CheckLoginController {
+class AdminController extends CheckLoginController {
 
 	protected $NOT_SUPPORT_METHOD = "不支持的请求方法！";
 
 	protected function _initialize() {
 		parent::_initialize();
 		$this -> assign("user", session("global_user"));
-		//当前一级导航激活menu
+		// 当前一级导航激活menu
 		if (I('get.activemenuid', 0) !== 0) {
 			session('activemenuid', I('get.activemenuid'));
 			session('activesubmenuid', 0);
 		}
-		//当前三级导航
+		// 当前三级导航
 		if (I('get.activesubmenuid', 0) !== 0) {
 			session('activesubmenuid', I('get.activesubmenuid'));
 		}
-		//获取配置
+		// 获取配置
 		$this -> getConfig();
-		//对页面一些配置赋值
+		// 对页面一些配置赋值
 		$this -> assignPageVars();
 		// 是否是超级管理员
 		define('IS_ROOT', is_administrator());
-		//检测IP是否受限制
+		// 检测IP是否受限制
 		$this -> checkAllowIP();
 
 		//定义版本
@@ -162,7 +162,7 @@ class UcenterController extends CheckLoginController {
 		if ($config === false) {
 			$map = array();
 			$fields = 'type,name,value';
-			$result = apiCall('Ucenter/Config/queryNoPaging', array($map, false, $fields));
+			$result = apiCall('Admin/Config/queryNoPaging', array($map, false, $fields));
 			if ($result['status']) {
 				$config = array();
 				if (is_array($result['info'])) {
@@ -223,11 +223,11 @@ class UcenterController extends CheckLoginController {
 			$map = array($primaryKey => array('in', $ids));
 		}
 
-		$result = apiCall("Ucenter/" . CONTROLLER_NAME . '/pretendDelete', array($map));
+		$result = apiCall("Admin/" . CONTROLLER_NAME . '/pretendDelete', array($map));
 
 		if ($result['status']) {
 
-			$this -> success("删除成功！", U('Ucenter/' . CONTROLLER_NAME . '/index'));
+			$this -> success("删除成功！", U('Admin/' . CONTROLLER_NAME . '/index'));
 
 		} else {
 			$this -> error($result['info']);
@@ -252,13 +252,13 @@ class UcenterController extends CheckLoginController {
 			$map = array($primaryKey => array('in', $ids));
 		}
 
-		$result = apiCall("Ucenter/" . CONTROLLER_NAME . '/enable', array($map));
+		$result = apiCall("Admin/" . CONTROLLER_NAME . '/enable', array($map));
 
 		if ($result['status']) {
 			if (IS_AJAX) {
 				$this -> success("启用成功！");
 			} else {
-				$this -> success("启用成功！", U('Ucenter/' . CONTROLLER_NAME . '/index'));
+				$this -> success("启用成功！", U('Admin/' . CONTROLLER_NAME . '/index'));
 			}
 		} else {
 			$this -> error($result['info']);
@@ -284,13 +284,13 @@ class UcenterController extends CheckLoginController {
 			$map = array($primaryKey => array('in', $ids));
 		}
 
-		$result = apiCall("Ucenter/" . CONTROLLER_NAME . '/disable', array($map));
+		$result = apiCall("Admin/" . CONTROLLER_NAME . '/disable', array($map));
 
 		if ($result['status']) {
 			if (IS_AJAX) {
 				$this -> success("禁用成功！");
 			} else {
-				$this -> success("禁用成功！", U('Ucenter/' . CONTROLLER_NAME . '/index'));
+				$this -> success("禁用成功！", U('Admin/' . CONTROLLER_NAME . '/index'));
 			}
 		} else {
 			$this -> error($result['info']);
@@ -322,9 +322,9 @@ class UcenterController extends CheckLoginController {
 			$this -> display();
 		} else {
 			if ($success_url === false) {
-				$success_url = U('Ucenter/' . CONTROLLER_NAME . '/index');
+				$success_url = U('Admin/' . CONTROLLER_NAME . '/index');
 			}
-			$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/add', array($entity));
+			$result = apiCall('Admin/' . CONTROLLER_NAME . '/add', array($entity));
 			if ($result['status'] === false) {
 				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 				$this -> error($result['info']);
@@ -340,7 +340,7 @@ class UcenterController extends CheckLoginController {
 	 */
 	public function view() {
 		$map = array('id' => I('get.id'));
-		$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/getInfo', array($map));
+		$result = apiCall('Admin/' . CONTROLLER_NAME . '/getInfo', array($map));
 		if ($result['status'] === false) {
 			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 			$this -> error(L('C_GET_NULLDATA'));
@@ -356,7 +356,7 @@ class UcenterController extends CheckLoginController {
 	public function edit() {
 		if (IS_GET) {
 			$map = array('id' => I('get.id'));
-			$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/getInfo', array($map));
+			$result = apiCall('Admin/' . CONTROLLER_NAME . '/getInfo', array($map));
 			if ($result['status'] === false) {
 				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 				$this -> error(L('C_GET_NULLDATA'));
@@ -370,20 +370,20 @@ class UcenterController extends CheckLoginController {
 	/**
 	 * 更新保存，根据主键默认id
 	 * 示列url:
-	 * /Ucenter/Menu/save/id/33
+	 * /Admin/Menu/save/id/33
 	 * id必须以get方式传入
 	 */
 	public function save($primarykey = 'id', $entity = null, $redirect_url = false) {
 		if (IS_POST) {
 			if ($redirect_url === false) {
-				$redirect_url = U('Ucenter/' . CONTROLLER_NAME . '/index');
+				$redirect_url = U('Admin/' . CONTROLLER_NAME . '/index');
 			}
 
 			if (is_null($entity)) {
 				$entity = I('post.');
 			}
 
-			$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/saveByID', array(I('get.' . $primarykey, 0), $entity));
+			$result = apiCall('Admin/' . CONTROLLER_NAME . '/saveByID', array(I('get.' . $primarykey, 0), $entity));
 			if ($result['status'] === false) {
 				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 				$this -> error($result['info']);
@@ -401,11 +401,11 @@ class UcenterController extends CheckLoginController {
 	 */
 	public function delete($success_url = false) {
 		if ($success_url === false) {
-			$success_url = U('Ucenter/' . CONTROLLER_NAME . '/index');
+			$success_url = U('Admin/' . CONTROLLER_NAME . '/index');
 		}
 		$map = array('id' => I('id', -1));
 
-		$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/delete', array($map));
+		$result = apiCall('Admin/' . CONTROLLER_NAME . '/delete', array($map));
 
 		if ($result['status'] === false) {
 			LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
@@ -421,7 +421,7 @@ class UcenterController extends CheckLoginController {
 	 */
 	public function bulkDelete($success_url = false) {
 		if ($success_url === false) {
-			$success_url = U('Ucenter/' . CONTROLLER_NAME . '/index');
+			$success_url = U('Admin/' . CONTROLLER_NAME . '/index');
 		}
 		$ids = I('ids', -1);
 		if ($ids === -1) {
@@ -430,7 +430,7 @@ class UcenterController extends CheckLoginController {
 		$ids = implode(',', $ids);
 		$map = array('id' => array('in', $ids));
 
-		$result = apiCall('Ucenter/' . CONTROLLER_NAME . '/delete', array($map));
+		$result = apiCall('Admin/' . CONTROLLER_NAME . '/delete', array($map));
 
 		if ($result['status'] === false) {
 			LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);

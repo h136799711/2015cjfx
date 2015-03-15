@@ -19,7 +19,10 @@
 				<ul class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#user" role="tab" data-toggle="tab">成员授权</a>
 					</li>
-					<li role="presentation" ><a href="{:U('Ucenter/AuthManage/access')}" role="tab" >访问授权</a>
+					<li role="presentation" ><a href="{:U('Admin/AuthManage/access')}" role="tab" >访问授权</a>
+					</li>
+					<li role="presentation">
+					 <a href="{:U('Admin/AuthManage/apiaccess')}">API授权</a>
 					</li>
 				</ul>
 
@@ -49,7 +52,7 @@
 								<select style="width:220px;padding: 10px 15px;font-size: 15px;line-height: 1.42857143;" id="user_select2" name="uid" class="form-control">
  <option></option>
 								</select>
-								<a id="addtogroup" target-form="addToGroupForm" class="ajax-post btn btn-sm btn-primary" href="{:U('Ucenter/AuthGroupAccess/addToGroup')}">添加到</a>
+								<a id="addtogroup" target-form="addToGroupForm" class="ajax-post btn btn-sm btn-primary" href="{:U('Admin/AuthGroupAccess/addToGroup')}">添加到</a>
 							</form>
 						</div>
 

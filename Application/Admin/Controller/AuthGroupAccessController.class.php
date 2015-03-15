@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 
-class AuthGroupAccessController extends UcenterController{
+class AuthGroupAccessController extends AdminController{
 	
 	protected function _initialize() {
 		parent::_initialize();
@@ -21,7 +21,7 @@ class AuthGroupAccessController extends UcenterController{
 //	public function addTest(){
 //		$uid = 34;
 //		$groupid = array(12,13,15);
-//		$result = apiCall("Ucenter/AuthGroupAccess/addToGroup",array($uid,$groupid));
+//		$result = apiCall("Admin/AuthGroupAccess/addToGroup",array($uid,$groupid));
 //		dump($result);
 //	}
 
@@ -46,10 +46,10 @@ class AuthGroupAccessController extends UcenterController{
 			$groupid = intval($groupid);
 		}
 		
-		$result = apiCall("Ucenter/AuthGroupAccess/addToGroup",array($uid,$groupid));
+		$result = apiCall("Admin/AuthGroupAccess/addToGroup",array($uid,$groupid));
 		
 		if($result['status']){			
-			$this->success("操作成功~",U('Ucenter/AuthManage/user',array('groupid'=>$groupid)));
+			$this->success("操作成功~",U('Admin/AuthManage/user',array('groupid'=>$groupid)));
 		}else{
 			LogRecord($result['info'], __FILE__.__LINE__);
 			$this->error($result['info']);
@@ -67,9 +67,9 @@ class AuthGroupAccessController extends UcenterController{
 		}
 		$map = array('uid'=>$uid,"group_id"=>$groupid);
 		
-		$result = apiCall("Ucenter/AuthGroupAccess/delete",array($map));
+		$result = apiCall("Admin/AuthGroupAccess/delete",array($map));
 		if($result['status']){
-			$this->success("操作成功~",U('Ucenter/AuthManage/user'));
+			$this->success("操作成功~",U('Admin/AuthManage/user'));
 		}else{
 			LogRecord($result['info'], __FILE__.__LINE__);
 			$this->error($result['info']);

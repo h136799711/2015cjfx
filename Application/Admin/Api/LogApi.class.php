@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Api;
+namespace Admin\Api;
 use Common\Api\Api;
-use Ucenter\Model\LogModel;
+use Admin\Model\LogModel;
 class LogApi extends Api{
 	
 	protected function _init(){

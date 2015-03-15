@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Api;
+namespace Admin\Api;
 use Common\Api\Api;
-use Ucenter\Model\MenuModel;
+use Admin\Model\MenuModel;
 
 class MenuApi extends Api{
 	

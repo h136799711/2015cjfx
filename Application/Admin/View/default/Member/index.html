@@ -13,7 +13,7 @@
 			<div class="table-responsive well">
 	<!-- 过滤\查询按钮 -->
 	<div class="filter-controls">
-		<form action="{:U('Ucenter/Member/index')}" class="memberForm form-inline" method="post">
+		<form action="{:U('Admin/Member/index')}" class="memberForm form-inline" method="post">
 			<div class="form-group">
 				<label class="control-label">用户昵称或ID</label>
 				<div class="input-group">
@@ -30,9 +30,9 @@
 	</div>
 	<!-- 操作按钮 -->
 	<div class="btn-controls">
-		<a class="btn btn-sm btn-primary" href="{:U('Ucenter/Member/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
-		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Ucenter/Member/enable')}"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>
-		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Ucenter/Member/disable')}"><i class="fa fa-minus-circle"></i>{:L('BTN_DISABLE')}</a>
+		<a class="btn btn-sm btn-primary" href="{:U('Admin/Member/add')}"><i class="fa fa-plus"></i>{:L('BTN_ADD')}</a>
+		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Admin/Member/enable')}"><i class="fa fa-check-circle"></i>{:L('BTN_ENABLE')}</a>
+		<a target-form="selectitem" class="ajax-post btn btn-sm btn-primary" href="{:U('Admin/Member/disable')}"><i class="fa fa-minus-circle"></i>{:L('BTN_DISABLE')}</a>
 	</div>
 
 	<table class="table table-striped table table-hover  table-condensed">

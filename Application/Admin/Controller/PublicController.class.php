@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 use Common\Controller\BaseController;
 use User\Api\UserApi;
 
@@ -34,7 +34,7 @@ class PublicController extends BaseController {
 		if ($config === false) {
 			$map = array();
 			$fields = 'type,name,value';
-			$result = apiCall('Ucenter/Config/queryNoPaging', array($map, false, $fields));
+			$result = apiCall('Admin/Config/queryNoPaging', array($map, false, $fields));
 			if ($result['status']) {
 				$config = array();
 				if (is_array($result['info'])) {
@@ -107,26 +107,26 @@ class PublicController extends BaseController {
 			$username = I('post.username', '', 'trim');
 			$password = I('post.password', '', 'trim');
 
-			$result = apiCall('Ucenter/UcenterAdmin/login', array('username' => $username, 'password' => $password));
+			$result = apiCall('Uclient/User/login', array('username' => $username, 'password' => $password));
 			
 			//调用成功
 			if ($result['status']) {
-				$map = array('id' => $result['info']['member_id']);
-				//				dump($map);
-				$result = apiCall('Ucenter/UcenterMember/getInfo', array($map));
+				$map = array('id' => $result['info']);
+				
+				$result = apiCall('Admin/UcenterMember/getInfo', array($map));
 				
 				
 				if ($result['status'] && is_array($result['info'])) {
-
+					
 					//存入 session
 					session('global_user_sign', data_auth_sign($result['info']));
 					session('global_user', $result['info']);
 					session("uid", $result['info']['id']);
-
+					
 					//登录模块
 					session("LOGIN_MOD", MODULE_NAME);
 
-					$this -> success(L('SUC_LOGIN'), U('Ucenter/Index/index'));
+					$this -> success(L('SUC_LOGIN'), U('Admin/Index/index'));
 
 				} else {
 					$this -> error(L('ERR_LOGIN'));

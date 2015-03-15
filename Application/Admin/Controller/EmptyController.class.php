@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Controller;
+namespace Admin\Controller;
 use Common\Controller\BaseController;
 
 class EmptyController extends BaseController{

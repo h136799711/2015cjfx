@@ -7,9 +7,9 @@
 // |-----------------------------------------------------------------------------------
 
 
-namespace Ucenter\Api;
+namespace Admin\Api;
 use Common\Api\Api;
-use Ucenter\Model\UcenterAppModel;
+use Admin\Model\UcenterAppModel;
 
 
 class UcenterAppApi extends  Api{

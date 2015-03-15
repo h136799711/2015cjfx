@@ -6,9 +6,9 @@
 // | Copyright (c) 2013-2015, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Ucenter\Api;
+namespace Admin\Api;
 
-use Ucenter\Model\AuthGroupAccessModel;
+use Admin\Model\AuthGroupAccessModel;
 
 class AuthGroupAccessApi extends \Common\Api\Api{
 	

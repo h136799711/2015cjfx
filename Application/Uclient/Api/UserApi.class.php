@@ -44,6 +44,7 @@ class UserApi extends Api{
      * @return integer           登录成功-用户ID，登录失败-错误编号
      */
     public function login($username, $password, $type = 1){
+    	
         $result = $this->model->login($username, $password, $type);	
 		if($result > 0){
     		return array('status'=>true,'info'=>$result);
