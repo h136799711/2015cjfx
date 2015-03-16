@@ -9,6 +9,7 @@
 // | Copyright (c) 2012-2014, http://www.gooraye.net. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
+
 class Wechat
 {
     
@@ -31,12 +32,15 @@ class Wechat
     
     private $data = array();
     private $pc = null;
+	private $hasAES = false;
     public function __construct($token, $encodingAesKey, $appId) {
         import("@.Common.WxBizMsg.wxBizMsgCrypt");
 		
         $this->pc = new \WXBizMsgCrypt(md5($token), $encodingAesKey, $appId);
+		
 
         $this->auth($token) || exit;
+
 
         if (IS_GET) {
             echo ($_GET['echostr']);
@@ -51,6 +55,7 @@ class Wechat
                     //TODO: 解密失败下
                 }else{
                     $xml = $decryptMsg;
+					$this->hasAES = true;
                 }
             }
 
@@ -149,7 +154,13 @@ class Wechat
         $xml = new SimpleXMLElement('<xml></xml>');
         $this->data2xml($xml, $this->data);
         $encryptXML = $xml->asXML();
-        exit($this->encryptMsg($encryptXML));
+		if($this->hasAES){
+			
+	        exit($this->encryptMsg($encryptXML));
+			
+		}else{
+        	exit($encryptXML);
+		}
     }
     
     /**
@@ -239,54 +250,54 @@ class Wechat
         return true;
     }
     
-    public function test() {
-        
-        import("Org.WxBizMsg.wxBizMsgCrypt");
-        
-        // 第三方发送消息给公众平台
-        $encodingAesKey = "229kyx180rl1tgsmsxprfnf62ppn0qu6mxzx4ht2wko";
-        $token = "ftpcdz1407317054";
-        $timeStamp = "1416470057";
-        $nonce = "gooraye";
-        $appId = "wx5b7a96f57e8395c8";
-        $text = "<xml><ToUserName><![CDATA[oia2Tj我是中文jewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
-        
-        $pc = new \WXBizMsgCrypt($token, $encodingAesKey, $appId);
-        $encryptMsg = '';
-        $errCode = $pc->encryptMsg($text, $timeStamp, $nonce, $encryptMsg);
-        if ($errCode == 0) {
-            var_dump ("加密后: " . $encryptMsg );
-        } else {
-            var_dump ($errCode );
-        }
-        $encryptMsg = @"<xml>
-    <Encrypt>
-        <![CDATA[cZvNxli381apPH76wAULlqTKOl5iaD9OaDTrT0EnfAwE2HLHu1oX5E+AYDn+UcqxxMKocdbJNVXSmS/F0lyw9WeCSbTPbal9xhZrj+ZTIAAXzO+DbvnkbYzRx+gjleSwPdhS/ywd2b2X5dZeuHgROn3zHo6yG3/sIj/CPuMCOhpO4gZjvXaWiUWDD2YwNaKWa/Y6SLJeKcUp1OVTXWroPxv0tui1b71AFnEDpDR9HliJxC2Rq9Y9ZfBtqY5sGtRpTFMgcMD6T21SrSNGzyUKbOFEF2EeOjoMG4l3RRyI0RBnPFMGth31+b5/LVdKQE36Yo+E/Yu4Fl+A55gMfTRc2WGqdFthO+/l+fPvgRdBUUwHk5+sTzUdJLOaJExXbUd8eK3xhUMp1QNoe6CpIGPauN73idQZFfVqzUbtnG9SfTM=]]>
-    </Encrypt>
-    <MsgSignature>
-        <![CDATA[b84648309e8a565696c22de66f2149d227d63ce5]]>
-    </MsgSignature>
-    <TimeStamp>1416476043</TimeStamp>
-    <Nonce>
-        <![CDATA[gooraye]]>
-    </Nonce>
-</xml>";
-        $xml_tree = new DOMDocument();
-        $xml_tree->loadXML($encryptMsg);
-        $array_e = $xml_tree->getElementsByTagName('Encrypt');
-        $array_s = $xml_tree->getElementsByTagName('MsgSignature');
-        $encrypt = $array_e->item(0)->nodeValue;
-        $msg_sign = $array_s->item(0)->nodeValue;
-        $format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%s]]></Encrypt></xml>";
-        $from_xml = sprintf($format, $encrypt);
-        
-        // 第三方收到公众号平台发送的消息
-        $msg = '';
-        $errCode = $pc->decryptMsg($msg_sign, $timeStamp, $nonce, $from_xml, $msg);
-        if ($errCode == 0) {
-            var_dump ("解密后: " . $msg . "\n");
-        } else {
-            var_dump ($errCode . "\n");
-        }
-    }
+//  public function test() {
+//      
+//      import("Org.WxBizMsg.wxBizMsgCrypt");
+//      
+//      // 第三方发送消息给公众平台
+//      $encodingAesKey = "229kyx180rl1tgsmsxprfnf62ppn0qu6mxzx4ht2wko";
+//      $token = "ftpcdz1407317054";
+//      $timeStamp = "1416470057";
+//      $nonce = "gooraye";
+//      $appId = "wx5b7a96f57e8395c8";
+//      $text = "<xml><ToUserName><![CDATA[oia2Tj我是中文jewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
+//      
+//      $pc = new \WXBizMsgCrypt($token, $encodingAesKey, $appId);
+//      $encryptMsg = '';
+//      $errCode = $pc->encryptMsg($text, $timeStamp, $nonce, $encryptMsg);
+//      if ($errCode == 0) {
+//          var_dump ("加密后: " . $encryptMsg );
+//      } else {
+//          var_dump ($errCode );
+//      }
+//      $encryptMsg = @"<xml>
+//  <Encrypt>
+//      <![CDATA[cZvNxli381apPH76wAULlqTKOl5iaD9OaDTrT0EnfAwE2HLHu1oX5E+AYDn+UcqxxMKocdbJNVXSmS/F0lyw9WeCSbTPbal9xhZrj+ZTIAAXzO+DbvnkbYzRx+gjleSwPdhS/ywd2b2X5dZeuHgROn3zHo6yG3/sIj/CPuMCOhpO4gZjvXaWiUWDD2YwNaKWa/Y6SLJeKcUp1OVTXWroPxv0tui1b71AFnEDpDR9HliJxC2Rq9Y9ZfBtqY5sGtRpTFMgcMD6T21SrSNGzyUKbOFEF2EeOjoMG4l3RRyI0RBnPFMGth31+b5/LVdKQE36Yo+E/Yu4Fl+A55gMfTRc2WGqdFthO+/l+fPvgRdBUUwHk5+sTzUdJLOaJExXbUd8eK3xhUMp1QNoe6CpIGPauN73idQZFfVqzUbtnG9SfTM=]]>
+//  </Encrypt>
+//  <MsgSignature>
+//      <![CDATA[b84648309e8a565696c22de66f2149d227d63ce5]]>
+//  </MsgSignature>
+//  <TimeStamp>1416476043</TimeStamp>
+//  <Nonce>
+//      <![CDATA[gooraye]]>
+//  </Nonce>
+//</xml>";
+//      $xml_tree = new DOMDocument();
+//      $xml_tree->loadXML($encryptMsg);
+//      $array_e = $xml_tree->getElementsByTagName('Encrypt');
+//      $array_s = $xml_tree->getElementsByTagName('MsgSignature');
+//      $encrypt = $array_e->item(0)->nodeValue;
+//      $msg_sign = $array_s->item(0)->nodeValue;
+//      $format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%s]]></Encrypt></xml>";
+//      $from_xml = sprintf($format, $encrypt);
+//      
+//      // 第三方收到公众号平台发送的消息
+//      $msg = '';
+//      $errCode = $pc->decryptMsg($msg_sign, $timeStamp, $nonce, $from_xml, $msg);
+//      if ($errCode == 0) {
+//          var_dump ("解密后: " . $msg . "\n");
+//      } else {
+//          var_dump ($errCode . "\n");
+//      }
+//  }
 }

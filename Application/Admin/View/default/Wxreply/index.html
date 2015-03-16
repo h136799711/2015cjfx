@@ -1,0 +1,44 @@
+<extend name="template/base_index" />
+
+<block name="area_header">
+
+</block>
+
+<block name="area_body">
+	{:W('Menus/topbar')}
+	<div class="admin-main container-fluid">
+		{:W('Menus/left')}
+		<div class="admin-main-content">
+			{:W('Menus/breadcrumb')}
+			<ul class="nav nav-tabs" role="tablist" id="configTab">
+				<li role="presentation" class="active">
+					<a href="#tab1" role="tab" data-toggle="tab">文本回复</a>
+				</li>
+				<li role="presentation" class="">
+					<a href="#tab1" role="tab" data-toggle="tab">图文回复</a>
+				</li>
+			</ul>
+			
+			<!-- Tab panes -->
+			<div class="tab-content ">
+				<div role="tabpanel" class="tab-pane fade clearfix" id="tab1">
+					<div>
+						<a class="btn btn-primary" href="{:U('Admin/Wxreply/addText')}" >新增</a>
+					</div>
+					<div>
+						<table class=""></table>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane fade clearfix" id="tab1">
+					图文回复
+				</div>
+			</div>
+		</div>
+		<!-- END admin-main-content -->
+	</div>
+	<!-- END admin-main-->
+</block>
+
+<block name="area_footer">
+
+</block>

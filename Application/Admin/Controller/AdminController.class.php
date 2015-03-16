@@ -29,20 +29,26 @@ class AdminController extends CheckLoginController {
 		$this -> getConfig();
 		// 对页面一些配置赋值
 		$this -> assignPageVars();
-		// 是否是超级管理员
-		define('IS_ROOT', is_administrator());
+		
+		if(!defined('IS_ROOT')){
+			// 是否是超级管理员
+			define('IS_ROOT', is_administrator());
+		}
+		
 		// 检测IP是否受限制
 		$this -> checkAllowIP();
-
-		//定义版本
-		if (defined("APP_DEBUG") && APP_DEBUG) {
-			define("APP_VERSION", time());
-		} else {
-			define("APP_VERSION", C('APP_VERSION'));
-		}
-		//权限检测
-		if ($this -> checkAuthority() === false) {
-			$this -> error(L('ERR_NO_PERMISSION'));
+	
+		if(!defined('APP_VERSION')){
+			//定义版本
+			if (defined("APP_DEBUG") && APP_DEBUG) {
+				define("APP_VERSION", time());
+			} else {
+				define("APP_VERSION", C('APP_VERSION'));
+			}
+			//权限检测
+			if ($this -> checkAuthority() === false) {
+				$this -> error(L('ERR_NO_PERMISSION'));
+			}
 		}
 	}
 	

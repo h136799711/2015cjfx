@@ -22,6 +22,21 @@ class ConnectController extends Controller {
 	public $fans;
 	//当前通信的公众号信息
 	public $wxaccount;
+	
+	public function test(){
+//		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxafc71bde2ff1dc95&secret=4d9b29be353502e8c81b19ded8e6b10e";
+//		$json =  json_decode(curlGet($url));
+//		dump($json);
+//		dump(json_decode($json));
+//		dump($json->access_token);
+		
+		$data = array("action_name"=>"QR_LIMIT_STR_SCENE",
+				"action_info"=>array('scene'=>array('scene_str'=>"VIP_10001")));
+//		dump(json_encode($data));	
+		$accessToken =	getAccessToken("wx58aea38c0796394d","3e1404c970566df55d7314ecfe9ff437");
+		$obj = getQrcode($accessToken,'VIP_'.'10001');
+		dump($obj);
+	}
 
 	public function index() {
 
@@ -35,22 +50,27 @@ class ConnectController extends Controller {
 		if (!preg_match("/^[0-9a-zA-Z]{3,42}$/", $this -> token)) {
 			exit('error id');
 		}
-
-		import("@.Common.Wechat");
-
+		
 		//获取当前通信的公众号信息
 		$this -> wxaccount = S('weixin_' . $this -> token);
 		if (!$this -> wxaccount) {
-			$this -> wxaccount = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $this -> token)));
-			S('weixin_' . $this -> token, $this -> wxuser, 600);
+			$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $this -> token)));
+			if($result['status']){
+				$this->wxaccount = $result['info'];
+			}
+			S('weixin_' . $this -> token, $this -> wxaccount, 600);
 			//缓存10分钟
 		}
-
-		$weixin = new \Wechat($this -> token, $this -> wxuser['encodingaeskey'], $this -> wxuser['appid']);
+				
+		import("@.Common.Wechat");		
+		
+		$weixin = new \Wechat($this -> token, $this -> wxaccount['encodingaeskey'], $this -> wxaccount['appid']);
+		
+		
 		$this -> data = $weixin -> request();
 		
 		if ($this -> data && is_array($this -> data)) {
-
+			
 			//读取缓存的粉丝信息
 			$this -> fans = S('fans_' . $this -> token . '_' . $this -> data['FromUserName']);
 			if (!$this -> fans) {
@@ -59,7 +79,6 @@ class ConnectController extends Controller {
 			}
 			
 			//$this->my = C('site_my');
-
 			//$open = M('TokenOpen')->where(array('id' => I('get.token')))->find();
 			//$this->fun = $open['queryname'];
 			list($content, $type) = $this -> reply($this -> data);
@@ -74,13 +93,18 @@ class ConnectController extends Controller {
 		
 		import("@.Common.Wechat");
 		
-		return array('Test Connect!',\Wechat::MSG_TYPE_TEXT);
+//		return array('Test Connect!',\Wechat::MSG_TYPE_TEXT);
+		
+		$accessToken =	getAccessToken($this->wxaccount['appid'],$this->wxaccount['appsecret']);
+//		return array($accessToken.'getAccessToken!',\Wechat::MSG_TYPE_TEXT);
+		$obj = getQrcode($accessToken,'VIP_'.'10001');
+		return array($obj->url,\Wechat::MSG_TYPE_TEXT);
 		
 		if (\Wechat::MSG_EVENT_CLICK == $data['Event']) {
 
 			$data['Content'] = $data['EventKey'];
 			$this -> data['Content'] = $data['EventKey'];
-
+			
 		} elseif ($data['Event'] == \Wechat::MSG_EVENT_SCAN) {
 			$data['Content'] = $this -> getRecognition($data['EventKey']);
 			$this -> data['Content'] = $data['Content'];
@@ -89,19 +113,7 @@ class ConnectController extends Controller {
 			//群发任务结束
 			
 		} elseif (\Wechat::MSG_EVENT_SUBSCRIBE == $data['Event']) {
-
-			//关注时回复
-//			$this -> behaviordata('follow', '1');
-//			$this -> requestdata('follownum');
-//			$follow_data = M('Areply') -> field('home,keyword,content') -> where(array('token' => $this -> token)) -> find();
-
-//			if ($follow_data['home'] == 1) {
-
-				// return $this->keyword($follow_data['keyword']);
-
-//			} else {
-//				return array(html_entity_decode($follow_data['content']), 'text');
-//			}
+			
 			
 		} elseif ('unsubscribe' == $data['Event']) {
 			$this -> requestdata('unfollownum');
@@ -122,38 +134,7 @@ class ConnectController extends Controller {
 			return array($this -> data['FromUserName'], 'text');
 		}
 		
-		//          import("Org.GetPin");
-		//          $Pin = new \GetPin();
-		//          $key = $data['Content'];
-		//          $datafun = explode(',', $this->fun);
-		//          $tags = $this->get_tags($key);
-		//          $back = explode(',', $tags);
-		//
-		//          if ($key == '首页' || $key == 'home') {
-		//              return $this->home();
-		//          }
-		//
-		//          foreach ($back as $keydata => $data) {
-		//
-		//              $string = $Pin->Pinyin($data);
-		//
-		//              if (in_array($string, $datafun) && $string) {
-		//                  if ($string == 'fujin') {
-		//                      $this->recordLastRequest($key);
-		//                  }
-		//
-		//                  $this->requestdata('textnum');
-		//                  unset($back[$keydata]);
-		//
-		//                  // 判断以关键字中文的拼音的函数是否存在
-		//                  if (method_exists('WxProxyController', $string)) {
-		//                      eval('$return = $this->' . $string . '($back);');
-		//                  }
-		//
-		//                  break;
-		//              }
-		//          }
-
+		
 		if (!empty($return)) {
 
 			//===========上面处理了请求=========
@@ -171,7 +152,7 @@ class ConnectController extends Controller {
 				case '主页' :
 					return $this -> home();
 					break;
-
+				
 				case '帮助' :
 				case 'help' :
 					return $this -> help();
@@ -185,5 +166,15 @@ class ConnectController extends Controller {
 	}
 
 	//END reply
-
+	
+	//首页，官网首页
+	private function home(){
+		return array('首页','text');
+	}
+	
+	//帮助说明
+	private function help(){
+		return array("帮助信息",'text');
+	}
+	
 }

@@ -8,12 +8,12 @@
 
 namespace Admin\Controller;
 use Common\Controller\BaseController;
-use User\Api\UserApi;
 
 class PublicController extends BaseController {
 
 	protected function _initialize() {
 		parent::_initialize();
+		
 		//TODO:只获取全局通用的配置
 		$this -> getConfig();
 		$seo = array('title' => C('WEBSITE_TITLE'), 'keywords' => C('WEBSITE_KEYWORDS'), 'description' => C('WEBSITE_DESCRIPTION'));
@@ -22,6 +22,16 @@ class PublicController extends BaseController {
 		if (isNight()) {
 			$cfg['theme'] = "darkly";
 		}
+		if(!defined("APP_VERSION")){
+			//定义版本
+			if (defined("APP_DEBUG") && APP_DEBUG) {
+				define("APP_VERSION", time());
+			} else {
+				define("APP_VERSION", C('APP_VERSION'));
+			}
+		
+		}
+		
 		//
 		$this -> assignVars($seo, $cfg);
 	}
@@ -97,18 +107,16 @@ class PublicController extends BaseController {
 	 * 登录检测
 	 */
 	public function checkLogin() {
-
 		if (IS_AJAX) {
-
 			$verify = I('post.verify', '', 'trim');
 			if (!$this -> check_verify($verify, 1)) {
 				$this -> error(L('ERR_VERIFY'));
 			}
 			$username = I('post.username', '', 'trim');
 			$password = I('post.password', '', 'trim');
-
-			$result = apiCall('Uclient/User/login', array('username' => $username, 'password' => $password));
 			
+			$result = apiCall('Uclient/User/login', array('username' => $username, 'password' => $password));
+//			dump($result);
 			//调用成功
 			if ($result['status']) {
 				$map = array('id' => $result['info']);
@@ -144,7 +152,7 @@ class PublicController extends BaseController {
 	 */
 	public function login() {
 		$this -> assignTitle("账号-登录");
-
+		
 		if (IS_GET) {
 			//显示登录界面
 			$this -> display();
@@ -189,10 +197,10 @@ class PublicController extends BaseController {
 	 * 获取验证码
 	 */
 	public function verify() {
-		$config = array('fontSize' => 16, // 验证码字体大小
+		$config = array('fontSize' => 22, // 验证码字体大小
 		'length' => 4, // 验证码位数
 		'useNoise' => false, // 关闭验证码杂点
-		'imageW' => '238', 'imageH' => '30');
+		'imageW' => '240', 'imageH' => '40');
 		$Verify = new \Think\Verify($config);
 		$Verify -> entry(1);
 	}

@@ -52,7 +52,7 @@ class WxaccountController extends AdminController{
 		}
 	}
 	
-	public function save(){
+	public function store(){
 		if(IS_POST){
 			import("Org.String");
 			$id= I('post.id','');

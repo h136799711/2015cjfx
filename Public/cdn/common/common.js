@@ -223,9 +223,7 @@
 				$(that).button("loading");
 //				console.log("query=",query);
 //				return ;
-				$.post(target, query).fail(function() {
-					$.scojs_message('Unknown Error', $.scojs_message.TYPE_ERROR);
-				}).always(function() {
+				$.post(target, query).always(function() {
 					setTimeout(function(){
 							$(that).button("reset");
 						},1400);

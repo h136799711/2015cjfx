@@ -24,7 +24,7 @@ class BaseController extends Controller{
 	/*
 	 * Seo 配置
 	 * */
-	public function assignVars($seo=array('title'=>'标题','keywords'=>'关键词','description'=>'描述',),							$cfg=array('owner'=>'绍兴古睿信息科技有限公司')){
+	public function assignVars($seo=array('title'=>'标题','keywords'=>'关键词','description'=>'描述',),	$cfg=array('owner'=>'绍兴古睿信息科技有限公司')){
 		$this->seo = array_merge($this->seo,$seo);
 		$this->cfg = array_merge($this->cfg,$cfg);
 		

@@ -6,7 +6,7 @@
 // | Copyright (c) 2013-2016 杭州博也网络科技, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Admin\Model;
+namespace Weixin\Model;
 use Think\Model;
 /**
  * CREATE TABLE IF NOT EXISTS `boye_2015cjfx`.`cjfx_wxaccount` (

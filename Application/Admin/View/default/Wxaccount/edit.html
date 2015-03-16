@@ -79,14 +79,14 @@
 						<div class="col-md-10 col-lg-10">
 							<input type="text" readonly="readonly" value="{$wxaccount.encodingaeskey}"  class="required form-control" name="encodingAESKey" id="encodingAESKey" placeholder="请输入EncodingAESKey">
 							 <a href="javascript:createEncodingAESKey();" class="btn btn-primary">重新生成</a> 
-							<div class="help-block">(请慎重更改，更改后必须重新微信开发者中心中的服务器配置！)</div>
+							<div class="help-block">(请慎重更改，更改后必须重新配置微信开发者中心中的服务器配置！)</div>
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<label for="btns" class="col-md-2 col-lg-2 control-label">&nbsp;</label>
 						<div class="col-lg-10 col-md-10">
-							<a target-form="wxaccountForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/save')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
+							<a target-form="wxaccountForm" class="ajax-post btn btn-primary" href="{:U('Admin/'.CONTROLLER_NAME.'/store')}" autofocus="autofocus"><i class="fa fa-save"></i> {:L('BTN_SAVE')}</a>
 							<!--<a class="btn btn-default" href="{:U('Admin'.CONTROLLER_NAME.'/index')}"><i class="fa fa-times-circle"></i> {:L('BTN_CANCEL')}</a>-->
 						</div>
 					</div>
