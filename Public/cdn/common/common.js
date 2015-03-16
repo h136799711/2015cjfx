@@ -55,6 +55,8 @@
 	$(window).load(function() {
 		NProgress.done();
 	})
+	
+	
 	$(function() {
 			NProgress.start();
 			//nprogress
@@ -256,5 +258,10 @@
 
 			$(window).resize();
 		}) //end $.ready
+
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		})
+
 
 })(jQuery, window);

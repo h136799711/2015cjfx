@@ -373,7 +373,7 @@ class AdminController extends CheckLoginController {
 	 * /Admin/Menu/save/id/33
 	 * id必须以get方式传入
 	 */
-	public function save($primarykey = 'id', $entity = null, $redirect_url = false) {
+	protected function save($primarykey = 'id', $entity = null, $redirect_url = false) {
 		if (IS_POST) {
 			if ($redirect_url === false) {
 				$redirect_url = U('Admin/' . CONTROLLER_NAME . '/index');

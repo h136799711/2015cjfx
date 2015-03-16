@@ -152,7 +152,7 @@ class MenuController extends UcenterController {
 				if($result['status']){
 					$entity = $result['info'];
 					//删除对应节点
-					$this->delAuthRule($entity['title'], $entity['url'], $entity['pid']);
+//					$this->delAuthRule($entity['title'], $entity['url'], $entity['pid']);
 				}else{
 					LogRecord('[INFO]' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 					$this -> error($result['info']);
@@ -222,20 +222,20 @@ class MenuController extends UcenterController {
 	/**
 	 * 保存节点
 	 */
-	private function delAuthRule($title, $url, $pid) {
-		$authRuleCtrl = A('Ucenter/AuthRule');
-
-		if ($pid == 0) {
-			//一级
-			$type = 2;
-		} else {
-			//一级以下
-			$type = 1;
-		}
-		$authRuleCtrl -> delete($title, $url, $type);
-
-	}
-	
+//	private function delAuthRule($title, $url, $pid) {
+//		$authRuleCtrl = A('Ucenter/AuthRule');
+//
+//		if ($pid == 0) {
+//			//一级
+//			$type = 2;
+//		} else {
+//			//一级以下
+//			$type = 1;
+//		}
+//		$authRuleCtrl -> delete($title, $url, $type);
+//
+//	}
+//	
 
 
 

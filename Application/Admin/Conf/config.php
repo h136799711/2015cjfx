@@ -25,5 +25,5 @@ return array(
     'DB_USER'                   =>  'root',
     'DB_PWD'                    =>  '1',
     'DB_PORT'                   =>  '3306',
-    'DB_PREFIX'                 =>  'uc_',
+    'DB_PREFIX'                 =>  'cjfx_',
 );

@@ -32,7 +32,6 @@ ENGINE = MyISAM
  */
 
 class WxaccountModel extends Model{
-	
 	//自动验证
 	protected $_validate = array(
 		array('wxname','require','微信昵称必须！'),
@@ -43,13 +42,14 @@ class WxaccountModel extends Model{
 		array('headerpic','require','头像地址必须！'),
 		array('wxuid','require','微信号必须！'),
 		array('qrcode','require','公众号二维码图片地址必须！'),
+		
 	);
 	
 	//自动完成
 	protected $_auto = array(
 		array('tplid', 0, self::MODEL_INSERT), 
 		array('uid', 0, self::MODEL_INSERT), 
-		array('updatetime', 'time', self::MODEL_UPDATE,'function'), 
+		array('updatetime', 'time', self::MODEL_BOTH,'function'), 
 		array('createtime', NOW_TIME, self::MODEL_INSERT), 
 		array('status', '1', self::MODEL_INSERT), 
 	);
