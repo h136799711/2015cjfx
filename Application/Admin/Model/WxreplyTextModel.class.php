@@ -28,14 +28,15 @@ ENGINE = InnoDB
  */
 class WxreplyTextModel extends Model{
 	protected $_auto = array(
-		array('content',"",self::MODEL_BOTH),
 		array('updatetime',NOW_TIME,self::MODEL_BOTH),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
 	);
 	
 	protected $_validate = array(
-		array('wxaccount_id','require','公众号ID必须'),
-		array('keyword','require','关键词必填'),
+		array('content',"require","内容必填",self::MUST_VALIDATE),
+		array('wxaccount_id','require','公众号ID必须',self::MUST_VALIDATE),
+		array('keyword','require','关键词必填',self::MUST_VALIDATE),
 	);
+	
 	
 }

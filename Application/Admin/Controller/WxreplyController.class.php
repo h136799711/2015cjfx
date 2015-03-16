@@ -12,4 +12,8 @@ class WxreplyController extends AdminController{
 	public function index(){
 		$this->display();
 	}	
+	
+	
+	
+	
 }
