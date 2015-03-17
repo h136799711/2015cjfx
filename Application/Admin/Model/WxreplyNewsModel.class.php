@@ -17,10 +17,11 @@ use Think\Model;
   `updatetime` INT NOT NULL,
   `wxaccount_id` INT NOT NULL,
   `description` VARCHAR(256) NOT NULL COMMENT '图文描述',
+  `pictureid` int NOT NULL COMMENT '图片表的ID，外键',
   `picurl` VARCHAR(512) NOT NULL COMMENT '图片链接',
   `url` VARCHAR(256) NOT NULL COMMENT '点击图文跳转的链接',
-  `titile` VARCHAR(64) NOT NULL COMMENT '标题',
-  `order` TINYINT NOT NULL DEFAULT 0 COMMENT '排序，仅在多图文的情况下',
+  `title` VARCHAR(64) NOT NULL COMMENT '标题',
+  `sort` TINYINT NOT NULL DEFAULT 0 COMMENT '排序，仅在多图文的情况下',
   PRIMARY KEY (`id`),
   INDEX `fk_wxreply_cjfx_wxaccount1_idx` (`wxaccount_id` ASC),
   CONSTRAINT `fk_wxreply_cjfx_wxaccount10`
@@ -33,13 +34,10 @@ ENGINE = InnoDB
  */
 class WxreplyNewsModel extends  Model{
 	protected $_auto = array(
-		array('order',0,self::MODEL_BOTH),
+		array('sort',0,self::MODEL_INSERT),
 		array('updatetime',NOW_TIME,self::MODEL_BOTH),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
-		array('description',"",self::MODEL_INSERT),
-		array('picurl',"",self::MODEL_INSERT),
-		array('url',"",self::MODEL_INSERT),
-		array('titile',"",self::MODEL_INSERT),
+		
 	);
 	
 	protected $_validate = array(

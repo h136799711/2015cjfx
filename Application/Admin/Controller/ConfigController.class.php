@@ -70,7 +70,7 @@ class ConfigController extends AdminController {
 			$this -> display();
 		} else {
 			$menu = I('post.');
-			parent::add($menu, U('Admin/Config/index'));
+			parent::addTo($menu, U('Admin/Config/index'));
 		}
 	}
 	

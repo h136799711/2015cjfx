@@ -8,7 +8,7 @@
 
 namespace Admin\Controller;
 
-class WxreplyTextController extends  AdminController{
+class WxreplyNewsController extends  AdminController{
 	
 	protected function _initialize(){
 		parent::_initialize();
@@ -19,7 +19,7 @@ class WxreplyTextController extends  AdminController{
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " updatetime desc ";
 		//
-		$result = apiCall('Admin/WxreplyText/query',array($map,$page,$order));
+		$result = apiCall('Admin/WxreplyNews/query',array($map,$page,$order));
 		if($result['status']){
 			$this->assign("show",$result['info']['show']);
 			$this->assign("list",$result['info']['list']);
@@ -37,12 +37,16 @@ class WxreplyTextController extends  AdminController{
 		}elseif(IS_POST){
 			$entity = array(
 						"keyword"=>I('post.keyword',''),
-						"content"=>I('post.content',''),
+						"title"=>I('post.title',''),
+						"description"=>I('post.description',''),
+						"url"=>I('post.url',''),
+						'pictureid'=>I('post.pictureid',0),
+						"picurl"=>I('post.picurl',''),
 						"wxaccount_id"=> getWxAccountID(),//TODO:暂支持单公众号所以此处公众号ID写死
 						);
-			$result = apiCall("Admin/WxreplyText/add",array($entity));
+			$result = apiCall("Admin/WxreplyNews/add",array($entity));
 			if($result['status']){
-				$this->success(L('RESULT_SUCCESS'),U('Admin/WxreplyText/index'));
+				$this->success(L('RESULT_SUCCESS'),U('Admin/WxreplyNews/index'));
 			}else{
 				LogRecord($result['info'], __FILE__);
 				$this->error($result['info']);
@@ -56,9 +60,9 @@ class WxreplyTextController extends  AdminController{
 	public function edit(){
 		if(IS_GET){
 			$id = I('get.id',0);
-			$result = apiCall("Admin/WxreplyText/getInfo",array(array('id'=>$id)));
+			$result = apiCall("Admin/WxreplyNews/getInfo",array(array('id'=>$id)));
 			if($result['status']){
-				$this->assign("textVO",$result['info']);
+				$this->assign("newsVO",$result['info']);
 				$this->display();
 			}else{
 				LogRecord($result['info'], __FILE__);
@@ -69,11 +73,15 @@ class WxreplyTextController extends  AdminController{
 			$id = I('post.id',0);
 			$entity = array(
 						"keyword"=>I('post.keyword',''),
-						"content"=>I('post.content','')
+						"title"=>I('post.title',''),
+						"description"=>I('post.description',''),
+						"url"=>I('post.url',''),
+						'pictureid'=>I('post.pictureid',0),
+						"picurl"=>I('post.picurl',''),
 						);
-			$result = apiCall("Admin/WxreplyText/saveByID",array($id,$entity));
+			$result = apiCall("Admin/WxreplyNews/saveByID",array($id,$entity));
 			if($result['status']){
-				$this->success(L('RESULT_SUCCESS'),U('Admin/WxreplyText/index'));
+				$this->success(L('RESULT_SUCCESS'),U('Admin/WxreplyNews/index'));
 			}else{
 				LogRecord($result['info'], __FILE__);
 				$this->error($result['info']);

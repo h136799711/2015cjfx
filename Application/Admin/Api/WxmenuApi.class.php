@@ -6,13 +6,14 @@
 // | Copyright (c) 2013-2016 杭州博也网络科技, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Admin\Controller;
+namespace Admin\Api;
+use Admin\Model\WxmenuModel;
 
-class WxreplyController extends AdminController{
-	public function index(){
-		$this->display();
-	}	
+class WxmenuApi extends  \Common\Api\Api{
 	
+	protected function _init(){
+		$this->model = new WxmenuModel();
+	}
 	
 	
 	

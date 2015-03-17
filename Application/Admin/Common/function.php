@@ -92,3 +92,7 @@ function isNight(){
 		return false;
 	}
 }
+
+function getWxAccountID(){
+	return 1;
+}

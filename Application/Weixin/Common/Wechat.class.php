@@ -25,10 +25,12 @@ class Wechat
     
     //事件类型常量
     const MSG_EVENT_SUBSCRIBE = 'subscribe';
-    const MSG_EVENT_SCAN = 'SCAN';
-    const MSG_EVENT_LOCATION = 'LOCATION';
-    const MSG_EVENT_CLICK = 'CLICK';
-    const MSG_EVENT_MASSSENDJOBFINISH = 'MASSSENDJOBFINISH';
+    const MSG_EVENT_UNSUBSCRIBE = 'unsubscribe';
+    const MSG_EVENT_SCAN = 'scan';
+    const MSG_EVENT_LOCATION = 'location';
+    const MSG_EVENT_CLICK = 'click';
+    const MSG_EVENT_VIEW = 'view';
+    const MSG_EVENT_MASSSENDJOBFINISH = 'masssendjobfinish';
     
     private $data = array();
     private $pc = null;

@@ -31,7 +31,7 @@ class AuthGroupController extends AdminController{
 				'title'=>I('post.title','','trim'),
 				'notes'=>I('post.notes','','trim')
 			);
-			parent::add($entity);
+			parent::addTo($entity);
 		}else{
 			$this->display();
 		}

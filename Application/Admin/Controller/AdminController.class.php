@@ -323,7 +323,7 @@ class AdminController extends CheckLoginController {
 	 * GET:显示
 	 * @param $success_url 添加成功后跳转url
 	 */
-	protected function add($entity, $success_url = false) {
+	protected function addTo($entity, $success_url = false) {
 		if (IS_GET) {
 			$this -> display();
 		} else {

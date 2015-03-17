@@ -125,6 +125,15 @@ body{
 	border-top: 0px;
 }
 
+.text-wordbreak{
+	word-wrap: break-word;
+	word-break: break-word;
+	overflow-wrap: break-word;
+}
+.text-ellipsis{
+	text-overflow: ellipsis;
+}
+
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (min-width: 768px) {
