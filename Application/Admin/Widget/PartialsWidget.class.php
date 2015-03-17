@@ -8,9 +8,9 @@
 
 
 namespace Admin\Widget;
-use Ucenter\Controller\UcenterController;
+use Admin\Controller\AdminController;
 
-class PartialsWidget extends UcenterController{
+class PartialsWidget extends AdminController{
 	/**
 	 * 配置部分内容
 	 */

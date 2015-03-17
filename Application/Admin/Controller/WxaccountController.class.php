@@ -22,7 +22,7 @@ class WxaccountController extends AdminController{
 	public function help(){
 		
 		if(IS_GET){
-			$map = array('id'=>1);
+			$map = array('id'=>getWxAccountID());
 			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
 			
 			if($result['status']){
@@ -40,7 +40,7 @@ class WxaccountController extends AdminController{
 	 */
 	public function edit(){
 		if(IS_GET){
-			$map = array('id'=>1);
+			$map = array('id'=>getWxAccountID());
 			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
 			if($result['status']){
 				$this->assign("wxaccount",$result['info']);

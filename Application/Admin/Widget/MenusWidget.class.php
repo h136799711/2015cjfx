@@ -113,7 +113,7 @@ class MenusWidget extends AdminController {
 		//TODO: 如果为了链接考虑，可以转为Cookie来存取
 		if (session("?activesubmenuid")) {
 			$map = array('id' => session('activesubmenuid'));
-			$result = apiCall('Ucenter/Menu/getInfo', array($map));
+			$result = apiCall('Admin/Menu/getInfo', array($map));
 			if ($result['status']) {
 				array_push($breadcrumb, array('title' => $result['info']['title'], 'url' => getURL($result['info']['url'])));
 			} else {

@@ -29,29 +29,29 @@ class AdminController extends CheckLoginController {
 		$this -> getConfig();
 		// 对页面一些配置赋值
 		$this -> assignPageVars();
-		
-		if(!defined('IS_ROOT')){
+
+		if (!defined('IS_ROOT')) {
 			// 是否是超级管理员
 			define('IS_ROOT', is_administrator());
 		}
-		
+
 		// 检测IP是否受限制
 		$this -> checkAllowIP();
-	
-		if(!defined('APP_VERSION')){
+
+		if (!defined('APP_VERSION')) {
 			//定义版本
 			if (defined("APP_DEBUG") && APP_DEBUG) {
 				define("APP_VERSION", time());
 			} else {
 				define("APP_VERSION", C('APP_VERSION'));
 			}
-			//权限检测
-			if ($this -> checkAuthority() === false) {
-				$this -> error(L('ERR_NO_PERMISSION'));
-			}
+		}
+		//权限检测
+		if ($this -> checkAuthority() === false) {
+			$this -> error(L('ERR_NO_PERMISSION'));
 		}
 	}
-	
+
 	//===================权限相关START=======================
 
 	public function checkAuthority() {
@@ -59,7 +59,7 @@ class AdminController extends CheckLoginController {
 		if (IS_ROOT) {
 			return true;
 		}
-		
+
 		$access = $this -> accessControl();
 		if (false === $access) {
 			$this -> error('403:禁止访问');
@@ -79,58 +79,57 @@ class AdminController extends CheckLoginController {
 		//TODO:检测权限
 		return true;
 	}
-	
-	
-    /**
-     * 权限检测
-     * @param string  $rule    检测的规则
-     * @param string  $mode    check模式
-     * @return boolean
-     */
-    private function checkRule($rule, $mode='url'){
-        static $Auth    =   null;
-        if (!$Auth) {
-            $Auth       =   new \Think\Auth();
-        }
-		
-        if(!$Auth->check($rule,UID,2,$mode)){
-            return false;
-        }
-		
-        return true;
-    }
-	
+
 	/**
-     * action访问控制,在 **登陆成功** 后执行的第一项权限检测任务
-     *
-     * @return boolean|null  返回值必须使用 `===` 进行判断
-     *
-     *   返回 **false**, 不允许任何人访问(超管除外)
-     *   返回 **true**, 允许任何管理员访问,无需执行节点权限检测
-     *   返回 **null**, 需要继续执行节点权限检测决定是否允许访问
-	 * 
-     */
-    private function accessControl(){
-        $allow = C('ALLOW_VISIT');
-        $deny  = C('DENY_VISIT');
-        $check = strtolower(CONTROLLER_NAME.'/'.ACTION_NAME);
-        if ( !empty($deny)  && in_array_case($check,$deny) ) {
-            return false;//非超管禁止访问deny中的方法
-        }
-        if ( !empty($allow) && in_array_case($check,$allow) ) {
-            return true;
-        }
-        return null;//需要检测节点权限
-    }
-	
-	private function checkDynamic(){
-		 return true;
+	 * 权限检测
+	 * @param string  $rule    检测的规则
+	 * @param string  $mode    check模式
+	 * @return boolean
+	 */
+	private function checkRule($rule, $mode = 'url') {
+		static $Auth = null;
+		if (!$Auth) {
+			$Auth = new \Think\Auth();
+		}
+
+		if (!$Auth -> check($rule, UID, 2, $mode)) {
+			return false;
+		}
+
+		return true;
 	}
-	
+
+	/**
+	 * action访问控制,在 **登陆成功** 后执行的第一项权限检测任务
+	 *
+	 * @return boolean|null  返回值必须使用 `===` 进行判断
+	 *
+	 *   返回 **false**, 不允许任何人访问(超管除外)
+	 *   返回 **true**, 允许任何管理员访问,无需执行节点权限检测
+	 *   返回 **null**, 需要继续执行节点权限检测决定是否允许访问
+	 *
+	 */
+	private function accessControl() {
+		$allow = C('ALLOW_VISIT');
+		$deny = C('DENY_VISIT');
+		$check = strtolower(CONTROLLER_NAME . '/' . ACTION_NAME);
+		if (!empty($deny) && in_array_case($check, $deny)) {
+			return false;
+			//非超管禁止访问deny中的方法
+		}
+		if (!empty($allow) && in_array_case($check, $allow)) {
+			return true;
+		}
+		return null;
+		//需要检测节点权限
+	}
+
+	private function checkDynamic() {
+		return true;
+	}
+
 	//===================权限相关END=======================
-	
-	
-	
+
 	/**
 	 * 检测IP是否在运行访问的IP里
 	 */
