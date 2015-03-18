@@ -97,7 +97,55 @@
 					$(".admin-main-content").outerWidth(width);
 				}
 			});
+			//一般是select 框
+			$(".sle_ajax_post").change(function(ev){
+				var item = $(ev.target);
+				var query = item.serialize();
+				if (item.hasClass('confirm')) {
 
+					var conf = $.scojs_confirm({
+						content: '确认要执行该操作吗?',
+						action: function() {
+							sleajaxpost(query, item);
+						}
+					});
+					conf.show();
+				}else{
+					sleajaxpost(query, item);
+				}
+				
+			})
+				
+			function sleajaxpost (query, that){
+				
+				var target = that.attr("data-href");
+				$.post(target, query).always(function() {
+					
+				}).done(function(data) {
+					if (data.status == 1) {
+						if (data.url) {
+							$.scojs_message(data.info + ' 页面即将自动跳转~', $.scojs_message.TYPE_OK);
+						} else {
+							$.scojs_message(data.info, $.scojs_message.TYPE_OK);
+						}
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+							} else if ($(that).hasClass('no-refresh')) {} else {
+								location.reload();
+							}
+						}, 1500);
+					} else {
+
+						$.scojs_message(data.info, $.scojs_message.TYPE_OK);
+						setTimeout(function() {
+							if (data.url) {
+								location.href = data.url;
+							} else {}
+						}, 1500);
+					}
+				});
+			}
 
 			//ajax get请求
 			$('.ajax-get').click(function(ev) {
