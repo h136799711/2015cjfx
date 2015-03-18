@@ -239,4 +239,12 @@ function tree_to_list($tree, $child = '_child', $order='id', &$list = array()){
     return $list;
 }
 
-
+/**
+ * 获取图片表的图片链接
+ */
+function getPictureURL($localpath,$remoteurl){
+	if(strpos($remoteurl, "http") === 0){
+		return $remoteurl;
+	}
+	return __ROOT__.$localpath;
+}
