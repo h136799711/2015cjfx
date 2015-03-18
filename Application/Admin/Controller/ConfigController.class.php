@@ -60,6 +60,15 @@ class ConfigController extends AdminController {
 		}
 	}
 	
+		/**
+	 * 更新保存，根据主键默认id
+	 * 示列url:
+	 * /Admin/Menu/save/id/33
+	 * id必须以get方式传入
+	 */
+	public function save(){
+		parent::save();	
+	}
 
 	/**
 	 * 添加
@@ -78,6 +87,9 @@ class ConfigController extends AdminController {
 		$this->configVars();
 		parent::edit();
 	}
+	
+	
+	
 	
 	/**
 	 * 配置分组与类型参数
