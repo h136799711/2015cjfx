@@ -183,9 +183,23 @@ class Wechat
         $this->data['Music'] = $music;
     }
     
+	/**
+	 * 回复图片信息
+	 * @param $media_id 通过上传多媒体文件，得到的id 
+	 */
+	private function image($media_id){
+		$image = array('MediaId'=>$media_id);
+        $this->data['Image'] = $image;
+	}
+	
     /**
      * 回复图文信息
      * @param  string $news 要回复的图文内容 数组
+	 * 格式：
+	 * array(
+	 * 	array('title','description','picurl','url'),
+	 * 	array('title','description','picurl','url')
+	 * )
      */
     private function news($news) {
         

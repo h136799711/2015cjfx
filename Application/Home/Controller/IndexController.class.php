@@ -2,7 +2,42 @@
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
-    public function index(){
-        $this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>欢迎使用 <b>ThinkPHP</b>！</p><br/>[ 您现在访问的是Home模块的Index控制器 ]</div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script>','utf-8');
-    }
+
+	private $wxaccount = "";
+	private $wxapi = "";
+	
+	protected function _initialize(){
+		$this->refreshWxaccount();
+	}
+
+	public function index() {
+		if (IS_GET) {
+			$userinfo = $this->wxapi ->getBaseUserInfo();
+			$this -> assign("userinfo", $userinfo);
+			$this -> display();
+		} else {
+			$this -> error("无法访问！");
+		}
+	}
+
+	/**
+	 * 刷新
+	 */
+	private function refreshWxaccount() {
+		$token = I('get.token', '');
+		if(!empty($token)){
+			session("token",$token);
+		}elseif(session("?token")){
+			$token = session("token");
+		}
+		
+		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $token)));
+		if ($result['status']) {
+			$this -> wxaccount = $result['info'];
+     		$this->wxapi = new \Common\Api\WeixinApi($this->wxaccount['appid'],$this->wxaccount['appsecret']);		
+		}else{
+			$this -> error("信息获取失败，请重试！");
+		}
+	}
+
 }

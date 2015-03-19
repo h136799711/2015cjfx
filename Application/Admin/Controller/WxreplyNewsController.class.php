@@ -13,14 +13,31 @@ class WxreplyNewsController extends  AdminController{
 	protected function _initialize(){
 		parent::_initialize();
 	}
+	/**
+	 * 获取文本回复、图文回复的所有不重复关键词
+	 */
+	private function getAllKeywords(){
+		$keywords = array();
+		$textKeywords = apiCall("Admin/WxreplyText/getKeywords",array());
+		$newsKeywords = apiCall("Admin/WxreplyNews/getKeywords",array());
+		if($textKeywords['status']){
+			$keywords = $textKeywords['info'];
+		}
+		if($newsKeywords['status']){
+			$keywords = array_merge($keywords,$newsKeywords['info']);
+		}
+		return $keywords;
+	}
 	
 	public function index(){
+		$keywords = $this->getAllKeywords();
 		$map = array('wxaccount_id'=>getWxAccountID());
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " updatetime desc ";
 		//
 		$result = apiCall('Admin/WxreplyNews/query',array($map,$page,$order));
 		if($result['status']){
+			$this->assign("keywords",$keywords);
 			$this->assign("show",$result['info']['show']);
 			$this->assign("list",$result['info']['list']);
 			$this->display();

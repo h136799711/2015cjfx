@@ -1,7 +1,8 @@
 <extend name="template/base_index" />
 
 <block name="area_header">
-
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/select2.min.css" />
+	<link type="text/css" rel="stylesheet" href="__CDN__/select2/4.0.0/css/cosmo-skin.css" />
 </block>
 
 <block name="area_body">
@@ -10,6 +11,20 @@
 		{:W('Menus/left')}
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
+			<div class="well clearfix">
+				<form class="form form-inline">				
+					<div class="col-lg-12 col-md-12">
+						<label for="ss_keyword" class="control-label">首次关注时响应关键词：</label>
+						<select id="ss_keyword" name="ss_keyword" data-href="{:U('Admin/Wxaccount/saveFirstResp')}" class="sle_ajax_post form-control input-normal select2">
+									<option value="">=无=</option>
+								<volist name="keywords" id="vo">
+									<option value="{$vo.keyword}" <if condition=" C('SS_KEYWORD') eq $vo['keyword'] ">selected="selected"</if> >{$vo.keyword}</option>
+								</volist>
+						</select>
+					</div>
+				</form>
+			</div>
+			
 			<ul class="nav nav-tabs" role="tablist" id="configTab">
 				<li role="presentation" class="">
 					<a href="{:U('Admin/WxreplyText/index')}" role="tab" >文本回复</a>
@@ -84,4 +99,15 @@
 
 <block name="area_footer">
 
+	<script src="__CDN__/select2/4.0.0/js/select2.min.js"></script>
+	<script src="__CDN__/select2/4.0.0/js/i18n/zh-CN.js"></script>
+	<!--<script src="__CDN__/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>-->
+	<script>
+		$(function() {
+			
+			$(".select2").select2({
+				language:"zh-CN"
+			});
+		});
+	</script>
 </block>

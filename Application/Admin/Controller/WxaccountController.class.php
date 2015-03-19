@@ -17,6 +17,21 @@ class WxaccountController extends AdminController{
 	}
 	
 	/**
+	 * 首次关注时响应关键词管理
+	 */
+	public function saveFirstResp(){
+		$keyword = I('post.ss_keyword','');			
+		$config = array("SS_KEYWORD"=>$keyword);
+		$result = apiCall("Admin/Config/set", array($config));
+		if($result['status']){
+			C('SS_KEYWORD',$keyword);
+			$this->success(L('RESULT_SUCCESS'));
+		}else{
+			$this->error($result['info']);
+		}
+	}
+	
+	/**
 	 * 公众号帮助信息
 	 */
 	public function help(){

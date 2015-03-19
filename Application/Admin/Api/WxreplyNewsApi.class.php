@@ -16,4 +16,15 @@ class WxreplyNewsApi extends \Common\Api\Api{
 		$this->model = new WxreplyNewsModel();	
 	}
 	
+	/**
+	 * 获取所有keyword，不重复
+	 */
+	public function getKeywords(){
+		$result = $this->model->distinct(true)->field('keyword')->select();
+		if($result === false){
+			return $this->apiReturnErr($this->model->getDbError());
+		}else{
+			return $this->apiReturnSuc($result);
+		}
+	}
 }

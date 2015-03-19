@@ -25,33 +25,33 @@ use Think\Model;
   `status` TINYINT NOT NULL COMMENT '数据状态,',
   `notes` VARCHAR(45) NOT NULL COMMENT '备注',
   `wxaccount_id` INT NOT NULL,
-  `cjfx_commission_id` INT NOT NULL,
-  `cjfx_wxuser_family_wxuserid` INT NOT NULL,
+  `commission_id` INT NOT NULL,
+  `wxuser_family_wxuserid` INT NOT NULL,
   `sex` TINYINT NOT NULL COMMENT '性别',
   `province` VARCHAR(32) NOT NULL COMMENT '省份',
   `city` VARCHAR(32) NOT NULL COMMENT '城市',
   `country` VARCHAR(32) NOT NULL COMMENT '国家',
+  `subscribed` TINYINT(2) NOT NULL DEFAULT 1 COMMENT '是否关注公众号，1：是0：否',
   PRIMARY KEY (`id`),
   INDEX `fk_cjfx_wxuser_cjfx_wxaccount_idx` (`wxaccount_id` ASC),
-  INDEX `fk_cjfx_wxuser_cjfx_commission1_idx` (`cjfx_commission_id` ASC),
-  INDEX `fk_cjfx_wxuser_cjfx_wxuser_family1_idx` (`cjfx_wxuser_family_wxuserid` ASC),
+  INDEX `fk_cjfx_wxuser_cjfx_commission1_idx` (`commission_id` ASC),
+  INDEX `fk_cjfx_wxuser_cjfx_wxuser_family1_idx` (`wxuser_family_wxuserid` ASC),
   CONSTRAINT `fk_cjfx_wxuser_cjfx_wxaccount`
     FOREIGN KEY (`wxaccount_id`)
     REFERENCES `boye_2015cjfx`.`cjfx_wxaccount` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cjfx_wxuser_cjfx_commission1`
-    FOREIGN KEY (`cjfx_commission_id`)
+    FOREIGN KEY (`commission_id`)
     REFERENCES `boye_2015cjfx`.`cjfx_commission` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cjfx_wxuser_cjfx_wxuser_family1`
-    FOREIGN KEY (`cjfx_wxuser_family_wxuserid`)
+    FOREIGN KEY (`wxuser_family_wxuserid`)
     REFERENCES `boye_2015cjfx`.`cjfx_wxuser_family` (`wxuserid`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-    )
-ENGINE = MyISAM
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
 	///////////////////////////////////
 	`nickname` VARCHAR(32) NOT NULL COMMENT '昵称',
   `avatar` VARCHAR(255) NOT NULL COMMENT '头像地址',
@@ -71,19 +71,22 @@ class WxuserModel extends Model{
 		array('referrer','require','推荐人必须！'),
 		array('openid','require','openid参数必须！'),
 		array('wxaccount_id','require','公众号ID参数必须！'),
+		array('city', 'require','所属城市必须！'), 
+		array('province', 'require','所属省份必须！'), 
+		array('country', 'require','所属国家必须！'), 
+		array('sex', 'require','性别必须！'), 
+		array('subscribe_time', 'require','关注时间必须！'), 
+		
 	);
 	
 	//自动完成
 	protected $_auto = array(
+		array('subscribed', 1, self::MODEL_INSERT), 
 		array('costmoney', 0, self::MODEL_INSERT), 
 		array('money', 0, self::MODEL_INSERT), 
-		array('updatetime', 'time', self::MODEL_UPDATE,'function'), 
+		array('updatetime', 'time', self::MODEL_BOTH,'function'), 
 		array('createtime', NOW_TIME, self::MODEL_INSERT), 
-		array('notes', '', self::MODEL_INSERT), 
-		array('city', '', self::MODEL_INSERT), 
-		array('province', '', self::MODEL_INSERT), 
-		array('country', 'CN', self::MODEL_INSERT), 
-		array('sex', '0', self::MODEL_INSERT), 
+		array('notes', '', self::MODEL_INSERT), 		
 		array('score',0, self::MODEL_INSERT), 
 		array('status', '1', self::MODEL_INSERT), 
 	);

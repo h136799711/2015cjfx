@@ -158,6 +158,25 @@ class WeixinApi {
 		return $obj;
 	}
 	
+	
+	/**
+	 * 上传临时素材
+	 * @param $filepath 文件路径
+	 */
+	public function uploadMaterial($filepath,$type='image'){
+		
+		if(!file_exists($filepath)){
+			return array('status'=>false,'msg'=>'文件不存在');
+		}
+		
+		$accessToken = $this->getAccessToken();
+		$data = array("media"=>'@'.$filepath);
+		
+		$url = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=".$accessToken."&type=".$type;		
+		$obj = $this->curlPost($url, $data);
+		return $obj;
+	}
+	
 	public function createMenu($menulist){
 		
 		$accessToken = $this->getAccessToken();
@@ -261,9 +280,9 @@ class WeixinApi {
 		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken."&openid=".$openid."&lang=zh_CN";
 		$arr = json_decode($this->curlGet($url),true);
 		if(isset($arr['errcode'])){
-			return array('status'=>false,'msg'=> $this->errcode[$arr['errcode']] );
+			return array('status'=>false,'info'=> $this->errcode[$arr['errcode']] );
 		}else{
-			return array('status'=>true,'msg'=>$arr);
+			return array('status'=>true,'info'=>$arr);
 		}
 	}
 	
