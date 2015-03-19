@@ -55,6 +55,16 @@ function LogRecord($msg, $location, $level = 'ERR') {
 }
 
 /**
+ * 如果操作失败则记录日志
+ * @return array 格式：array('status'=>boolean,'info'=>'错误信息')
+ * @author hebiduhebi@163.com
+ */
+function ifFailedLogRecord($result,$location){
+	if($result['status'] === false){
+		Think\Log::write($location . $result['info'], 'ERR');
+	}
+}
+/**
  * 数据签名认证
  * @param  array  $data 被认证的数据
  * @return string       签名
