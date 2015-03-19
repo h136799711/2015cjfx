@@ -244,15 +244,16 @@ class ConnectController extends WeixinController {
 		if(empty($keyword)){
 			$keyword = $this->data['Content'];
 		}
-		//dump($keyword);
+		
 		$map = array('keyword'=>$keyword);
+		
 		//文本响应
 		$result = apiCall("Weixin/WxreplyText/getInfo",array($map));
 		
-//		dump($result);
 		if($result['status'] && is_array($result['info'])){
 			return array((($result['info']['content'])) , self::MSG_TYPE_TEXT);
 		}
+		
 		//图文响应
 		$result = apiCall("Weixin/WxreplyNews/queryWithPicture",array($map,'sort desc'));
 		
@@ -349,12 +350,16 @@ class ConnectController extends WeixinController {
 	private function qrsceneProcess($eventKey) {
 		//$eventKey
 		//TODO: 处理二维码扫描事件
-		$eventKey = intval(str_replace('UID_', '', $eventKey));
-
-		if (is_int($eventKey) && $eventKey > 0) {			
-			$this->addWxuser($eventKey);
+		//TODO: 转到插件中处理
+		if(strpos($eventKey, 'UID_') === 0){
+			$eventKey = intval(str_replace('UID_', '', $eventKey));
+		
+			if (is_int($eventKey) && $eventKey > 0) {			
+				$this->addWxuser($eventKey);
+			}
+			addWeixinLog("用户uid= " . $eventKey, "【微信消息】");
 		}
-		addWeixinLog("用户uid= " . $eventKey, "【微信消息】");
+		
 		return "";
 
 	}
@@ -363,6 +368,7 @@ class ConnectController extends WeixinController {
 	 * 关注事件
 	 */
 	private function subscribe() {
+		addWeixinLog($this->data, "[subscribe]");
 		if (isset($this -> data['EventKey']) && !empty($this->data['EventKey'])) {
 			//TODO: 处理用户通过推广二维码进行关注的事件
 			$eventKey = $this -> data['EventKey'];
@@ -411,16 +417,44 @@ class ConnectController extends WeixinController {
 	private function addWxuserFamily($referrer){
 		$wxaccount_id = $this->wxaccount['id'];
 		$openid = $this->getOpenID();
-		
+		$parentFamily = "";
+				
 		$result = apiCall("Weixin/WxuserFamily/createOneIfNone",array($wxaccount_id,$openid,$referrer));
 		
-		addWeixinLog($result,"WxuserFamily的粉丝信息 2");
+		
+		addWeixinLog($result,"WxuserFamily的粉丝信息 2".$referrer);
 		if($result['status']){
+			
+			if($referrer > 0){
+				$parentFamily = apiCall("Weixin/Wxuser/getInfoWithFamily",array($referrer));
+				addWeixinLog($parentFamily,"getInfoWithFamily的粉丝信息3");
+				//如果有推荐人,则更新当前用户的家族关系
+				if($parentFamily['status'] && is_array($parentFamily['info'])){
+					$this->updateWxuserFamily($result['info'], $parentFamily['info']);
+				}
+			}
+			
 			return $result['info'];
 		}else{
 			return -1;
 		}
 		
+	}
+	
+	/**
+	 * 更新微信用户家族关系
+	 */
+	private function updateWxuserFamily($id,$parentFamily){
+		$family = array(
+			'parent_1'=>$parentFamily['wxuserid'],
+			'parent_2'=>$parentFamily['parent_1'],
+			'parent_3'=>$parentFamily['parent_2'],
+			'parent_4'=>$parentFamily['parent_3'],//4级
+		);
+		addWeixinLog($family,$id.'[updateWxuserFamily]');
+		
+		$result = apiCall("Weixin/WxuserFamily/saveByID",array($id,$family));
+		ifFailedLogRecord($result,'[updateWxuserFamily]'.__LINE__);
 	}
 	
 	private function addCommission(){
@@ -440,8 +474,11 @@ class ConnectController extends WeixinController {
 	 */
 	private function addWxuser($referrer = 0,$cnt=0) {
 
+		addWeixinLog($referrer,"addWxuser 1");
 		$openid = $this -> getOpenID();
 		$userinfo = $this -> wxapi -> getBaseUserInfo($openid);
+		
+		
 		if(!$userinfo['status']){
 			LogRecord($userinfo['info'], __FILE__.__LINE__);
 			if($cnt > 1){
@@ -476,7 +513,6 @@ class ConnectController extends WeixinController {
 			$wxuser['avatar'] = $userinfo['headimgurl'];
 			$wxuser['subscribe_time'] = $userinfo['subscribe_time'];
 			$wxuser['subscribed'] = 1;
-			
 		}
 		
 		$map = array('openid' => $this -> getOpenID(), 'wxaccount_id' => $this->wxaccount['id'] );
@@ -493,6 +529,7 @@ class ConnectController extends WeixinController {
 		
 		//判断是否已记录
 		if (is_array($result['info'])) {
+			
 			if($result['info']['id'] == $referrer){
 				//不能自己推荐自己
 				unset($wxuser['referrer']);
@@ -504,11 +541,33 @@ class ConnectController extends WeixinController {
 		if ($result['status']) {
 			//TODO:检测推荐人是否是其他粉丝
 			//是则推送消息给其他粉丝，提醒有下家关注
-			//				$this->sendToFans($referrer);
+			if($referrer > 0){
+				$family = apiCall("Weixin/WxuserFamily/getInfo",array($map));//当前的家族关系
+				if($family['status']){
+					$this->sendTextToFans($wxuser,$family['info']);
+				}
+			}
 		} else {
 			LogRecord($result['info'], __FILE__.__LINE__);
 		}
 
+	}
+
+	private function sendTextToFans($wxuser,$family){
+		if(is_array($family)){
+			
+			$map['id'] = array('in',array($family['parent_1'],$family['parent_2'],$family['parent_3'],$family['parent_4']));	
+			
+			$result = apiCall("Weixin/Wxuser/queryNoPaging",array($map));	
+			if($result['status']){
+				$wxusers =  $result['info'];
+				$levels = array("一","二","三","四","五");
+				foreach($wxusers as $key=>$vo){
+					$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族".$levels[$key]."级成员";
+					$this->wxapi->sendTextToFans($vo['openid'],$text);
+				}
+			}	
+		}
 	}
 
 	/*

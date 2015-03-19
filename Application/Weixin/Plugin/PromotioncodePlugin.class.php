@@ -16,7 +16,8 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	
 	private $config = array(
 		'downloadFolder'=>'./Uploads/Qrcode',
-		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！'
+		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！',
+		'codeprefix'=>'UID_',//推广码所带前缀
 	);
 	private $wxapi ;
 	/**
@@ -24,10 +25,12 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	 * @return 返回 Wechat可处理的数组
 	 */
 	function process($data){
+		addWeixinLog($data,'[PromotioncodePlugin]');
 		if(empty($data['fans']) ){
 			LogRecord("fans参数为empty", "[PromotioncodePlugin]".__LINE__);
 			return array("二维码推广插件[调用失败]","text");
 		}
+		
 		if(empty($data['wxaccount']) ){
 			LogRecord("wxaccount参数为empty", "[PromotioncodePlugin]".__LINE__);
 			return array("二维码推广插件[调用失败]","text");
@@ -41,8 +44,8 @@ class PromotioncodePlugin extends  WeixinPlugin{
 		
 		$this -> wxapi = new \Common\Api\WeixinApi($data['wxaccount']['appid'], $data['wxaccount']['appsecret']);
 		
-
-		$realfile = $this->getQrcode($data['fans']['id']);
+		
+		$realfile = $this->getQrcode($this->config['codeprefix'].$data['fans']['id']);
 		
 		if(!file_exists($realfile)){
 			return array("获取失败，请重试！","text");
@@ -84,13 +87,13 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	
 	private function getQrcode($id){
 		//上传获取一张永久二维码
-		$filename = "/qrcode_$id.jpg";
+		$filename = "/qrcode_uid$id.jpg";
 		
 		if(file_exists(realpath($this->config['downloadFolder']).$filename)){
 			return realpath($this->config['downloadFolder']).$filename;
 		}
 		
-		$json = $this -> wxapi->getQrcode($id);
+		$json = $this -> wxapi->getQrcode(.strval($id));
 		if($json['status']){
 			//			
 			$ticket = $json['msg'];

@@ -13,7 +13,19 @@ class TestController extends Controller {
     public function index(){
 		$this->display();
     }
-    
+	
+	public function test2(){
+		dump(apiCall("Weixin/Wxuser/getInfoWithFamily", array(2)));
+	}
+	
+    public function sendText(){
+    	
+		$this -> wxapi = new \Common\Api\WeixinApi("wx58aea38c0796394d" , "3e1404c970566df55d7314ecfe9ff437");
+		
+		dump($this->wxapi->sendTextToFans('oqMIVt3Ouq-2Vm0kZOZmZ2rTDlP8','hello 我是主动发送给你的！'));
+    }
+	
+	
 	public function testWeixin(){
 		
 		$this -> wxapi = new \Common\Api\WeixinApi("wx58aea38c0796394d" , "3e1404c970566df55d7314ecfe9ff437");
