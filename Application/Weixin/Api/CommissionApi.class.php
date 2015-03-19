@@ -16,7 +16,7 @@ class CommissionApi extends  \Common\Api\Api{
 	}
 	
 	/**
-	 * 根据参数创建一个$commission记录
+	 * 根据参数创建一个$commission记录，如果不存在
 	 * 
 	 * @return 
 	 */

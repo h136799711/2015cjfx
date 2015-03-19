@@ -8,6 +8,11 @@
 
 namespace Common\Api;
 
+
+/**
+ * 微信接口调用封装类
+ * @author hebiduhebi@163.com
+ */
 class WeixinApi {
 	
 	
@@ -109,7 +114,7 @@ class WeixinApi {
 	
 	
 	private $appid = "";
-	private $appscret = "";
+	private $appsecret = "";
 	
 	
 	
@@ -119,6 +124,7 @@ class WeixinApi {
 	}
 	
 	//=================微信接口方法
+	
 	/**
 	 * 获取accesstoken,缓存7000秒，缓存key="WEIXIN_"$appid$secret
 	 * @param $appid 公众号appid
@@ -147,11 +153,9 @@ class WeixinApi {
 	public function getQrcode($scene_str) {
 		$accessToken = $this->getAccessToken();
 		$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" . $accessToken;
-		//	{"action_name": "QR_LIMIT_STR_SCENE", "action_info": {"scene": {"scene_str": "123"}}}
 		$data = array("action_name" => "QR_LIMIT_STR_SCENE", "action_info" => array('scene' => array('scene_str' => $scene_str)));
 		$obj = $this->curlPost($url, json_encode($data));
-
-		//	dump($obj);
+		
 		//ticket	获取的二维码ticket，凭借此ticket可以在有效时间内换取二维码。
 		//expire_seconds	二维码的有效时间，以秒为单位。最大不超过1800。
 		//url  二维码编码的字符串，可以根据此字符串来生成qrcode。
@@ -176,7 +180,15 @@ class WeixinApi {
 		$obj = $this->curlPost($url, $data);
 		return $obj;
 	}
-	
+	/**
+	 * 创建自定义菜单
+	 * @param $menulist 格式： array(
+	 * 			array('type'=>'类型','name'=>'一级菜单名称','key'=>'关联key','url'=>跳转链接,'_child'=>array(
+	 * 							array('type'=>'类型','name'=>'二级菜单名称','key'=>'关联key','url'=>跳转链接),
+	 * 							array('type'=>'类型','name'=>'二级单名称','key'=>'关联key','url'=>跳转链接),
+	 * 					))
+	 * 	)
+	 */
 	public function createMenu($menulist){
 		
 		$accessToken = $this->getAccessToken();
@@ -286,6 +298,70 @@ class WeixinApi {
 		}
 	}
 	
+	/**
+	 * 获取scope=snsapi_base 的跳转链接
+	 * @param $redirectURL 跳转链接
+	 */
+	public function getOAuth2BaseURL($redirectURL,$state='_openid_',$scope='snsapi_base'){
+		$redirectURL = urlencode($redirectURL);
+		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$this->appid&redirect_uri=$redirectURL&response_type=code&scope=$scope&state=$state#wechat_redirect";
+		return $url;
+	}
+	
+	/**
+	 * {
+   "access_token":"ACCESS_TOKEN",
+   "expires_in":7200,
+   "refresh_token":"REFRESH_TOKEN",
+   "openid":"OPENID",
+   "scope":"SCOPE"
+}
+	 */
+	public function getOAuth2AccessToken($code){
+		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->appid."&secret=".$this->appsecret."&code=".$code."&grant_type=authorization_code";
+		$arr = json_decode($this->curlGet($url),true);
+		return $arr;
+	}
+	
+	/**
+	 * 主动发送文本消息给粉丝
+	 * 走客服接口
+	 */
+	public function sendTextToFans($openid,$text){
+		
+		$accessToken = $this->getAccessToken();
+		$url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=$accessToken";
+		$textData = array('touser'=>$openid,'msgtype'=>'text','text'=>array('content'=>$text));
+		
+		$json = json_encode($textData,JSON_UNESCAPED_UNICODE);
+		$result = $this->curlPost($url, $json);
+		
+		if($result['status']){
+			if($result['msg']->errcode == 0){
+				return array('status'=>true,'msg'=>'success');
+			}else{
+				$index=$result['msg']->errcode;
+				
+				return array('status'=>false,'msg'=>$this->errcode[$index]);
+			}			
+		}else{
+			return array('status'=>false,'msg'=>$result['msg']);
+		}
+				
+	}
+	
+	/**
+	 *TODO: 主动发送模板消息给粉丝
+	 * 走模板消息接口
+	 */
+	public function sendTmplMsgToFans(){
+		
+	}
+	
+	
+	
+	
+	
 	//===============================================================
 
 	private function curlPost($url, $data) {
@@ -295,7 +371,7 @@ class WeixinApi {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -319,12 +395,11 @@ class WeixinApi {
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array($header));
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$temp = curl_exec($ch);
 		return $temp;

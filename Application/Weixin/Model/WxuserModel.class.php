@@ -71,9 +71,7 @@ class WxuserModel extends Model{
 		array('referrer','require','推荐人必须！'),
 		array('openid','require','openid参数必须！'),
 		array('wxaccount_id','require','公众号ID参数必须！'),
-		array('city', 'require','所属城市必须！'), 
-		array('province', 'require','所属省份必须！'), 
-		array('country', 'require','所属国家必须！'), 
+		
 		array('sex', 'require','性别必须！'), 
 		array('subscribe_time', 'require','关注时间必须！'), 
 		

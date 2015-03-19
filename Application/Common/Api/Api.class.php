@@ -8,6 +8,9 @@
 
 namespace Common\Api;
 
+/**
+ * API基类
+ */
 abstract class Api {
 
 	/**
