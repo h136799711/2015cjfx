@@ -1,0 +1,25 @@
+<?php
+// .-----------------------------------------------------------------------------------
+// | WE TRY THE BEST WAY
+// |-----------------------------------------------------------------------------------
+// | Author: 贝贝 <hebiduhebi@163.com>
+// | Copyright (c) 2013-2016 杭州博也网络科技, http://www.itboye.com. All Rights Reserved.
+// |-----------------------------------------------------------------------------------
+
+const EXPRESS = array('sf'=>"顺丰",'sto'=>"申通",'yt'=>"圆通",'yd'=>"韵达",'tt'=>"天天",'ems'=>"EMS",'zto'=>"中通",'ht'=>"汇通");
+
+/**
+ * 快递公司数据
+ */
+function getAllExpress(){
+	return array(
+		array('code'=>'sf','name'=EXPRESS['sf']),
+		array('code'=>'sto','name'=EXPRESS['sto']),
+		array('code'=>'yt','name'=EXPRESS['yt']),
+		array('code'=>'yd','name'=EXPRESS['yd']),
+		array('code'=>'tt','name'=EXPRESS['tt']),
+		array('code'=>'ems','name'=EXPRESS['ems']),
+		array('code'=>'zto','name'=EXPRESS['zto']),
+		array('code'=>'ht','name'=EXPRESS['ht']),
+	);
+}
