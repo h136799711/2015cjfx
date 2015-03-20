@@ -8,7 +8,7 @@
 
 namespace Admin\Api;
 
-use Admin\Model\WxreplyNewsModel;
+use Common\Model\WxreplyNewsModel;
 
 class WxreplyNewsApi extends \Common\Api\Api{
 	

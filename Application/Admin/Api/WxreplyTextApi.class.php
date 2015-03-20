@@ -8,7 +8,7 @@
 
 namespace Admin\Api;
 
-use Admin\Model\WxreplyTextModel;
+use Common\Model\WxreplyTextModel;
 
 class WxreplyTextApi extends \Common\Api\Api{
 	

@@ -6,15 +6,16 @@
 // | Copyright (c) 2013-2016 杭州博也网络科技, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Admin\Api;
-use Common\Model\WxmenuModel;
 
-class WxmenuApi extends  \Common\Api\Api{
+
+namespace Admin\Api;
+
+use Common\Model\GroupAccessModel;
+
+class GroupAccessApi extends \Common\Api\Api{
 	
 	protected function _init(){
-		$this->model = new WxmenuModel();
+		$this->model = new GroupAccessModel();
 	}
-	
-	
 	
 }

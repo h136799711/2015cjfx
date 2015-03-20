@@ -134,6 +134,10 @@ body{
 	text-overflow: ellipsis;
 }
 
+.error{
+	color: #FF0000;
+}
+
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (min-width: 768px) {

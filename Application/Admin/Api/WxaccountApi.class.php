@@ -10,7 +10,7 @@
 
 namespace Admin\Api;
 
-use Admin\Model\WxaccountModel;
+use Common\Model\WxaccountModel;
 
 class WxaccountApi extends \Common\Api\Api{
 		

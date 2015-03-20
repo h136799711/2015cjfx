@@ -68,11 +68,7 @@
 				NProgress.inc();
 			});
 
-			//验证表单
-			if ($.validator) {
-				$(".validate-form").validate();
-			}
-
+			
 			$(".dropdown-toggle.avatar").hover(function() {
 				$(".dropdown-toggle.avatar").dropdown("toggle");
 			}).next(".dropdown-menu").hover(function() {
@@ -97,6 +93,7 @@
 					$(".admin-main-content").outerWidth(width);
 				}
 			});
+			
 			//一般是select 框
 			$(".sle_ajax_post").change(function(ev){
 				var item = $(ev.target);
@@ -214,7 +211,7 @@
 				var need_confirm = false;
 				if (($(this).attr('type') == 'submit') || (target = $(this).attr('href')) || (target = $(this).attr('url'))) {
 					form = $('.' + target_form);
-					if(form.hasClass("validate-form")){
+					if(form.hasClass("validate-form") || form.hasClass("validateForm")){
 						if(!form.valid()){
 							$.scojs_message('表单验证不通过！',$.scojs_message.TYPE_ERROR);
 							return false;
