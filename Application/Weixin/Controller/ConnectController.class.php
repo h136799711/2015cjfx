@@ -498,7 +498,8 @@ class ConnectController extends WeixinController {
 		//检测推荐人是否合法
 		if($result['status'] && is_array($result['info']) && $family['status'] && !$this->checkReferrer($result['info']['id'],$family['info'])){
 			$this->wxapi->sendTextToFans($this->getOpenID(),"推荐人无效！");
-			return ;
+			$referrer = $result['info']['referrer'];
+//			return ;
 		}
 		
 		$wxuser = array();
