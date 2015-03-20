@@ -225,7 +225,7 @@ class AuthManageController extends AdminController {
 			$ul .= "data-jstree=\"$jstree\" id=\"jstree_" . $vo['id'] . "\" >" . $vo['title'];
 
 			if (is_array($vo['_child'])) {
-				$childUL = $this -> createTree($vo['_child']);
+				$childUL = $this -> createTree($vo['_child'],$menus);
 			}
 
 			$ul .= $childUL;
