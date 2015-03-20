@@ -10,7 +10,7 @@
 
 namespace Weixin\Api;
 
-use Weixin\Model\WxaccountModel;
+use Common\Model\WxaccountModel;
 
 class WxaccountApi extends \Common\Api\Api{
 		

@@ -7,7 +7,7 @@
 // |-----------------------------------------------------------------------------------
 
 namespace Weixin\Api;
-use Weixin\Model\CommissionModel;
+use Common\Model\CommissionModel;
 
 class CommissionApi extends  \Common\Api\Api{
 	

@@ -7,7 +7,7 @@
 // |-----------------------------------------------------------------------------------
 
 namespace Weixin\Api;
-use Weixin\Model\WxuserFamilyModel;
+use Common\Model\WxuserFamilyModel;
 
 class WxuserFamilyApi extends  \Common\Api\Api{
 	

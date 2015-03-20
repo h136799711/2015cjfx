@@ -8,7 +8,7 @@
 
 namespace Weixin\Api;
 
-use Weixin\Model\WxreplyNewsModel;
+use Common\Model\WxreplyNewsModel;
 
 class WxreplyNewsApi extends \Common\Api\Api{
 	

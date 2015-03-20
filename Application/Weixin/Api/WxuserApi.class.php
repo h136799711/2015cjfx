@@ -9,7 +9,7 @@
 
 namespace Weixin\Api;
 
-use Weixin\Model\WxuserModel;
+use Common\Model\WxuserModel;
 
 class WxuserApi extends \Common\Api\Api{
 		
