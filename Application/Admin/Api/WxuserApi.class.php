@@ -45,7 +45,8 @@ class WxuserApi extends \Common\Api\Api{
 			return $this->apiReturnSuc($userCount);			
 		}
 	}
-	 
+	
+
 	
 	
 }
