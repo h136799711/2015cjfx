@@ -80,7 +80,17 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	 * TODO:判断当前用户是否有权利生成推广二维码
 	 */
 	private function hasAuthorized($fans){
-		return true;
+		$groupid = $fans['groupid'];
+		if($groupid == 0){
+			return false;
+		}
+		$result = apiCall("Admin/GroupAccess/getInfo", array('wxuser_group_id'=>$groupid));
+		if($result['status'] && is_array($result['info'])){
+			if($result['info']['alloweddistribution'] == 1){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	
