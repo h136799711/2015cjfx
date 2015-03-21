@@ -81,7 +81,7 @@ class WxuserGroupController extends  AdminController {
 
 	public function powerEdit() {
 		if (IS_GET) {
-			$map = array('groupid' => I('get.groupid', 0));
+			$map = array('wxuser_group_id' => I('get.groupid', 0));
 			$result = apiCall('Admin/GroupAccess/getInfo', array($map));
 			if ($result['status']) {
 				$this -> assign("access", $result['info']);
