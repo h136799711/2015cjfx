@@ -211,7 +211,7 @@
 				var need_confirm = false;
 				if (($(this).attr('type') == 'submit') || (target = $(this).attr('href')) || (target = $(this).attr('url'))) {
 					form = $('.' + target_form);
-					if(form.hasClass("validate-form") || form.hasClass("validateForm")){
+					if($.validator && (form.hasClass("validate-form") || form.hasClass("validateForm"))) {
 						if(!form.valid()){
 							$.scojs_message('表单验证不通过！',$.scojs_message.TYPE_ERROR);
 							return false;

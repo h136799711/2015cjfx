@@ -13,21 +13,26 @@
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
 			<div class="table-responsive well">
-
+				
+				<div class="filter-controls">
+					<a href="{:U('Admin/Wxuser/syncUser')}" class="btn btn-sm btn-primary"><i class="fa fa-refresh"></i>同步公众号会员</a>
+				</div>
+				<!--,array('startdatetime'=>I('get.startdatetime',''),'enddatetime'=>I('get.enddatetime',''))-->
 				<!-- 过滤\查询按钮 -->
 				<div class="filter-controls">
 					<!-- 日期查询 -->
-					<form action="{:U('Admin/Wxfans/index')}" method="post" class="form-inline">
+					<form action="{:U('Admin/Wxuser/index')}" method="post" class="form-inline">
 						<div class="form-group">
 							<div class="input-group">
 								<div class="input-group-addon">
+									关注时间
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="startdatetime" id="startdatetime" class="form-control" value="{:date('Y/m/d H:i',$startdatetime)}" />
+								<input type="text" name="startdatetime" id="startdatetime" class="form-control input-short" value="{:date('Y-m-d',$startdatetime)}" />
 								<div class="input-group-addon">
 									<i class="fa fa-long-arrow-right"></i>
 								</div>
-								<input type="text" name="enddatetime" id="enddatetime" class="form-control" value="{:date('Y/m/d H:i',$enddatetime)}" />
+								<input type="text" name="enddatetime" id="enddatetime" class="form-control input-short" value="{:date('Y-m-d',$enddatetime)}" />
 							</div>
 						</div>
 						<button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
@@ -72,7 +77,7 @@
 							<volist name="list" id="vo">
 								<tr>
 									<td>
-										<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" />{$vo.nickname}</td>
+										<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" /><a href="{:U(CONTROLLER_NAME .'/view',array('id'=>$vo['id']))}" >{$vo.nickname}</a></td>
 									<td><img src="{$vo.avatar}" class="avatar" style="max-width:60px;"/> </td>
 									<td>
 										{$vo.score}
@@ -82,8 +87,7 @@
 									</td>
 									<!--<td>{$vo.status|getStatus}</td>-->
 									<td>
-										<a href="{:U(CONTROLLER_NAME .'/view',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>{:L('BTN_VIEW')}</a>
-										<a href="{:U(CONTROLLER_NAME .'/delete',array('id'=>$vo['id']))}" class="btn btn-default btn-sm ajax-get confirm"><i class="fa fa-eye"></i>查看其家族</a>
+										<a href="{:U('Admin/Wxuser/viewFamily',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>查看其家族</a>
 									</td>
 								</tr>
 
@@ -97,10 +101,14 @@
 			<script type="text/javascript">
 				$(function() {
 						$('#startdatetime').datetimepicker({
-							lang: 'ch'
+							lang: 'ch',
+							format:'Y-m-d',
+							timepicker:false,
 						});
 						$('#enddatetime').datetimepicker({
-							lang: 'ch'
+							lang: 'ch',
+							format:'Y-m-d',
+							timepicker:false,
 						});
 				});
 			</script>

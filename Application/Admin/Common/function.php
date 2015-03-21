@@ -92,7 +92,42 @@ function isNight(){
 		return false;
 	}
 }
-
+/**
+ * TODO: 从session中取WxAccountID
+ */
 function getWxAccountID(){
 	return 1;
+}
+
+function getLogInfo($info){
+	$loginfo = unserialize($info);
+	$str = '';
+	if(isset($loginfo['ToUserName'])){
+		$str = '[ToUserName]: '.$loginfo['ToUserName'].';';
+	}
+	
+	if(isset($loginfo['FromUserName'])){
+		$str .= '[FromUserName]: '.$loginfo['FromUserName'].';';
+	}
+	if(empty($str)){
+		return $info;
+	}
+	
+	if(isset($loginfo['CreateTime'])){		
+		$str .= '[CreateTime]: '.date('Y/m/d H:i:s',$loginfo['CreateTime']).';';
+	}
+	if(isset($loginfo['MsgType'])){		
+		$str .= '[MsgType]: '.$loginfo['MsgType'].';';
+	}
+	if(isset($loginfo['Content'])){		
+		$str .= '[Content]: '.$loginfo['Content'].';';
+	}
+	if(isset($loginfo['MediaId'])){
+		$str .= '[MediaId]: '.$loginfo['MediaId'].';';
+	}
+	if(isset($loginfo['EventKey'])){
+		$str .= '[EventKey]: '.$loginfo['EventKey'].';';
+	}
+	
+	return $str;
 }

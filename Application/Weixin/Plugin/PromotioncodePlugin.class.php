@@ -27,17 +27,19 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	function process($data){
 		addWeixinLog($data,'[PromotioncodePlugin]');
 		if(empty($data['fans']) ){
+		
+			addWeixinLog($data['fans'],'[PromotioncodePlugin]');
 			LogRecord("fans参数为empty", "[PromotioncodePlugin]".__LINE__);
-			return array("二维码推广插件[调用失败]","text");
+			return array("1二维码推广插件[调用失败]","text");
 		}
 		
 		if(empty($data['wxaccount']) ){
 			LogRecord("wxaccount参数为empty", "[PromotioncodePlugin]".__LINE__);
-			return array("二维码推广插件[调用失败]","text");
+			return array("2二维码推广插件[调用失败]","text");
 		}
 		
 		
-		//TODO:检测是否有权限生成二维码
+		//检测是否有权限生成二维码
 		if(!$this->hasAuthorized($data['fans'])){
 			return array($this->config['noAuthorizedMsg'],"text");
 		}
@@ -53,7 +55,6 @@ class PromotioncodePlugin extends  WeixinPlugin{
 		//
 		$realfile = $this->getPublicityPicture($data['fans'],$realfile);
 		
-//		return array($realfile,"text");
 		$media_id = S("PromotioncodePlugin_".$data['fans']['id']);
 		if(empty($media_id)){
 			$media_id = $this -> wxapi->uploadMaterial($realfile);
@@ -80,6 +81,7 @@ class PromotioncodePlugin extends  WeixinPlugin{
 	 * TODO:判断当前用户是否有权利生成推广二维码
 	 */
 	private function hasAuthorized($fans){
+		if(empty($fans) || !isset($fans['groupid'])){return false;}
 		$groupid = $fans['groupid'];
 		if($groupid == 0){
 			return false;
@@ -103,7 +105,8 @@ class PromotioncodePlugin extends  WeixinPlugin{
 			return realpath($this->config['downloadFolder']).$filename;
 		}
 		
-		$json = $this -> wxapi->getQrcode(.strval($id));
+		$json = $this -> wxapi->getQrcode($this->config['codeprefix'].strval($id));
+		
 		if($json['status']){
 			//			
 			$ticket = $json['msg'];

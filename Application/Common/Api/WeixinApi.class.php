@@ -164,6 +164,20 @@ class WeixinApi {
 	
 	
 	/**
+	 * 获取用户列表
+	 */
+	public function getUserList($nextopenid=''){
+		$accessToken = $this->getAccessToken();
+		
+		$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=".$accessToken;
+		if(!empty($nextopenid)){
+			$url = $url."&next_openid=".$nextopenid;
+		}
+		$arr = json_decode($this->curlGet($url),TRUE);
+		return $arr;
+	}
+	
+	/**
 	 * 上传临时素材
 	 * @param $filepath 文件路径
 	 */
@@ -180,6 +194,7 @@ class WeixinApi {
 		$obj = $this->curlPost($url, $data);
 		return $obj;
 	}
+	
 	/**
 	 * 创建自定义菜单
 	 * @param $menulist 格式： array(

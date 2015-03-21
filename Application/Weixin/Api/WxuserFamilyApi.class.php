@@ -20,8 +20,8 @@ class WxuserFamilyApi extends  \Common\Api\Api{
 	 * 
 	 * @return 
 	 */
-	public function createOneIfNone($wxaccount_id,$openid,$referrer){
-		//TODO:根据referrer，查找出推荐人的上一级
+	public function createOneIfNone($wxaccount_id,$openid){
+		
 		$wxuserfamily = $this->model->where(array('wxaccount_id'=>$wxaccount_id,'openid'=>$openid))->find();
 		if($wxuserfamily === false ){
 			$error = $this->model->getDbError();

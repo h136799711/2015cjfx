@@ -100,7 +100,7 @@ class ConnectController extends WeixinController {
 		
 			//读取缓存的粉丝信息
 			$this -> fans = S($fanskey);
-			if (empty($this -> fans)) {
+			if (is_null($this->fans) || $this -> fans === false) {
 				
 				$result = apiCall('Weixin/Wxuser/getInfo', array( array('wxaccount_id'=>$this -> wxaccount['id'], 'openid' => $this->getOpenID())));
 				addWeixinLog($result,"wxuser getInfo");
@@ -128,12 +128,13 @@ class ConnectController extends WeixinController {
 	
 	//响应
 	private function reply() {
-		addWeixinLog($this->data,"【来自微信服务器消息】");
 		import("@.Common.Wechat");
 		//转化为小写
 		$this -> data['Event'] = strtolower($this -> data['Event']);
 		$this -> data['MsgType'] = strtolower($this -> data['MsgType']);
-		
+		if($this->data['Event']  != \Wechat::MSG_EVENT_LOCATION){
+			addWeixinLog($this->data,"【来自微信服务器消息】");
+		}
 		$return = "";
 		
 		//=====================微信事件转化为系统内部可处理
@@ -208,7 +209,7 @@ class ConnectController extends WeixinController {
 	);
 	
 	private function innerProcess(){
-		addWeixinLog("innerProcess","系统内置处理1");
+		
 		//系统内置关键词处理方式
 		//统一以包括上_
 		switch (strtolower($this->data['Content'])) {
@@ -218,8 +219,10 @@ class ConnectController extends WeixinController {
 				break;
 			case '_promotioncode_':
 				//TODO: 考虑从数据库中取得 关键词对应的插件标识名
+				addWeixinLog($this->getPluginParams(),"[Promotioncode]");
 				$return = pluginCall($this->Plugins['_promotioncode_'],array($this->getPluginParams()));
 				
+//				$return = pluginCall("Promotioncode",array($this->getPluginParams()));
 				break;
 			default :
 				//TODO: 可以检测用户请求数
@@ -320,7 +323,7 @@ class ConnectController extends WeixinController {
 		//点击菜单拉取消息时的事件推送
 		$this->data['Content'] = $this->data['EventKey'];
 		
-		addWeixinLog($return,"menuClick");
+		addWeixinLog($this->data['Content'],"menuClick");
 		if(empty($return)){
 			
 		}
@@ -419,7 +422,7 @@ class ConnectController extends WeixinController {
 		$openid = $this->getOpenID();
 		$parentFamily = "";
 				
-		$result = apiCall("Weixin/WxuserFamily/createOneIfNone",array($wxaccount_id,$openid,$referrer));
+		$result = apiCall("Weixin/WxuserFamily/createOneIfNone",array($wxaccount_id,$openid));
 		
 		
 		addWeixinLog($result,"WxuserFamily的粉丝信息 2".$referrer);
@@ -512,8 +515,8 @@ class ConnectController extends WeixinController {
 		$wxuser['province'] = '';
 		$wxuser['country'] = 'CN';
 		$wxuser['city'] = "";
-		$wxuser['commission_id'] = $this->addWxuserFamily($referrer);
-		$wxuser['wxuser_family_wxuserid'] = $this->addCommission();
+		$this->addWxuserFamily($referrer);
+		$this->addCommission();
 		$wxuser['subscribe_time'] = time();
 		$wxuser['subscribed'] = 1;
 		

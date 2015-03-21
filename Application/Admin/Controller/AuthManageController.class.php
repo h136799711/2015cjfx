@@ -218,11 +218,11 @@ class AuthManageController extends AdminController {
 			}
 
 			if ($vo['pid'] == 0) {
-				$jstree = "{ 'selected' : " . $selected . ", 'opened' :  true}";
+				$jstree = '{ "selected" : ' . $selected . ', "opened" :  true}';
 			} else {
-				$jstree = "{ 'selected' : " . $selected . ", 'opened' : false }";
+				$jstree = '{ "selected" : ' . $selected . ', "opened" : false }';
 			}
-			$ul .= "data-jstree=\"$jstree\" id=\"jstree_" . $vo['id'] . "\" >" . $vo['title'];
+			$ul .= "data-jstree='".$jstree."' id=\"jstree_" . $vo['id'] . "\" >" . $vo['title'];
 
 			if (is_array($vo['_child'])) {
 				$childUL = $this -> createTree($vo['_child'],$menus);
@@ -233,7 +233,6 @@ class AuthManageController extends AdminController {
 		}
 
 		$ul .= "</ul>";
-
 		return $ul;
 	}
 
