@@ -7,7 +7,7 @@
 // |-----------------------------------------------------------------------------------
 namespace Common\Model;
 use Think\Model;
-class WxaccountModel extends Model{
+class WeixinLogModel extends Model{
 	//自动验证
 	protected $_validate = array(
 		
