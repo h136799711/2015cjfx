@@ -42,7 +42,7 @@ class MenuController extends AdminController {
 	/**
 	 * 保存
 	 */
-	public function save() {
+	public function save($primarykey = 'id', $entity = NULL, $redirect_url = false) {
 		if (IS_GET) { $this -> error($this -> NOT_SUPPORT_METHOD);
 		}
 		$entity = I('post.');
@@ -136,7 +136,7 @@ class MenuController extends AdminController {
 	/**
 	 * 删除菜单
 	 */
-	public function delete() {
+	public function delete($success_url = false) {
 		$map = array('pid' => I('id', -1));
 		$result = apiCall('Admin/Menu/query', array($map));
 		if ($result['status'] && !is_null($result['info'])) {
