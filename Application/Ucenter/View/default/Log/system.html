@@ -61,7 +61,7 @@
 							<tr>
 								<td>
 									<input type="checkbox" value="{$vo.id}" name="ids[]" class="selectitem" />{$vo.id}</td>
-								<td>{$vo.timestamp|date="Y/m/d H:m:s",###}</td>
+								<td>{$vo.timestamp|date="Y/m/d H:i:s",###}</td>
 								<td>{$vo.info}</td>
 								<td>
 									<a href="{:U(CONTROLLER_NAME .'/view',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>{:L('BTN_VIEW')}</a>
