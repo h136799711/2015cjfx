@@ -11,25 +11,47 @@ class IndexController extends ShopController {
 		parent::_initialize();
 		$this -> refreshWxaccount();
 	}
-
+	public function buy(){
+		$productid = I('get.pid',0);
+		if($productid == 0){
+			$this->error("参数错误！");
+		}
+		
+		$result = apiCall("Tool/Province/queryNoPaging",array());
+		if($result['status']){
+			$this->assign("provinces",$result['info']);	
+		}
+		
+		
+		$product = apiCall("Admin/Product/getInfoWithThumbnail", array('id'=>$productid));
+		if($product['status']){
+			$product['info']['tburl'] = getPictureURL($product['info']['thumbnaillocal'],$product['info']['thumbnailremote']);
+			$this->assign("product",$product['info']);
+			$this->display();
+		}
+	}
 	public function index() {
 		if (IS_GET) {
+			C('SHOW_PAGE_TRACE',false);
 			session("userinfo", null);
+			
 			$userinfo = null;
 			if (session("?userinfo")) {
 				$userinfo = session("userinfo");
 			}
+//			$userinfo = array('nickname'=>'我的家族','headimgurl'=>'http://wx.qlogo.cn/mmopen/etibbrEkCpyiccXDxXAwUiaTyS1paNPyAmln7bW7LQT9MAW6QCHqPsomImib8rjBT5z1elcbFL7kS7KA2icKQBvWnBVe3pp11W63c/0',);
+			
 			if (!is_array($userinfo)) {
 
 				$code = I('get.code', '');
 				$state = I('get.state', '');
 				if (empty($code) && empty($state)) {
 
-					$redirect = $this -> wxapi -> getOAuth2BaseURL(C('SITE_URL') . U('Home/Index/index', array('token' => I('get.token', ''))), 'HomeIndexOpenid');
+					$redirect = $this -> wxapi -> getOAuth2BaseURL(C('SITE_URL') . U('Shop/Index/index').'?token='.I('get.token',''), 'HomeIndexOpenid');
 
 					redirect($redirect);
 				}
-
+				
 				if ($state == 'HomeIndexOpenid') {
 					$accessToken = $this -> wxapi -> getOAuth2AccessToken($code);
 
@@ -46,13 +68,20 @@ class IndexController extends ShopController {
 					}
 				}
 			}
-
-			$this -> assign("userinfo", $userinfo);
-			$this -> display();
+			$groupaccess = apiCall("Admin/GroupAccess/getInfo",array('groupid'=>$userinfo['groupid']));
+			if($groupaccess['status']){
+				$this -> assign("groupaccess", $groupaccess['info']);
+				$this -> assign("alloweddistribution", $groupaccess['info']['alloweddistribution']);
+				$this -> assign("userinfo", $userinfo);
+				$this -> display();
+			}else{
+				$this -> error("权限获取失败，请重试！");
+			}
 		} else {
 			$this -> error("无法访问！");
 		}
 	}
+	
 	
 	
 	/**
@@ -63,7 +92,17 @@ class IndexController extends ShopController {
 	}
 	
 	
-	
+	/**
+	 * 保存订单
+	 */
+	public function saveOrder(){
+		//TODO:保存订单
+		//items=1&totalprice=99&name=1212
+		//&mobile=2&wxno=2&province=360000&city=361100
+		//&area=361127&address=222&notes=
+		//$item = 
+		dump(I('post.'));
+	}
 	
 	
 	

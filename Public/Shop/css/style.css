@@ -8,6 +8,7 @@
  	text-align: center;
 }
 .cjfx select{
+	width: 100%;
 	display: inline-block;
   padding: .625em;
   line-height: 1.2;
