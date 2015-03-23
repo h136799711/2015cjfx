@@ -1,43 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
-		<meta charset="utf-8">
-		<title>测试静默获取用户信息</title>
-		<meta name="viewport" content="width=device-width;minimum-scale=1.0;maxmum-scale=1.0;user-scalable=no;">
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>微信安全支付</title>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width,user-scalable=no" />
 		
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+		
+			var url = "{:U('Weixin/Weixinjs/index',array('token'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
+			
+			document.write('<script src="'+url+'"><\/script>');
+		</script>
 	</head>
+
 	<body>
-		测试静默获取用户信息
-		<!--
-			subscribe : 
-			openid : 
-			nickname : 
-			city : 
-			province : 
-			country : 
-			headimgurl : 
-			subscribe_time : 
-			unionid : 
-			remark : 
-			 -->
-		<empty name="userinfo">
-			<div>
-				无法获取您的信息，请使用微信打开！
-			</div>
-		<else/>
-			<div style="width:100%">
-				<div>
-				昵称：{$userinfo.nickname}<br/>
-				关注时间：{$userinfo.subscribe_time|date="Y-m-d h:i:s",###}<br/>
-				是否族长：【暂未实现】<br/>
-				</div>
-				<div style="float:left;">
-				<img  src="{$userinfo.headimgurl}" style="width:60px;height:60px;" />	
-				</div>
-			</div>
-			<include file="partial/footermenu" />
-		</empty>
-		
-		{__NORUNTIME__}
+
+						
+		</br>
+		</br>
+		</br>
+		</br>
+		<div align="center">
+			<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" id="pay">支付测试</button>
+		</div>
+		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
+		<script type="text/javascript">
+			
+			wx.ready(function() {
+//				alert("ready");
+			});
+			wx.error(function(res) {
+			});
+			
+			$(function() {
+//				$("#pay").tap(function() {
+//					alert("tap");
+					wx.chooseWXPay({
+						timestamp:"{$jsapiparams.timestamp}", 
+						nonceStr:"{$jsapiparams.nonceStr}",// 支付签名随机串，不长于 32 位
+						package:"{$jsapiparams.package}",
+						signType:"{$jsapiparams.signType}",// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+						paySign:"{$jsapiparams.paySign}",
+
+					    success: function (res) {
+					    	alert(res.err_code+res.err_desc+res.err_msg);
+					        // 支付成功后的回调函数
+					    }
+					});
+//				});
+			})
+		</script>
 	</body>
+
 </html>

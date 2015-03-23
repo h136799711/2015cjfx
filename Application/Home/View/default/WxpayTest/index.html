@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>微信安全支付</title>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width,user-scalable=no" />
+		
+		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
+		<!--<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+		
+			var url = "{:U('Weixin/Weixinjs/index',array('token'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
+			
+			document.write('<script src="'+url+'"><\/script>');
+		</script>-->
+		
+		<script type="text/javascript">
+
+		//调用微信JS api 支付
+		function jsApiCall()
+		{
+			WeixinJSBridge.invoke(
+				'getBrandWCPayRequest',
+				{$jsapiparams},
+				function(res){
+					WeixinJSBridge.log(res.err_msg);
+					//alert(res.err_code+res.err_desc+res.err_msg);
+				}
+			);
+		}
+
+		function callpay()
+		{
+			if (typeof WeixinJSBridge == "undefined"){
+			    if( document.addEventListener ){
+			        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+			    }else if (document.attachEvent){
+			        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+			    }
+			}else{
+			    jsApiCall();
+			}
+		}
+	</script>
+		
+		
+	</head>
+
+	<body>
+
+						
+		</br>
+		<pre><code>{:dump($jsapiparams)}</code></pre>
+		</br>
+		</br>
+		</br>
+		<div align="center">
+			<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay();" id="pay">支付测试</button>
+		</div>
+		
+		
+		<script type="text/javascript">
+			
+//			wx.ready(function() {
+//			});
+//			wx.error(function(res) {
+//			});
+			
+//			$(function() {
+//				$("#pay").tap(function() {
+//					alert("tap");
+//					wx.chooseWXPay({
+//						timestamp:"{$jsapiparams.timestamp}", 
+//						nonceStr:"{$jsapiparams.nonceStr}",// 支付签名随机串，不长于 32 位
+//						package:"{$jsapiparams.package}",
+//						signType:"{$jsapiparams.signType}",// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+//						paySign:"{$jsapiparams.paySign}",
+//
+//					    success: function (res) {
+//					    	alert(res.err_code+res.err_desc+res.err_msg);
+//					        // 支付成功后的回调函数
+//					    }
+//					});
+//				});
+//			})
+		</script>
+		
+	</body>
+
+</html>

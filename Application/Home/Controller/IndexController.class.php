@@ -11,9 +11,10 @@ class IndexController extends HomeController {
 		parent::_initialize();
 		$this -> refreshWxaccount();
 	}
-
+	
 	public function index() {
-		$this->redirect(U('Shop/Index/index'));
+		$this->display();
+//		$this->redirect(U('Shop/Index/index'));
 //		if (IS_GET) {
 //			session("userinfo", null);
 //			$userinfo = null;

@@ -160,10 +160,10 @@ class AdminController extends CheckLoginController {
 	 */
 	protected function getConfig() {
 		$config = S('config_' . session_id() . '_' . session("uid"));
-		if (APP_DEBUG === true) {
-			//调试模式下，不缓存配置
-			$config = false;
-		}
+//		if (APP_DEBUG === true) {
+//			//调试模式下，不缓存配置
+//			$config = false;
+//		}
 		if ($config === false) {
 			$map = array();
 			$fields = 'type,name,value';

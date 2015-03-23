@@ -9,7 +9,7 @@
 namespace Home\Controller;
 use Think\Controller;
 
-class HomeController extends  Controller {
+ abstract class HomeController extends  Controller {
 
 	protected function _initialize() {
 
@@ -26,7 +26,17 @@ class HomeController extends  Controller {
 		}
 
 	}
-
+	public function index(){
+		$config = C('WXPAY_CONFIG');
+		
+        $wxpayJsApi = new \Common\Api\UnifiedOrderApi($config);
+		dump($wxpayJsApi);
+//      $wxpayJsApi = new \Common\Api\DownloadBillApi($config);
+//      $wxpayJsApi = new \Common\Api\NotifyApi($config);
+//      $wxpayJsApi = new \Common\Api\OrderQueryApi($config);
+//      $wxpayJsApi = new \Common\Api\RefundApi($config);
+//      $wxpayJsApi = new \Common\Api\ShortUrlApi($config);
+	}
 	/**
 	 * 从数据库中取得配置信息
 	 */
