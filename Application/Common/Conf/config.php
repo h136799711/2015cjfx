@@ -51,5 +51,16 @@ return array(
         'AUTH_GROUP_ACCESS' => 'common_auth_group_access', //用户组明细表
         'AUTH_RULE' => 'common_auth_rule', //权限规则表
         'AUTH_USER' => 'common_members'//用户信息表
-    )
+    ),
+    'WXPAY_CONFIG'=>array(
+		'appid'=>'wx58aea38c0796394d',
+		'appsecret'=>'3e1404c970566df55d7314ecfe9ff437',
+		'notifyurl'=>'http://1.test.8raw.com/index.php/Home/WxpayTest/notify',
+		'mchid'=>'10027619',//微信支付商户号  
+		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
+		'jsapicallurl'=>'http://1.test.8raw.com/index.php/Home/WxpayTest/index',
+		'sslcertpath'=>'',
+		'sslkeypath'=>'',
+	)
+	
 );
