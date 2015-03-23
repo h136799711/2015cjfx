@@ -10,7 +10,12 @@ namespace Shop\Controller;
 use Think\Controller;
 
 class ShopController extends  Controller {
-
+	
+	protected $userinfo;
+	protected $wxaccount;
+	protected $wxapi;
+	protected $openid;
+	
 	protected function _initialize() {
 
 		// 获取配置
@@ -24,7 +29,93 @@ class ShopController extends  Controller {
 				define("APP_VERSION", C('APP_VERSION'));
 			}
 		}
+		$this -> refreshWxaccount();
+		
 
+	}
+
+	public function getWxuser($url) {
+//		session("userinfo", null);
+
+		$this -> userinfo = null;
+		if (session("?userinfo")) {
+			$this -> userinfo = session("userinfo");
+		}
+		
+		if (!is_array($this -> userinfo)) {
+
+			$code = I('get.code', '');
+			$state = I('get.state', '');
+			if (empty($code) && empty($state)) {
+
+				$redirect = $this -> wxapi -> getOAuth2BaseURL($url, 'HomeIndexOpenid');
+
+				redirect($redirect);
+			}
+
+			if ($state == 'HomeIndexOpenid') {
+				$accessToken = $this -> wxapi -> getOAuth2AccessToken($code);
+
+				$this -> openid = $accessToken['openid'];
+				$result = $this -> wxapi -> getBaseUserInfo($accessToken['openid']);
+
+				if ($result['status']) {
+					$this -> userinfo = $result['info'];
+					$this -> refreshWxuser($this -> userinfo);
+					session("userinfo", $this -> userinfo);
+				} else {
+					$this -> userinfo = null;
+				}
+			}
+		}
+	}
+
+	/**
+	 * 刷新粉丝信息
+	 */
+	private function refreshWxuser($userinfo) {
+		$wxuser = array();
+//		$wxuser['wxaccount_id'] = intval($this -> wxaccount['id']);
+		$wxuser['nickname'] = $userinfo['nickname'];
+		$wxuser['province'] = $userinfo['province'];
+		$wxuser['country'] = $userinfo['country'];
+		$wxuser['city'] = $userinfo['city'];
+		$wxuser['sex'] = $userinfo['sex'];
+		$wxuser['avatar'] = $userinfo['headimgurl'];
+		$wxuser['subscribe_time'] = $userinfo['subscribe_time'];
+
+		if (!empty($this -> openid) && is_array($this -> wxaccount)) {
+
+			$map = array('openid' => $this -> openid, 'wxaccount_id' => $this -> wxaccount['id']);
+
+			$result = apiCall('Weixin/Wxuser/save', array($map, $wxuser));
+
+			if (!$result['status']) {
+				LogRecord($result['info'], "[Home/Index/refreshWxuser]" . __LINE__);
+			}
+
+		}
+
+	}
+
+	/**
+	 * 刷新
+	 */
+	private function refreshWxaccount() {
+		$token = I('get.token', '');
+		if (!empty($token)) {
+			session("shop_token", $token);
+		} elseif (session("?shop_token")) {
+			$token = session("shop_token");
+		}
+		
+		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $token)));
+		if ($result['status'] && is_array($result['info'])) {
+			$this -> wxaccount = $result['info'];
+			$this -> wxapi = new \Common\Api\WeixinApi($this -> wxaccount['appid'], $this -> wxaccount['appsecret']);
+		} else {
+			exit("公众号信息获取失败，请重试！");
+		}
 	}
 
 	/**

@@ -75,6 +75,8 @@
 				<div class="address-from">
 					<div class="ui-form ui-border-t">
 						<form action="#" id="addressForm">
+							<input name="productname" type="hidden" value="{$product.name}" />
+							<input name="price" type="hidden" value="{$product.price}" />
 							<div class="ui-form-item ui-border-b">
 								<label for="#"><span class="ui-txt-warning">*</span> 联系人</label>
 								<input name="name" id="inputname" type="text" placeholder="请输入联系人姓名">
@@ -196,11 +198,12 @@
 					}
 			}
 			function appendToArea(data){
-					var city = $("#area");
-					city.empty();
+					$("#area").removeClass("txt-gray");
+					var area = $("#area");
+					area.empty();
 					for(var i in data){
 						var ele = $("<option></option>");
-						ele.text(data[i].area).attr("value",data[i].areaid).appendTo(city);
+						ele.text(data[i].area).attr("value",data[i].areaid).appendTo(area);
 					}
 			}
 
@@ -260,14 +263,17 @@
 				        el.loading("hide");
 						return ;
 					}
+					var p_name = $("#province > option").not(function(){ return !this.selected }).text();
+					var c_name = $("#city > option").not(function(){ return !this.selected }).text();
+					var a_name = $("#area > option").not(function(){ return !this.selected }).text();
 					
 					var totalprice = parseInt($(".shopcart-total-price").text());
-					var postdata = $.param({ items:$(".item-cnt").val(),totalprice: totalprice});
+					var postdata = $.param({province:province,city:city,area:area, totalprice: totalprice});
 					postdata = postdata+'&'+$('#addressForm').serialize();
 					//addressForm
 					$.ajax({
 					  type: 'POST',
-					  url: '{:U("Shop/Index/saveOrder")}',
+					  url: '{:U("Shop/Orders/save")}',
 					  data:postdata ,
 					  dataType: 'json',
 					  timeout: 10,
