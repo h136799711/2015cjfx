@@ -7,13 +7,13 @@
 		<meta name="format-detection" content="telephone=no" />
 		<meta name="viewport" content="width=device-width,user-scalable=no" />
 		
-		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<!--<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script type="text/javascript">
 		
-			var url = "{:U('Weixin/Weixinjs/index',array('token'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
+			var url = "{:U('Weixin/Weixinjs/index',array('tk'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
 			
 			document.write('<script src="'+url+'"><\/script>');
-		</script>
+		</script>-->
 	</head>
 
 	<body>
@@ -28,29 +28,10 @@
 		</div>
 		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
 		<script type="text/javascript">
-			
-			wx.ready(function() {
-//				alert("ready");
-			});
-			wx.error(function(res) {
-			});
-			
 			$(function() {
-//				$("#pay").tap(function() {
-//					alert("tap");
-					wx.chooseWXPay({
-						timestamp:"{$jsapiparams.timestamp}", 
-						nonceStr:"{$jsapiparams.nonceStr}",// 支付签名随机串，不长于 32 位
-						package:"{$jsapiparams.package}",
-						signType:"{$jsapiparams.signType}",// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-						paySign:"{$jsapiparams.paySign}",
-
-					    success: function (res) {
-					    	alert(res.err_code+res.err_desc+res.err_msg);
-					        // 支付成功后的回调函数
-					    }
-					});
-//				});
+				$("#pay").click(function() {
+					alert("tap");
+				});
 			})
 		</script>
 	</body>

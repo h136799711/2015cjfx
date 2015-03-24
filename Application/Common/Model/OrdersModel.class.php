@@ -26,6 +26,8 @@ class OrdersModel extends Model{
 	
 	protected $_auto = array(
 		array('status',1,self::MODEL_INSERT),
+		array('pay_status',self::ORDER_TOBE_PAID,self::MODEL_INSERT),
+		array('order_status',self::ORDER_TOBE_CONFIRMED,self::MODEL_INSERT),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
 		//待确认2，未发货3，已发货4，已完成5，已退货6
 		array('order_status',2,self::MODEL_INSERT),

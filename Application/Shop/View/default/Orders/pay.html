@@ -1,26 +1,74 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="ISUX">
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" content="width=device-width,user-scalable=no"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <title>微信订单支付</title>
-    <link rel="stylesheet" type="text/css" href="__CDN__/frozenui/1.2.0/frozen.css">
-    
-</head>
-<body>
-    <div class="wrapper">
-       
-    </div>
-     <script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
-    <script src="__CDN__/frozenui/1.0.1/frozen.js"></script>
-    <script>
-       (function() {
-			
-        })();
-    </script>
-</body>
+
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>微信安全支付</title>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width,user-scalable=no" />
+
+		<link rel="stylesheet" type="text/css" href="__CDN__/frozenui/1.2.1/css/frozen.css">
+		<link rel="stylesheet" type="text/css" href="__CSS__/style.css?v=__APP_VERSION__">
+		</script>
+
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+			var url = "{:U('Weixin/Weixinjs/index',array('tk'=>'eotprkjn1426473619'))}?url=" + location.href.split("#")[0];
+			document.write('<script src="' + url + '"><\/script>');
+		</script>
+
+	</head>
+
+	<body>
+
+		</br>
+
+		<div class="ui-form ui-border-t">
+			<form>
+				<volist name="items" id="vo">
+					{:dump($vo)}
+				</volist>
+				<div class="ui-border-b">
+					<div class="ui-btn-wrap">
+						<button id="submit" type="button" onclick="callpay();" class="ui-btn-lg ui-btn-danger ">微信支付</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
+		<script src="__CDN__/frozenui/1.0.1/frozen.js"></script>
+		<script type="text/javascript">
+			 //调用微信JS api 支付
+			function jsApiCall() {
+				WeixinJSBridge.invoke(
+					'getBrandWCPayRequest', {
+						$jsapiparams
+					},
+					function(res) {
+						WeixinJSBridge.log(res.err_msg);
+						if (res.err_msg == "get_brand_wcpay_request:ok") {
+							window.location.href = "{:U('Admin/WxpayTest/success')}";
+						} else if (res.err_msg == "get_brand_wcpay_request:cancel") {} else if (res.err_msg == "get_brand_wcpay_request:fail") {
+							alert(res.err_desc);
+						}
+					}
+				);
+			}
+
+			function callpay() {
+				if (typeof WeixinJSBridge == "undefined") {
+					if (document.addEventListener) {
+						document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+					} else if (document.attachEvent) {
+						document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+						document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+					}
+				} else {
+					jsApiCall();
+				}
+			}
+		</script>
+
+	</body>
+
 </html>

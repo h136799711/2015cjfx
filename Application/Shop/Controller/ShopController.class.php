@@ -30,18 +30,24 @@ class ShopController extends  Controller {
 			}
 		}
 		$this -> refreshWxaccount();
-		
+		$url = $this->getCurrentURL();
+		$this->getWxuser($url);
 
+	}
+	
+	protected function getCurrentURL(){
+		$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		return $url;
 	}
 
 	public function getWxuser($url) {
-//		session("userinfo", null);
 
 		$this -> userinfo = null;
 		if (session("?userinfo")) {
 			$this -> userinfo = session("userinfo");
 		}
 		
+		addWeixinLog($this -> userinfo,"userinfo");
 		if (!is_array($this -> userinfo)) {
 
 			$code = I('get.code', '');
@@ -60,9 +66,7 @@ class ShopController extends  Controller {
 				$result = $this -> wxapi -> getBaseUserInfo($accessToken['openid']);
 
 				if ($result['status']) {
-					$this -> userinfo = $result['info'];
-					$this -> refreshWxuser($this -> userinfo);
-					session("userinfo", $this -> userinfo);
+					$this -> refreshWxuser($result['info']);
 				} else {
 					$this -> userinfo = null;
 				}
@@ -85,13 +89,20 @@ class ShopController extends  Controller {
 		$wxuser['subscribe_time'] = $userinfo['subscribe_time'];
 
 		if (!empty($this -> openid) && is_array($this -> wxaccount)) {
-
+			
 			$map = array('openid' => $this -> openid, 'wxaccount_id' => $this -> wxaccount['id']);
 
 			$result = apiCall('Weixin/Wxuser/save', array($map, $wxuser));
 
 			if (!$result['status']) {
 				LogRecord($result['info'], "[Home/Index/refreshWxuser]" . __LINE__);
+			}else{
+				$result = apiCall('Weixin/Wxuser/getInfo', array($map));
+				if($result['status']){
+					
+					$this -> userinfo = $result['info'];
+					session("userinfo", $result['info']);
+				}
 			}
 
 		}

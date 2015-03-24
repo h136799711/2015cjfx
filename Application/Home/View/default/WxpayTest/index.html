@@ -7,16 +7,38 @@
 		<meta name="format-detection" content="telephone=no" />
 		<meta name="viewport" content="width=device-width,user-scalable=no" />
 		
-		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
-		<!--<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		</script>
+		
+
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<script type="text/javascript">
 		
-			var url = "{:U('Weixin/Weixinjs/index',array('token'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
+			var url = "{:U('Weixin/Weixinjs/index',array('tk'=>'eotprkjn1426473619'))}?url="+location.href.split("#")[0];
 			
 			document.write('<script src="'+url+'"><\/script>');
-		</script>-->
+		</script>
 		
-		<script type="text/javascript">
+		
+	</head>
+
+	<body>
+
+						
+		</br>
+		<pre><code>{:dump($params)}</code></pre>
+		</br>
+		</br>
+		</br>
+		<div align="center">
+			<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay();" id="pay">支付测试</button>
+		</br>
+		</br>
+		<!--</br>
+			<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" id="jspay">JS支付测试</button>
+		</div>-->
+		
+		<script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
+				<script type="text/javascript">
 
 		//调用微信JS api 支付
 		function jsApiCall()
@@ -26,7 +48,12 @@
 				{$jsapiparams},
 				function(res){
 					WeixinJSBridge.log(res.err_msg);
-					//alert(res.err_code+res.err_desc+res.err_msg);
+					if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+						window.location.href = "{:U('Admin/WxpayTest/success')}";
+					}else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+					}else if(res.err_msg == "get_brand_wcpay_request:fail"){
+						alert(res.err_desc);
+					}
 				}
 			);
 		}
@@ -45,23 +72,6 @@
 			}
 		}
 	</script>
-		
-		
-	</head>
-
-	<body>
-
-						
-		</br>
-		<pre><code>{:dump($jsapiparams)}</code></pre>
-		</br>
-		</br>
-		</br>
-		<div align="center">
-			<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay();" id="pay">支付测试</button>
-		</div>
-		
-		
 		<script type="text/javascript">
 			
 //			wx.ready(function() {
@@ -70,18 +80,15 @@
 //			});
 			
 //			$(function() {
-//				$("#pay").tap(function() {
-//					alert("tap");
+//				$("#jspay").click(function() {
 //					wx.chooseWXPay({
-//						timestamp:"{$jsapiparams.timestamp}", 
-//						nonceStr:"{$jsapiparams.nonceStr}",// 支付签名随机串，不长于 32 位
-//						package:"{$jsapiparams.package}",
-//						signType:"{$jsapiparams.signType}",// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-//						paySign:"{$jsapiparams.paySign}",
-//
+//						timestamp:"{$params.timestamp}", 
+//						nonceStr:"{$params.nonceStr}",
+//						package:"{$params.package}",
+//						signType:"{$params.signType}",
+//						paySign:"{$params.paySign}",
 //					    success: function (res) {
 //					    	alert(res.err_code+res.err_desc+res.err_msg);
-//					        // 支付成功后的回调函数
 //					    }
 //					});
 //				});

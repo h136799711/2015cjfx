@@ -268,3 +268,11 @@ function GUID()
 
     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
+
+
+function addWeixinLog($data, $operator = '') {
+		$log['ctime']    = time();
+		$log['loginfo']  = is_array($data) ? serialize($data) : $data;
+		$log['operator'] = $operator;
+		M('WeixinLog')->add($log);
+}

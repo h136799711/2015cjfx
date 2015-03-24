@@ -7,12 +7,12 @@
 // |-----------------------------------------------------------------------------------
 
 namespace Common\Model;
-
+use Think\Model;
 /**
  * 收货地址
  */
 class AddressModel extends Model{
-	protected function $_validate =array(
+	protected $_validate = array(
 		array('wxuserid','require','所属用户ID必须')
 	);
 }

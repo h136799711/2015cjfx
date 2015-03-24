@@ -9,104 +9,192 @@
 namespace Shop\Controller;
 use Think\Controller;
 class OrdersController extends ShopController {
-	
-	
+
 	protected function _initialize() {
 		parent::_initialize();
 	}
-	
-	public function pay(){
-		$id = I('get.id','');
-		$result = apiCall("Shop/Orders/getInfo", array('id'=>$id));
-		if($result['status']){
+
+	public function pay() {
+		$id = I('get.id', '');
+		$result = apiCall("Shop/Orders/getInfo", array('id' => $id));
+		if ($result['status']) {
 			$order = $result['info'];
-			$this->assign("order",$order);
-			$this->display();
-		}
-	}
-	
-	public function save() {
-		$userinfo = session("userinfo");
-		if (IS_POST && is_array($userinfo)) {
-			
-			$entity = array('wxuser_id' => $userinfo['id'],
-			 'price' => I('post.totalprice', 0), 
-			 'mobile' => I('post.mobile', ''), 
-			 'wxno' => I('post.wxno', ''), 
-			 'contactname' => I('post.contactname', ''), 
-			 'note' => I('post.note', ''), 
-			 'country' => I('post.country', ''), 
-			 'province' => I('post.p_name', ''), 
-			 'city' => I('post.c_name', ''), 
-			 'area' => I('post.a_name', ''), 
-			 'detailinfo' => I('post.address', ''), 
-			 'orderid' => $this -> getOrderID(), 
-			 'items' => $this -> getItems());
-			$result = apiCall("Shop/Orders/add",array($entity));
-			if($result['status']){
-//			dump($entity);
-				$address  = array(
-					'wxuser_id' => $userinfo['id'],
-			 		'country' => I('post.country', ''), 
-			 		'province' => I('post.province', ''), 
-			 		'city' => I('post.city', ''), 
-			 		'detailinfo' => I('post.address', ''), 
-			 		'area' => I('post.area', ''), 
-				);
-				$result = apiCall("Shop/Address/addOrUpdate",array($entity));
-				if($result['status']){		
-					$this->success("操作成功！",U('Shop/Orders/pay',array('id'=>$result['status']['id']))).'?showwxpaytitle=1';
-				}else{
-					LogRecord($result['info'], __FILE__.__LINE__);
-				}
-			}
-			dump($address);
+			$payConfig = C('WXPAY_CONFIG');
+			$items = unserialize($order['items']);
+			$payConfig['jsapicallurl'] = $this->getCurrentURL();
+			$itemdesc = $items[0]['item'];
+			$trade_no = $order['orderid'];
+			$total_fee = $order['price']*100;
+			$this -> setWxpayConfig($payConfig, $trade_no, $itemdesc, $total_fee);
+			$this -> display("order",$order);
+			$this -> display("items",$items);
+			$this -> display();
+
 		}else{
-			$this->error("禁止访问！");
+			$this->error("支付失败！");
 		}
 
 	}
 	
-	private function items() {
-		$items = array( array('item' => I('productname', ''), 'price' => I('post.price', 0)), );
-		
+	/**
+	 * @param config 配置
+	 * @param trade_no 订单ID
+	 * @param itemdesc 商品描述
+	 * @param total_fee 总价格
+	 */
+	private function setWxpayConfig($config, $trade_no, $itemdesc, $total_fee, $prodcutid = 1) {
+		try {
+			//使用jsapi接口
+			$jsApi = new \Common\Api\WxpayJsApi($config);
+
+			//=========步骤1：网页授权获取用户openid============
+			//通过code获得openid
+			if (!isset($_GET['code'])) {
+				//触发微信返回code码
+				$url = $jsApi -> createOauthUrlForCode($config['jsapicallurl']);
+				//				$url = $url.'?showwxpaytitle=1';
+				Header("Location: $url");
+			} else {
+				//获取code码，以获取openid
+				$code = $_GET['code'];
+				$jsApi -> setCode($code);
+				$result = $jsApi -> getOpenId();
+			}
+			$openid = "";
+			if ($result['status']) {
+				$openid = $result['info'];
+			} else {
+				$this -> error($result['info']);
+			}
+			//			dump($openid);
+			//			dump($result);
+			//			exit();
+			//=========步骤2：使用统一支付接口，获取prepay_id============
+
+			//使用统一支付接口
+			$unifiedOrder = new \Common\Api\UnifiedOrderApi($config);
+
+			//设置统一支付接口参数
+			//设置必填参数
+			//appid已填,商户无需重复填写
+			//mch_id已填,商户无需重复填写
+			//noncestr已填,商户无需重复填写
+			//spbill_create_ip已填,商户无需重复填写
+			//sign已填,商户无需重复填写
+			$unifiedOrder -> setParameter("openid", "$openid");
+			//商品描述
+			$unifiedOrder -> setParameter("body", $itemdesc);
+			//商品描述
+			//自定义订单号，此处仅作举例
+			//	$timeStamp = time();
+			//			$unifiedOrder -> setParameter("product_id", "$prodcutid");
+			//商品ID
+			$unifiedOrder -> setParameter("out_trade_no", "$trade_no");
+			//商户订单号
+			$unifiedOrder -> setParameter("total_fee", "$total_fee");
+			//总金额
+			$unifiedOrder -> setParameter("notify_url", $config['notifyurl']);
+			//通知地址
+			$unifiedOrder -> setParameter("trade_type", "JSAPI");
+
+			//          $unifiedOrder->setParameter("attach",'{"token":"'.'123'.'","orderid":"'.'456'.'"}');//附加数据
+			//交易类型//商户订单号
+			//			$unifiedOrder -> setParameter("fee_type", 1);
+			//	$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
+			//	$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
+			//非必填参数，商户可根据实际情况选填
+			//$unifiedOrder->setParameter("sub_mch_id","XXXX");//子商户号
+			//$unifiedOrder->setParameter("device_info","XXXX");//设备号
+			//$unifiedOrder->setParameter("attach","XXXX");//附加数据
+			//$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
+			//$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
+			//$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记
+			//$unifiedOrder->setParameter("openid","XXXX");//用户标识
+
+			$prepay_id = $unifiedOrder -> getPrepayId();
+			//=========步骤3：使用jsapi调起支付============
+			$jsApi -> setPrepayId($prepay_id);
+
+			$jsApiParameters = $jsApi -> getParameters();
+
+			if (!empty($jsApiParameters -> return_msg)) {
+				$this -> error($jsApiParameters -> return_msg);
+			}
+			//			dump($unifiedOrder);
+			//			dump($jsApiParameters);
+			//			exit();
+			//			$returnUrl = U('Home/WxpayTest/return',array(''));
+
+			$this -> assign("jsapiparams", $jsApiParameters);
+			//      	$this->assign("params", json_decode($jsApiParameters));
+			//	        $this->assign('returnUrl', $returnUrl);
+		} catch(SDKRuntimeException $sdkexcep) {
+			$error = $sdkexcep -> errorMessage();
+			$this -> assign("error", $error);
+			$this -> error($error);
+		}
+
+	}
+
+	public function save() {
+		$userinfo = session("userinfo");
+//		$userinfo = array('id'=>1);
+		if (IS_POST && is_array($userinfo)) {
+			addWeixinLog($userinfo,'[session]saveispost');
+			$entity = array(
+				'wxuser_id' => $userinfo['id'], 
+				'price' => I('post.totalprice', 0), 
+				'mobile' => I('post.mobile', ''), 
+				'wxno' => I('post.wxno', ''), 
+				'contactname' => I('post.contactname', ''), 
+				'note' => I('post.note', ''), 
+				'country' => I('post.country', ''), 
+				'province' => I('post.p_name', ''), 
+				'city' => I('post.c_name', ''), 
+				'area' => I('post.a_name', ''), 
+				'detailinfo' => I('post.address', ''), 
+				'orderid' => $this -> getOrderID(), 
+				'items' => $this -> getItems()
+			 );
+			$result = apiCall("Shop/Orders/add", array($entity));
+			if ($result['status']) {
+				$address = array('wxuserid' => $userinfo['id'], 
+				'country' => I('post.country', ''), 
+				'province' => I('post.province', ''), 
+				'city' => I('post.city', ''), 
+				'detailinfo' => I('post.address', ''), 
+				'area' => I('post.area', '')
+				);
+				$result = apiCall("Shop/Address/addOrUpdate", array($address));
+				if ($result['status']) {
+//					dump($result);
+					$this -> success("操作成功！", U('Shop/Orders/pay', array('id' => $result['info']['id']))) . '?showwxpaytitle=1';
+				} else {
+					LogRecord($result['info'], __FILE__ . __LINE__);
+				}
+			}else{
+				$this -> error($resutl['info']);
+			}
+//			dump($address);
+		} else {
+			$this -> error("禁止访问！");
+		}
+
+	}
+
+	private function getItems() {
+		$items = array( array('pic'=>>I('post.pthumbnail',''),'item' => I('productname', ''), 'price' => I('post.price', 0)), );
+
 		return serialize($items);
 	}
-	
+
 	private function getOrderID() {
-//		dump($this->wxaccount);
-		return  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt();
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  $this->wxaccount['id'].date('YmdHis',time()).$this->randInt().'<br/>';
-//		echo  GUID().'<br/>';
-//		echo  md5().'<br/>';
+		return $this -> wxaccount['id'] . date('YmdHis', time()) . $this -> randInt();
 	}
-	
-	private function randInt(){
+
+	private function randInt() {
 		srand(GUID());
 		return rand(10000000, 99999999);
 	}
-	
-	
-	
+
 }

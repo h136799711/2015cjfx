@@ -10,7 +10,7 @@ namespace Shop\Api;
 use Common\Api;
 use Common\Model\AddressModel;
 
-class OrdersApi extends \Common\Api\Api{
+class AddressApi extends \Common\Api\Api{
 	protected function _init(){
 		$this->model = new AddressModel();
 	}
@@ -20,7 +20,7 @@ class OrdersApi extends \Common\Api\Api{
 	 * @entity 地址信息
 	 */
 	public function addOrUpdate($entity){
-		$result = $this->model->where("wxuserid"=>$entity['wxuserid'])->find();
+		$result = $this->model->where(array("wxuserid"=>$entity['wxuserid']))->find();
 		if($result === false){
 			return $this->apiResultErr($this->model->getDbError());
 		}

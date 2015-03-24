@@ -3,18 +3,13 @@ namespace Shop\Controller;
 
 class IndexController extends ShopController {
 
-//	private $wxaccount = "";
-//	private $wxapi = "";
-//	private $openid = "";
 
 	protected function _initialize() {
 		parent::_initialize();
 	}
 
 	public function buy() {
-		
-		$this->getWxuser(C('SITE_URL') . U('Shop/Index/buy') . '?token=' . I('get.token', ''));	
-		
+				
 		$productid = I('get.pid', 0);
 		if ($productid == 0) {
 			$this -> error("参数错误！");
@@ -37,9 +32,7 @@ class IndexController extends ShopController {
 		if (IS_GET) {
 			
 			C('SHOW_PAGE_TRACE', false);
-			$this->getWxuser(C('SITE_URL') . U('Shop/Index/index') . '?token=' . I('get.token', ''));
-//			dump($this->userinfo);
-//			exit();
+			
 			if (is_array($this -> userinfo)) {
 				$groupaccess = apiCall("Admin/GroupAccess/getInfo", array('groupid' => $this -> userinfo['groupid']));
 				if ($groupaccess['status']) {

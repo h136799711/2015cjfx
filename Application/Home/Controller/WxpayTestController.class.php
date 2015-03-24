@@ -15,7 +15,7 @@ class WxpayTestController extends Controller {
 		
 		$itemdesc = "COS-精华套装";
 		$trade_no = $this->getOrderID();
-		$total_fee = 0.01;
+		$total_fee = 1;
 		$this->setWxpayConfig($payConfig, $trade_no, $itemdesc, $total_fee);
 		$this -> display();
 	}
@@ -150,13 +150,13 @@ class WxpayTestController extends Controller {
 			//noncestr已填,商户无需重复填写
 			//spbill_create_ip已填,商户无需重复填写
 			//sign已填,商户无需重复填写
-			$unifiedOrder -> setParameter("openid", $openid);
+			$unifiedOrder -> setParameter("openid", "$openid");
 			//商品描述
 			$unifiedOrder -> setParameter("body", $itemdesc);
 			//商品描述
 			//自定义订单号，此处仅作举例
 			//	$timeStamp = time();
-			$unifiedOrder -> setParameter("product_id", $prodcutid);
+//			$unifiedOrder -> setParameter("product_id", "$prodcutid");
 			//商品ID
 			$unifiedOrder -> setParameter("out_trade_no", "$trade_no");
 			//商户订单号
@@ -165,7 +165,10 @@ class WxpayTestController extends Controller {
 			$unifiedOrder -> setParameter("notify_url", $config['notifyurl']);
 			//通知地址
 			$unifiedOrder -> setParameter("trade_type", "JSAPI");
-			//交易类型
+			
+//          $unifiedOrder->setParameter("attach",'{"token":"'.'123'.'","orderid":"'.'456'.'"}');//附加数据
+			//交易类型//商户订单号
+//			$unifiedOrder -> setParameter("fee_type", 1);
 			//	$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
 			//	$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
 			//非必填参数，商户可根据实际情况选填
@@ -182,10 +185,18 @@ class WxpayTestController extends Controller {
 			$jsApi -> setPrepayId($prepay_id);
 			
 			$jsApiParameters = $jsApi -> getParameters();
-			$returnUrl = U('Home/WxpayTest/return',array(''));
+			
+			if(!empty($jsApiParameters->return_msg)){	
+				$this->error($jsApiParameters->return_msg);
+			}
+//			dump($unifiedOrder);
+//			dump($jsApiParameters);
+//			exit();
+//			$returnUrl = U('Home/WxpayTest/return',array(''));
 	        
         	$this->assign("jsapiparams", $jsApiParameters);
-	        $this->assign('returnUrl', $returnUrl);
+        	$this->assign("params", json_decode($jsApiParameters));
+//	        $this->assign('returnUrl', $returnUrl);
 		} catch(SDKRuntimeException $sdkexcep) {
 			$error = $sdkexcep -> errorMessage();
 			$this -> assign("error", $error);			

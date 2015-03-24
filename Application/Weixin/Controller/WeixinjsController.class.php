@@ -14,7 +14,7 @@ class WeixinjsController extends WeixinController {
 	 */
 	public function index() {
 		C('SHOW_PAGE_TRACE',false);
-		$token = I('get.token','');
+		$token = I('get.tk','');
 //		dump($token);
 		$result = apiCall("Weixin/Wxaccount/getInfo", array(array('token'=>$token)));
 		if(!$result['status']){
