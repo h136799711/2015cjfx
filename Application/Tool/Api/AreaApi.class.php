@@ -14,7 +14,7 @@ use Tool\Model\AreaModel;
 class AreaApi extends Api{
 	
 	protected function _init(){
-		$this->model = D('Area');
+		$this->model = new AreaModel();
 	}
 	
 	/**

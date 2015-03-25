@@ -14,7 +14,7 @@ use Tool\Model\CityModel;
 class CityApi extends Api{
 	
 	protected function _init(){
-		$this->model = D('City');
+		$this->model = new CityModel();
 	}
 	
 	/**
