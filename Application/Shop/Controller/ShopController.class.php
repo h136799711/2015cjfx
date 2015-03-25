@@ -29,6 +29,7 @@ class ShopController extends  Controller {
 				define("APP_VERSION", C('APP_VERSION'));
 			}
 		}
+		C('SHOW_PAGE_TRACE', false);//设置不显示trace
 		$this -> refreshWxaccount();
 		$url = $this->getCurrentURL();
 		$this->getWxuser($url);
@@ -47,7 +48,6 @@ class ShopController extends  Controller {
 			$this -> userinfo = session("userinfo");
 		}
 		
-		addWeixinLog($this -> userinfo,"userinfo");
 		if (!is_array($this -> userinfo)) {
 
 			$code = I('get.code', '');

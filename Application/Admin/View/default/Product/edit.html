@@ -22,7 +22,7 @@
 				<input type="hidden" name="id" value="{$product.id}" />
 				<fieldset>
 					<legend>
-						商品添加</legend>
+						商品编辑</legend>
 					<div class="form-group">
 						<label for="inputname" class="col-md-2 col-lg-2 control-label">商品名称</label>
 						<div class="col-md-10 col-lg-10">
@@ -37,7 +37,7 @@
 							<div class="help-block">(销售价格)</div>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group hidden">
 						<label for="inputdis_price" class="col-md-2 col-lg-2 control-label">促销价格</label>
 						<div class="col-md-10 col-lg-10">
 							<input  value="{$product.dis_price}" type="text" class="required form-control input-short" name="dis_price" id="inputdis_price"  placeholder="请输入促销价格" value="0.00">
@@ -65,7 +65,7 @@
 						<div class="col-md-10 col-lg-10">
 							<div class="controls">
 								<input type="file" id="upload_picture">
-								<input type="hidden" name="pictureid" id="cover_id" value=" value="{$product.thumbnail}" />
+								<input type="hidden" name="pictureid" id="cover_id" value="{$product.thumbnail}" />
 								<div class="upload-img-box">									
 									<notempty name="product.tburl" value="">
 										<img class="img-responsive thumbnail" src="{$product.tburl}" />

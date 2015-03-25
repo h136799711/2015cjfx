@@ -9,7 +9,10 @@ class IndexController extends ShopController {
 	}
 
 	public function buy() {
-				
+		$userinfo = session("userinfo");
+		if(!is_array($userinfo)){
+//			$this->error("请登录！");
+		}
 		$productid = I('get.pid', 0);
 		if ($productid == 0) {
 			$this -> error("参数错误！");
@@ -21,6 +24,24 @@ class IndexController extends ShopController {
 		}
 
 		$product = apiCall("Admin/Product/getInfoWithThumbnail", array('id' => $productid));
+		$map = array("wxuserid"=>$userinfo['id']);
+		
+		$address = apiCall("Shop/Address/getInfo",array($map));
+		
+		if($address['status']){
+			$this->assign("address",$address['info']);
+			$city = apiCall("Tool/City/getListByProvinceID", array($address['info']['province']));
+			$area = apiCall("Tool/Area/getListByCityID", array($address['info']['city']));
+			if($city['status']){
+				$city = $city['info'];
+				$this->assign("city",$city);
+			}
+			if($area['status']){
+				$area = $area['info'];
+				$this->assign("area",$area);
+			}
+		}
+		
 		if ($product['status']) {
 			$product['info']['tburl'] = getPictureURL($product['info']['thumbnaillocal'], $product['info']['thumbnailremote']);
 			$this -> assign("product", $product['info']);
@@ -31,7 +52,6 @@ class IndexController extends ShopController {
 	public function index() {
 		if (IS_GET) {
 			
-			C('SHOW_PAGE_TRACE', false);
 			
 			if (is_array($this -> userinfo)) {
 				$groupaccess = apiCall("Admin/GroupAccess/getInfo", array('groupid' => $this -> userinfo['groupid']));

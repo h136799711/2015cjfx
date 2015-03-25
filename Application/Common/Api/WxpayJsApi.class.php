@@ -28,13 +28,13 @@ class WxpayJsApi extends WxpayCommonApi
 	/**
 	 * 	作用：生成可以获得code的url
 	 */
-	function createOauthUrlForCode($redirectUrl)
+	function createOauthUrlForCode($redirectUrl,$state='WXPAYJS')
 	{
 		$urlObj["appid"] = $this->APPID;
 		$urlObj["redirect_uri"] = "$redirectUrl";
 		$urlObj["response_type"] = "code";
 		$urlObj["scope"] = "snsapi_base";
-		$urlObj["state"] = "STATE"."#wechat_redirect";
+		$urlObj["state"] = "$state"."#wechat_redirect";
 		$bizString = $this->formatBizQueryParaMap($urlObj, false);
 		return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
 	}

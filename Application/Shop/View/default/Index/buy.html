@@ -78,26 +78,27 @@
 							<input name="country" type="hidden" value="中国" />
 							<input name="productname" type="hidden" value="{$product.name}" />
 							<input name="price" type="hidden" value="{$product.price}" />
-							<input name="pthumbnail" value="{$product.tburl}" />
+							<input name="amount" class="amount" type="hidden" value="1" />
+							<input name="pic" type="hidden" value="{$product.tburl}" />
 							<div class="ui-form-item ui-border-b">
 								<label for="#"><span class="ui-txt-warning">*</span> 联系人</label>
-								<input name="name" value="何必都" id="inputname" type="text" placeholder="请输入联系人姓名">
+								<input name="contactname" value="{$address.contactname}" id="inputname" type="text" placeholder="请输入联系人姓名">
 								<!--<a href="#" class="ui-icon-close"></a>-->
 							</div>
 							<div class="ui-form-item  ui-border-b">
 								<label for="inputmobile"><span class="ui-txt-warning">*</span> 联系电话</label>
-								<input name="mobile" value="联系电话" id="inputmobile"  placeholder="请输入联系电话" />
+								<input name="mobile" value="{$address.mobile}" id="inputmobile"  placeholder="请输入联系电话" />
 							</div>
 							<div class="ui-form-item  ui-border-b">
 								<label for="#"><span class="ui-txt-warning">&nbsp;</span> 微信号</label>
-								<input name="wxno" value="hbd136799711" placeholder="请输入微信号" />
+								<input name="wxno" value="{$address.mobile}" placeholder="请输入微信号" />
 							</div>
 							<div class="ui-form-item ui-form-item-select ui-border-b">
 								<label for="#" ><span class="ui-txt-warning">*</span> 省</label>
-								<select class="txt-gray" style="padding-left: 90px;" id="province" class="ui-border-t" name="province">
+								<select  style="padding-left: 90px;" id="province" class="ui-border-t <empty name="address">txt-gray</empty>" name="province">
 									<option style="" value="">请选择省份</option>
 									<volist name="provinces" id="vo">
-										<option value="{$vo.provinceid}">{$vo.province}</option>
+										<option value="{$vo.provinceid}" <eq name="address.province" value="$vo['provinceid']" >selected="true"</eq> >{$vo.province}</option>
 									</volist>
 								</select>
 								<div id="pcaloading" style="width:40px;position: absolute;top: 0px; right: 20px;" class="ui-loading-wrap">
@@ -108,23 +109,36 @@
 							<div class="ui-form-item ui-form-item-select ui-border-b">
 								<label for="#" ><span class="ui-txt-warning">*</span> 城市</label>
 								
-								<select class="txt-gray" style="padding-left: 90px;" id="city" class="ui-border-t" name="city">
-									<option value="">请先选择省份</option>
+								<select style="padding-left: 90px;" id="city" class="ui-border-t <empty name="address">txt-gray</empty>" name="city">
+									
+									<empty name="city">
+										<option value="">请先选择省份</option>
+										<else/>
+										<volist name="city" id="vo">
+										<option value="{$vo.cityid}" <eq name="address.city" value="$vo['cityid']" >selected="selected"</eq>  >{$vo.city}</option>
+										</volist>
+									</empty>
 								</select>
 							</div>
 							
-							<div class="ui-form-item ui-form-item-select ui-border-b hide" >
+							<div class="ui-form-item ui-form-item-select ui-border-b <empty name="address.area">hide</empty>" >
 								<label for="#" ><span class="ui-txt-warning">*</span> 区域</label>
 								
-								<select class="txt-gray" style="padding-left: 90px;" id="area" class="ui-border-t" name="area">
-									<option style="color: #A6A6A6;" value="">请先选择城市</option>
+								<select style="padding-left: 90px;" id="area" class="ui-border-t <empty name="address">txt-gray</empty>" name="area">
+									<empty name="area">
+										<option value="">请先选择城市</option>
+										<else/>
+										<volist name="area" id="vo">
+											<option value="{$vo.areaid}" <eq name="address.area" value="$vo['areaid']" >selected="selected"</eq> >{$vo.area}</option>
+										</volist>									
+									</empty>
 								</select>
 							</div>
 							
 							<div class="ui-form-item ui-form-item-textarea ui-border-b">
 								<label for="#"><span class="ui-txt-warning">*</span> 详细地址</label>
 								
-								<textarea name="address"  id="address" style="resize:none;" placeholder="请输入详细地址">详细地址</textarea>
+								<textarea name="address"  id="address" style="resize:none;" placeholder="请输入详细地址">{$address['detailinfo']}</textarea>
 							</div>
 							<div class="ui-form-item ui-form-item-textarea ui-border-b">
 								<label for="#"><span class="ui-txt-warning">&nbsp;</span> 备注</label>
@@ -175,20 +189,36 @@
 					return false;
 				}
 				str = $("#address").val();
-				var str1 = $("#province").val(); 
-				var str2 = $("#city").val(); 
-				var str3 = $("#area").val(); 
-				if(str.replace(/(^s*)|(s*$)/g, "").length == 0 || str1.length == 0 || str2.length == 0 || (str3.length == 0 && !$("#area").parent().hasClass("hide"))){
+//				var str1 = $("#province").val(); 
+//				var str2 = $("#city").val(); 
+//				var str3 = $("#area").val();
+//				
+				var str1 = $("#province > option").not(function(){ return !this.selected }).attr("value");
+				var str2 = $("#city > option").not(function(){ return !this.selected }).attr("value");
+				
+				var str3 = $("#area > option").not(function(){ return !this.selected }).attr("value");
+				
+				if(str1.length == 0 ){
+					myalert("请选择省份！");
+					return false;
+				}
+				
+				if(str2.length == 0){
+					myalert("请选择城市！");
+					return false;
+				}
+				
+				if(!$("#area").parent().hasClass("hide") && str3.length == 0){
+					myalert("请选择区域！");
+					return false;
+				}
+				
+				if(str.replace(/(^s*)|(s*$)/g, "").length == 0){
 						
 					myalert("请填写联系地址！");
 					return false;
 				}
 				
-//				var str = $("#inputname").val();
-//				if(strings.replace(/(^s*)|(s*$)/g, "").length == 0){
-//					myalert("请填写联系人姓名！");
-//					return false;
-//				}
 				return true;
 			}
 			function appendToCity(data){
@@ -281,9 +311,16 @@
 					var p_name = $("#province > option").not(function(){ return !this.selected }).text();
 					var c_name = $("#city > option").not(function(){ return !this.selected }).text();
 					
-					var a_name = $("#area > option").not(function(){ return !this.selected }).text();
+					var a_name = $("#area > option").not(function(){ return !this.selected });
+					if(a_name.attr("value") != ""){
+						a_name = a_name.text();
+					}else{
+						a_name = "";
+					}
 					
-					var totalprice = parseInt($(".shopcart-total-price").text());
+					var cnt = parseInt($(".item-cnt").val()) ;
+					$(".amount").val(cnt);
+					var totalprice = parseFloat($(".shopcart-total-price").text());
 					var obj = {p_name:p_name,c_name:c_name,a_name:a_name, totalprice: totalprice};
 					//console.log(obj);
 					var postdata = $.param(obj);
@@ -303,8 +340,8 @@
 					  success: function(data){
 					  	console.log(data);
 					  	if(data.status){
-					  		alert(data.url);
-//					  		window.location.href = data.url;
+//					  		alert(data.url);
+					  		window.location.href = data.url;
 					  	}else{
 					  		alert(data.info);
 				        	el.loading("hide");
@@ -324,11 +361,11 @@
 				$("#province").change(function(){
 					$("#province").removeClass("txt-gray");
 					var provinceID = $("#province").val();
-					console.log(provinceID);
+//					console.log(provinceID);
 					if(provinceID){
 						$("#pcaloading").show();
 						$.post("{:U('Tool/City/getCitys')}",{provinceid:provinceID},function(data){
-							console.log(data);
+//							console.log(data);
 							if(data.status){
 								appendToCity(data.info);								
 							}else{
@@ -342,11 +379,11 @@
 				$("#city").change(function(){
 					$("#city").removeClass("txt-gray");
 					var cityID = $("#city").val();
-					console.log(cityID);
+//					console.log(cityID);
 					if(cityID){
 						$("#pcaloading").show();
 						$.post("{:U('Tool/City/getArea')}",{cityid:cityID},function(data){
-							console.log(data);
+//							console.log(data);
 							if(data.status){
 								appendToArea(data.info);					
 							}else{

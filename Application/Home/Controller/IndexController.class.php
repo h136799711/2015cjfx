@@ -13,6 +13,7 @@ class IndexController extends HomeController {
 	}
 	
 	public function index() {
+//		dump('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);	
 		$this->display();
 //		$this->redirect(U('Shop/Index/index'));
 //		if (IS_GET) {
