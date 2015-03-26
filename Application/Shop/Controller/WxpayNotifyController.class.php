@@ -67,25 +67,31 @@ class WxpayNotifyController extends Controller {
 					$orderid = $entity['out_trade_no'];
 					//TODO: 根据订单id来更新订单状态
 					$result = apiCall("Shop/Orders/getInfo", array('orderid'=>$orderid));
-					
+					//清除缓存
+					$fanskey = "appid_".$entity['appid']."_" . $entity['openid'];
+					S($fanskey,null);
 					//1.查询订单是否已更新
 					addWeixinLog($result,"[完成支付的订单信息]");
 					if($result['status'] && is_array($result['info'])){
 						$paidStatus = \Common\Model\OrdersModel::ORDER_PAID;
 						if($result['info']['pay_status'] != $paid){//订单不为已支付的情况下更新
 							
+							$wxuserid =  $result['info']['wxuser_id'];
+							
 							//4. 更新为已支付，（对数据行要加写锁）
 							$result = apiCall("Shop/Orders/savePayStatus",array($orderid,$paidStatus));
 							if(!$result['status']){
 								LogRecord($result['info'], __FILE__."[savePayStatus]");
 							}
-							$wxuserid =  $result['info']['wxuser_id'];
 							
 							//3. 升级用户的用户组
 							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
 							if(!$result['status']){
 								LogRecord($result['info'], __FILE__."[groupUp]");
 							}
+
+							//TODO: 更新用户积分，用户积分 ＋ 消费金额
+//							apiCall("Admin/Wxuser/saveByID", array($wxuserid,))
 							
 						}
 					}

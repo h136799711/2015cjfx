@@ -1,18 +1,22 @@
-<div id="fill">
-</div>
-<div id="menu">
-	<ul>
-		<li>
-			<img class="menuimg" src="img/buy.png" />
-			<br>申请族长</li>
-		<li>
-			<img class="menuimg" src="img/order.png" />
-			<br>我的订单</li>
-		<li>
-			<img class="menuimg" src="img/famliy.png" />
-			<br>家族收益</li>
-		<li>
-			<img class="menuimg" src="img/code.png" />
-			<br>我的推广码</li>
-	</ul>
+<div class="footermenu am-btn-toolbar am-g am-btn-group-justify">
+	<div class="am-u-sm-3 am-text-center">
+		<a href="{:U('Shop/Index/index')}"  class="am-btn am-btn-warning <eq name="active" value="1">am-active</eq>" >
+			<div><i class="am-icon-home am-icon-md"></i></div>申请族长
+		</a>
+	</div>
+	<div class="am-u-sm-3 am-text-center">
+		<a href="{:U('Shop/Index/orders')}"  class="am-btn am-btn-warning <eq name="active" value="2">am-active</eq>">
+			<div><i class="am-icon-calendar-o am-icon-md"></i></div>
+		我的订单</a>
+	</div>
+	<div class="am-u-sm-3 am-text-center">
+		<a href="{:U('Shop/Index/myFamily')}"  class="am-btn am-btn-warning <eq name="active" value="3">am-active </eq>" >
+			<div><i class="am-icon-group am-icon-md"></i></div>
+		家族收益</a>
+	</div>
+	<div class="am-u-sm-3 am-text-center">
+		<a href="{:U('Shop/Index/myQrcode')}"  class="am-btn am-btn-warning <eq name="active" value="4">am-active</eq>"> 
+			<div><i class="am-icon-qrcode am-icon-md"></i></div>
+		推广码</a>
+	</div>
 </div>

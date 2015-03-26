@@ -95,7 +95,7 @@ class ConnectController extends WeixinController {
 		$this -> data = $weixin -> request();
 
 		if ($this -> data && is_array($this -> data)) {
-			$fanskey = "wxaccount_".$this -> wxaccount['id']."_" . $this->getOpenID();
+			$fanskey = "appid_".$this -> wxaccount['appid']."_" . $this->getOpenID();
 
 		
 			//读取缓存的粉丝信息

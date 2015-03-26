@@ -1,0 +1,90 @@
+
+.footermenu {
+	background: #ee2e6a;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+}
+.footermenu .am-btn-warning {
+	color: #FFFFFF;
+	border: 0px;
+	background: #ee2e6a;
+	font-size: 1em;
+}
+.footermenu a.am-btn-warning {
+	color:#FFFFFF;
+	padding:0.625em;
+}
+.footermenu .am-btn.am-active {
+	box-shadow: inset 0 0px 28px rgba(0, 0, 0, 0.3);
+}
+.footermenu a:visited {
+	color:#FFFFFF;
+}
+.footermenu .am-u-sm-3{
+	width:25%;
+	padding:0em;
+}
+.header {
+	 padding: 5px;
+	background: #fcefcf;
+}
+.header .avatar{
+	margin-right: 10px;	
+	margin-left: 5px;
+}
+.header .avatar,.header .info{
+	float:left;
+}
+.info{
+	font-size:.8em;
+}
+.avatar{
+	width:80px;
+	height:80px;
+	
+}
+
+.commission{
+	background-color: #e61944;
+  	height: 2.5em;
+  	line-height: 2.5em;
+  	width: 100%;
+  	vertical-align: middle;
+  	font-size: 1em;
+  	color: #FFFFFF;
+}
+.referrer{
+	height: 2.5em;
+	color:#000000;
+	font-size:1em;
+}
+#accordion .am-panel-hd a,#accordion  .am-panel-title{
+	color:#000000;
+}
+#accordion .am-panel-hd{
+	position: relative;
+}
+#accordion .am-panel-hd .am-panel-title{
+	padding-left: 2em;
+}
+#accordion i{
+  vertical-align: top;
+  position: absolute;
+  left: 1em;
+  top: 2px;
+  color: #666;
+}
+#accordion i.am-icon-plus{
+	top:auto;
+}
+#accordion .am-list span{
+	padding-left: 2em;
+}
+#accordion .am-list>li>a{
+	display: inline-block;
+	padding: 0px;
+}

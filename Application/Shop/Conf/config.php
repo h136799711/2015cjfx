@@ -19,14 +19,4 @@ return array(
     
 	'SHOW_PAGE_TRACE'=>false,
 	
-    'WXPAY_CONFIG'=>array(
-		'appid'=>'wx58aea38c0796394d',
-		'appsecret'=>'3e1404c970566df55d7314ecfe9ff437',
-		'mchid'=>'10027619',
-		'notifyurl'=>'http://1.test.8raw.com/index.php/Shop/WxpayNotify/index',
-		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
-		'jsapicallurl'=>'http://1.test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
-		'sslcertpath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
-		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
-	)
 );

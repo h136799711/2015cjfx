@@ -1,26 +1,115 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="author" content="ISUX">
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" content="width=device-width,user-scalable=no"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <title>demo</title>
-    <link rel="stylesheet" type="text/css" href="__CDN__/frozenui/1.2.0/frozen.css">
-    
-</head>
-<body>
-    <div class="wrapper">
-       
-    </div>
-     <script src="__CDN__/frozenui/1.0.1/zepto.min.js"></script>
-    <script src="__CDN__/frozenui/1.0.1/frozen.js"></script>
-    <script>
-       (function() {
-			
-        })();
-    </script>
-</body>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title>我的家族</title>
+		<link rel="stylesheet" type="text/css" href="__CDN__/amazeui/2.2.1/css/amazeui.min.css">
+		<link rel="stylesheet" type="text/css" href="__CSS__/shop.css?v=__APP_VERSION__">
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="header am-cf">
+				<div class="avatar">
+					<img class="am-img-thumbnail am-radius" src="{$userinfo.avatar}" alt="我的头像" />
+				</div>
+				<div class="info">
+					昵称：{$userinfo.nickname}
+					<br/> 族长：{$userinfo.groupid}
+					<br/> 关注时间：{$userinfo.subscribe_time|date='Y-m-d',###}
+					<br/> 会员ID: {$userinfo.id} 积分: {$userinfo.score}
+					<br/>
+				</div>
+			</div>
+			<div class="commission">
+				<div class="am-u-sm-6 am-text-center">销售额：{$total_sales}元</div>
+				<div class="am-u-sm-6 am-text-center">我的佣金：{$commission}元</div>
+			</div>
+
+			<div class="referrer am-vertical-align am-text-center">
+				<div class="am-vertical-align-middle">
+					您是由[{$referrer_name}]推荐
+				</div>
+			</div>
+
+			<div class="am-panel-group" id="accordion">
+				<div class="am-panel am-panel-default">
+					<div class="am-panel-hd">
+						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item1'}">
+		        <i class="am-icon-sort-desc"></i>家族成员
+		        <span class="am-badge am-badge-danger am-round">6</span>
+		      </h4>
+					</div>
+					<div id="item1" class="am-panel-collapse am-collapse ">
+						<div class="am-panel-bd">
+							<ul class="am-list am-list-static">
+ 							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>1))}"><span><i class="am-icon-plus"></i>一级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
+							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>2))}"><span><i class="am-icon-plus"></i>二级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
+							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>3))}"><span><i class="am-icon-plus"></i>三级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="am-panel am-panel-default">
+					<div class="am-panel-hd">
+						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item2'}">
+		        <i class="am-icon-sort-desc"></i>家族推广
+		        <span class="am-badge am-badge-danger am-round">0单</span>
+		      </h4>
+					</div>
+					<div id="item2" class="am-panel-collapse am-collapse ">
+						<div class="am-panel-bd">
+							<ul class="am-list am-list-static">
+ 							 	<li><span>下单未购买</span> <span>0</span></li>
+							 	<li><span>下单已购买</span> <span>0</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="am-panel am-panel-default">
+					<div class="am-panel-hd">
+						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item3'}">
+		        <i class="am-icon-sort-desc"></i>我的推广
+		        <span class="am-badge am-badge-danger am-round">0.00元</span>
+		      </h4>
+					</div>
+					<div id="item3" class="am-panel-collapse am-collapse ">
+						<div class="am-panel-bd">
+							<ul class="am-list am-list-static">
+ 							 	<li><span>未付款订单佣金</span> <span>0</span></li>
+							 	<li><span>已付款订单佣金</span> <span>1</span></li>
+							 	<li><span>已收货订单佣金</span> <span>2</span></li>
+							 	<li><span>已完成订单佣金</span> <span>3</span></li>
+							 	<li><span>待审核订单佣金</span> <span>4</span></li>
+							 	<li><span>已提现订单佣金</span> <span>5</span></li>
+							 	<li><span>可提现订单佣金</span> <span>6</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="am-panel am-panel-default">
+					<div class="am-panel-hd">
+						<a href="{:U('Shop/Index/withDrawCash')}"><h4 class="am-panel-title"><i class="am-icon-sort-desc"></i>申请提现</h4></a>
+					</div>
+				</div>
+			</div>
+
+			<assign name="active" value="3" />
+			<include file="partial/footermenu" />
+		</div>
+		<script src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<script src="__CDN__/amazeui/2.2.1/js/amazeui.min.js"></script>
+		<script>
+			(function() {
+						
+			        })();
+		</script>
+		{__NORUNTIME__}
+	</body>
+
 </html>

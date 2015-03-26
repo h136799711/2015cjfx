@@ -52,5 +52,22 @@ return array(
         'AUTH_RULE' => 'common_auth_rule', //权限规则表
         'AUTH_USER' => 'common_members'//用户信息表
     ),
+    'WXPAY_CONFIG'=>array(
+		'appid'=>'wx58aea38c0796394d',
+		'appsecret'=>'3e1404c970566df55d7314ecfe9ff437',
+		'mchid'=>'10027619',
+		'notifyurl'=>'http://1.test.8raw.com/index.php/Shop/WxpayNotify/index',
+		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
+		'jsapicallurl'=>'http://1.test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
+		'sslcertpath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
+		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
+	),
+	'PROMOTIONCODE'=>array(
+		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode.jpg',
+		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置
+		'downloadFolder'=>'./Uploads/Qrcode',   //
+		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！', //
+		'codeprefix'=>'UID_',//推广码所带前缀
+	)
 	
 );

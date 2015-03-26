@@ -6,7 +6,26 @@ class IndexController extends ShopController {
 
 	protected function _initialize() {
 		parent::_initialize();
+		
 	}
+	
+	/**
+	 * 子级会员查看
+	 */
+	public function subMembers(){
+		//会员级别
+		$level = I('get.level',1);
+		
+		$this->display();
+	}
+	
+	/**
+	 * 申请提现
+	 */
+	public function withDrawCash(){
+		$this->display();
+	}
+	
 	/**
 	 * 我的订单中心页面
 	 */
@@ -18,10 +37,65 @@ class IndexController extends ShopController {
 	/**
 	 * 我的家族中心
 	 */
-	public function myFamily() {
-		
+	public function myFamily() {		
+		$userinfo = $this->getUserInfo();
+		$this->assign("userinfo",$userinfo);
 		$this -> display();
 	}
+	
+	private function getUserInfo(){
+//		return $this->userinfo;
+		return array('avatar'=>'http://wx.qlogo.cn/mmopen/tyeAQdOFDdrrSiavyCmznWU2NNS5cZl92UzdPAlIR56nnO4nicZicKLDcsnRlB8W2FqMXibC8g7RHTbJQ38lvh90gnIvBRHT7cQt/0',
+		'id'=>'666','subscribe_time'=>"1400346362",'score'=>99,'groupid'=>0);
+	}
+	
+	
+	public function myQrcode(){
+		if(IS_GET){
+			$userinfo = $this->getUserInfo();
+			$hasright = $this->hasAuthority($userinfo);
+			
+			$realpath = realpath("./Uploads/QrcodeMerge/");
+			if(!	$hasright){
+				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode.jpg";
+			}else{
+				$qrcode = "./Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
+				if(!file_exists($qrcode)){
+					
+					$promotionapi = new \Common\Api\PromotioncodeApi(C('PROMOTIONCODE'));
+					$result = $promotionapi->process($this -> wxaccount['appid'], $this -> wxaccount['appsecret'],$userinfo);
+					if($result['status']){
+						
+					}else{
+						$this->error("推广二维码生成失败！");
+					}
+
+				}
+				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
+			}
+			$this->assign("qrcode",$qrcode);
+			$this->display();
+		}
+	}
+	
+	private function hasAuthority($userinfo){
+		if(empty($userinfo) || !isset($userinfo['groupid'])){return false;}
+		$groupid = $userinfo['groupid'];
+		if($groupid == 0){
+			return false;
+		}
+		$result = apiCall("Admin/GroupAccess/getInfo", array('wxuser_group_id'=>$groupid));
+		if($result['status'] && is_array($result['info'])){
+			if($result['info']['alloweddistribution'] == 1){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
 	
 	
 	/**
@@ -92,7 +166,7 @@ class IndexController extends ShopController {
 		}
 	}
 
-
+	
 	
 	
 
