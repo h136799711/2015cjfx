@@ -12,6 +12,24 @@ class IndexController extends HomeController {
 		$this -> refreshWxaccount();
 	}
 	
+	public function groupup(){
+		$wxuserid = 1;
+		$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
+		dump($result);
+		$result = apiCall("Admin/Wxuser/getInfo", array(array('id'=>$wxuserid)));
+		dump($result);
+	}
+	
+	public function groupdown(){
+		$wxuserid = 1;
+		$result = apiCall("Admin/Wxuser/groupDown",array($wxuserid));
+		dump($result);
+		$result = apiCall("Admin/Wxuser/getInfo", array(array('id'=>$wxuserid)));
+		dump($result);
+		
+		
+	}
+	
 	public function index() {
 //		dump('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);	
 		$this->display();

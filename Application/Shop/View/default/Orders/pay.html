@@ -185,7 +185,7 @@ li {
 					'getBrandWCPayRequest', {$jsapiparams},
 					function(res) {
 						if (res.err_msg == "get_brand_wcpay_request:ok") {
-							window.location.href = "{:U('Shop/Ordres/paysuccess')}";
+							window.location.href = "{:U('Shop/Orders/paysuccess')}";
 						} else if (res.err_msg == "get_brand_wcpay_request:cancel") {
 							alert("您取消了支付，可以在我的订单中继续支付！");
 						} else if (res.err_msg == "get_brand_wcpay_request:fail") {

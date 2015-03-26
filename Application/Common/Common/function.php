@@ -274,5 +274,6 @@ function addWeixinLog($data, $operator = '') {
 		$log['ctime']    = time();
 		$log['loginfo']  = is_array($data) ? serialize($data) : $data;
 		$log['operator'] = $operator;
-		M('WeixinLog')->add($log);
+		$weixinlog = new \Common\Model\WeixinLogModel();
+		$weixinlog->add($log);
 }

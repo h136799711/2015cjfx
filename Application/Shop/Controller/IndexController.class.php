@@ -7,7 +7,27 @@ class IndexController extends ShopController {
 	protected function _initialize() {
 		parent::_initialize();
 	}
-
+	/**
+	 * 我的订单中心页面
+	 */
+	public function orders(){
+		$this->display();
+	}
+	
+	
+	/**
+	 * 我的家族中心
+	 */
+	public function myFamily() {
+		
+		$this -> display();
+	}
+	
+	
+	/**
+	 * 购买页面
+	 * @param $pid 需要传入pid，要购买的产品id
+	 */
 	public function buy() {
 		$userinfo = session("userinfo");
 		if(!is_array($userinfo)){
@@ -49,6 +69,7 @@ class IndexController extends ShopController {
 		}
 	}
 
+	
 	public function index() {
 		if (IS_GET) {
 			
@@ -71,12 +92,6 @@ class IndexController extends ShopController {
 		}
 	}
 
-	/**
-	 * 我的家族中心
-	 */
-	public function myFamily() {
-		$this -> display();
-	}
 
 	
 	

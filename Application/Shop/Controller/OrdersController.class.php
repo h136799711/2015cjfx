@@ -15,73 +15,12 @@ class OrdersController extends ShopController {
 	}
 	
 	/**
-	 * 微信支付成功，通知接口
+	 * 支付成功后js跳转到此链接
 	 */
-	public function notify(){
-		  
-        
-        $config = C('WXPAY_CONFIG');
-        
-        //使用通用通知接口
-        $notify = new  \Common\Api\WxpayJsApi($config);
-        
-        //存储微信的回调
-        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $notify->saveData($xml);
-        
-		addWeixinLog($xml, '[notify]xml');
-//		addWeixinLog(I('get.'), '[notify]get');
-        //验证签名，并回应微信。
-        //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
-        //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
-        //尽可能提高通知的成功率，但微信不保证通知最终能成功。
-        // if($notify->checkSign() == FALSE){
-        //  $notify->setReturnParameter("return_code","FAIL");//返回状态码
-        //  $notify->setReturnParameter("return_msg","签名失败");//返回信息
-        // }else{
-        //  $notify->setReturnParameter("return_code","SUCCESS");//设置返回码
-        // }
-        // $returnXml = $notify->returnXml();
-        // echo $returnXml;
-        
-        
-        if ($notify->checkSign() == TRUE) {
-            if ($notify->data["return_code"] == "FAIL") {
-                
-                //此处应该更新一下订单状态，商户自行增删操作
-                addWeixinLog("【通信出错】", "微信支付");
-                
-                // $log_->log_result($log_name,"【通信出错】:\n".$xml."\n");
-                
-            } elseif ($notify->data["result_code"] == "FAIL") {
-                
-                //此处应该更新一下订单状态，商户自行增删操作
-                //
-                addWeixinLog("【业务出错】", "微信支付");
-                
-                // $log_->log_result($log_name,"【业务出错】:\n".$xml."\n");
-                
-            } else {
-                
-                //此处应该更新一下订单状态，商户自行增删操作
-                addWeixinLog("【支付成功】", "微信支付");
-                
-                // $log_->log_result($log_name,"【支付成功】:\n".$xml."\n");
-                
-            }
-            
-            //商户自行增加处理流程
-            //例如：更新订单状态
-            //例如：数据库操作
-            //例如：推送支付完成信息
-            
-        }
-        
-        echo "success";
-	}
-	
 	public function paysuccess(){
-		$this->display();
+		//跳转到订单中学
+		$this->redirect(('Shop/Index/orders'));
+//		$this->display();
 	}
 	/**
 	 * 微信支付页面
@@ -104,8 +43,9 @@ class OrdersController extends ShopController {
 			}
 			addWeixinLog($total_fee,"[支付总金额（单位：分）]");
 			$this -> setWxpayConfig($payConfig, $trade_no, $itemdesc, $total_fee);
+			addWeixinLog($payConfig['notifyurl'],"[通知回调url]");
 			$this -> assign("order",$order);
-			$this -> assign("url",$this->getCurrentURL());
+//			$this -> assign("url",$this->getCurrentURL());
 			$this -> assign("items",$items);
 			$this -> display();
 
@@ -243,8 +183,8 @@ class OrdersController extends ShopController {
 			//通知地址
 			$unifiedOrder -> setParameter("notify_url", $config['notifyurl']);
 			$unifiedOrder -> setParameter("trade_type", "JSAPI");
-
-			//          $unifiedOrder->setParameter("attach",'{"token":"'.'123'.'","orderid":"'.'456'.'"}');//附加数据
+			addWeixinLog($unifiedOrder,"[unifiedOrder]");
+			//$unifiedOrder->setParameter("attach",'{"token":"'.'123'.'","orderid":"'.'456'.'"}');//附加数据
 			//交易类型//商户订单号
 			//非必填参数，商户可根据实际情况选填
 			//$unifiedOrder->setParameter("sub_mch_id","XXXX");//子商户号

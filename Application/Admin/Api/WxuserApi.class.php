@@ -20,6 +20,80 @@ class WxuserApi extends \Common\Api\Api{
 	}
 	
 	/**
+	 * 升级用户组
+	 */
+	public function groupUp($wxuserid){
+		
+		$result = $this->model->where(array('id'=>$wxuserid))->find();
+		
+		if($result === FALSE){
+			$error = $this->model->getDbError();
+			return $this -> apiReturnErr($error);
+			
+		}else{
+			$groupid = $result['groupid'];
+//			dump($groupid);
+			// 获取用户组信息
+			$group = apiCall("Admin/WxuserGroup/getInfo",array(array('id'=>$groupid)));
+//			dump($group);
+			if($group['status']){
+				if(is_null($group['info'])){
+					$error = false;
+					return $this -> apiReturnSuc($error);
+				}
+				$nextgroupid = $group['info']['nextgroupid'];
+				$result = $this->model->where(array('id'=>$wxuserid))->save(array('groupid'=>$nextgroupid));
+				if($result === false){
+					$error = $this->model->getDbError();
+					return $this -> apiReturnErr($error);
+				}else{
+					return $this -> apiReturnSuc($result);
+				}
+				
+			}else{
+				$error = $group['info'];
+				return $this -> apiReturnErr($error);
+			}
+		}
+	
+	}
+	
+	/**
+	 * 降级用户组
+	 */
+	public function groupDown($wxuserid){
+		
+		$result = $this->model->where(array('id'=>$wxuserid))->find();
+		
+		if($result === FALSE){
+			$error = $this->model->getDbError();
+			return $this -> apiReturnErr($error);
+		}else{
+			$groupid = $result['groupid'];
+			// 获取用户组信息
+			$group = apiCall("Admin/WxuserGroup/getInfo",array(array('nextgroupid'=>$groupid)));
+			if($group['status']){
+				if(is_null($group['info'])){
+					$error = false;
+					return $this -> apiReturnSuc($error);
+				}
+				$prevgroupid = $group['info']['id'];
+				$result = $this->model->where(array('id'=>$wxuserid))->save(array('groupid'=>$prevgroupid));
+				if($result === false){
+					$error = $this->model->getDbError();
+					return $this -> apiReturnErr($error);
+				}else{
+					return $this -> apiReturnSuc($result);
+				}
+				
+			}else{
+				$error = $group['info'];
+				return $this -> apiReturnErr($error);
+			}
+		}
+	}
+	
+	/**
 	 * 获取家族关系
 	 * @param $id 会员id
 	 */
@@ -49,7 +123,7 @@ class WxuserApi extends \Common\Api\Api{
 	}
 	
 	/**
-	 * 
+	 * 查询子级会员
 	 */
 	public function querySubMember(){
 		$map = array();

@@ -47,7 +47,7 @@ class PromotioncodePlugin extends  WeixinPlugin{
 		$this -> wxapi = new \Common\Api\WeixinApi($data['wxaccount']['appid'], $data['wxaccount']['appsecret']);
 		
 		
-		$realfile = $this->getQrcode($this->config['codeprefix'].$data['fans']['id']);
+		$realfile = $this->getQrcode($data['fans']['id']);
 		
 		if(!file_exists($realfile)){
 			return array("获取失败，请重试！","text");
