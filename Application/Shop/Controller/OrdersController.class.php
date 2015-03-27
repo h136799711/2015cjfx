@@ -13,6 +13,43 @@ class OrdersController extends ShopController {
 	protected function _initialize() {
 		parent::_initialize();
 	}
+
+	private function getUserinfo(){
+		return array('id'=>1);
+//		return $this->userinfo;
+	}
+	
+	private function formatOrderData($list){
+		foreach($list as &$vo){
+			$vo['createtime'] = date("Y-m-d H:i:s",$vo['createtime']);
+			$vo['order_status'] = getOrderStatus($vo['order_status']);
+			$vo['pay_status'] = getPayStatus($vo['pay_status']);
+		}
+		return $list;
+	}
+	
+	/**
+	 * 订单列表，瀑布
+	 */
+	public function orderList(){
+//		if(IS_POST){
+			$userinfo = $this->getUserinfo();
+			$map= array('wxuser_id'=>$userinfo['id']);
+			$page = array('curpage'=>0,'size'=>10);
+			$order = " updatetime desc";
+			$params = false;
+			$fields = "id,orderid,price,createtime,pay_status,order_status";
+			$result = apiCall("Shop/Orders/query",array($map,$page,$order,$params,$fields));
+			if($result['status']){
+//				$json = json_encode($result['info']);
+//				dump($result);
+				$format = $this->formatOrderData($result['info']['list']);
+				$this->success($format);
+			}else{
+				$this->error($result['info']);
+			}
+//		}
+	}
 	
 	/**
 	 * 支付成功后js跳转到此链接

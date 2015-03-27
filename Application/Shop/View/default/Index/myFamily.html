@@ -20,7 +20,7 @@
 				</div>
 				<div class="info">
 					昵称：{$userinfo.nickname}
-					<br/> 族长：{$userinfo.groupid}
+					<br/> 族长：{$hasright?"是":"立即"}<eq name="hasright" value="true">是<else/><a href="{:U('Shop/Index/index')}">您还不是族长，立即成为族长</a></eq>
 					<br/> 关注时间：{$userinfo.subscribe_time|date='Y-m-d',###}
 					<br/> 会员ID: {$userinfo.id} 积分: {$userinfo.score}
 					<br/>
@@ -33,7 +33,7 @@
 
 			<div class="referrer am-vertical-align am-text-center">
 				<div class="am-vertical-align-middle">
-					您是由[{$referrer_name}]推荐
+					您是由【{$referrer_name}】推荐
 				</div>
 			</div>
 
@@ -42,15 +42,16 @@
 					<div class="am-panel-hd">
 						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item1'}">
 		        <i class="am-icon-sort-desc"></i>家族成员
-		        <span class="am-badge am-badge-danger am-round">6</span>
+		        <span class="am-badge am-badge-danger am-round am-fr">{$subMember[0]+$subMember[1]+$subMember[2]+$subMember[3]}人</span>
 		      </h4>
 					</div>
 					<div id="item1" class="am-panel-collapse am-collapse ">
 						<div class="am-panel-bd">
 							<ul class="am-list am-list-static">
- 							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>1))}"><span><i class="am-icon-plus"></i>一级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
-							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>2))}"><span><i class="am-icon-plus"></i>二级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
-							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>3))}"><span><i class="am-icon-plus"></i>三级成员</span></a> <span class="am-badge am-badge-danger am-round">6</span></li>
+ 							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>1))}"><span><i class="am-icon-plus"></i>一级成员</span></a> <span class="am-badge am-badge-danger am-round">{$subMember[0]}</span></li>
+							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>2))}"><span><i class="am-icon-plus"></i>二级成员</span></a> <span class="am-badge am-badge-danger am-round">{$subMember[1]}</span></li>
+							 	<li><a href="{:U('Shop/Index/subMembers',array('level'=>3))}"><span><i class="am-icon-plus"></i>三级成员</span></a> <span class="am-badge am-badge-danger am-round">{$subMember[2]}</span></li>
+								<li><a href="{:U('Shop/Index/subMembers',array('level'=>4))}"><span><i class="am-icon-plus"></i>四级成员</span></a> <span class="am-badge am-badge-danger am-round">{$subMember[3]}</span></li>
 							</ul>
 						</div>
 					</div>
@@ -59,14 +60,14 @@
 					<div class="am-panel-hd">
 						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item2'}">
 		        <i class="am-icon-sort-desc"></i>家族推广
-		        <span class="am-badge am-badge-danger am-round">0单</span>
+		        <span class="am-badge am-badge-danger am-round  am-fr">{$paidOrdersCnt+$tobepaidOrdersCnt}单</span>
 		      </h4>
 					</div>
 					<div id="item2" class="am-panel-collapse am-collapse ">
 						<div class="am-panel-bd">
 							<ul class="am-list am-list-static">
- 							 	<li><span>下单未购买</span> <span>0</span></li>
-							 	<li><span>下单已购买</span> <span>0</span></li>
+ 							 	<li><span>下单未购买</span> <span class="am-fr">{$tobepaidOrdersCnt}</span></li>
+							 	<li><span>下单已购买</span> <span class="am-fr">{$paidOrdersCnt}</span></li>
 							</ul>
 						</div>
 					</div>
@@ -75,7 +76,7 @@
 					<div class="am-panel-hd">
 						<h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#item3'}">
 		        <i class="am-icon-sort-desc"></i>我的推广
-		        <span class="am-badge am-badge-danger am-round">0.00元</span>
+		        <span class="am-badge am-badge-danger am-round  am-fr">0.00元</span>
 		      </h4>
 					</div>
 					<div id="item3" class="am-panel-collapse am-collapse ">

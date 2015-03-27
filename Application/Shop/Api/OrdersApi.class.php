@@ -29,4 +29,31 @@
 			return $this->apiReturnSuc($result);
 		}
 	}
+	
+	
+	/**
+	 * 统计下单未购买的订单数
+	 */
+	public function countOrderBy($wxuserid,$paystatus){
+		
+//		$level1SQL = "(select wf.parent_1 from __WXUSER_FAMILY__ wf left join __WXUSER__ wu on wu.wxaccount_id = wf.wxaccount_id and wu.openid = wf.openid   where wf.parent_1 = $wxuserid)";
+//		$level2SQL = "(select wf.parent_2 from __WXUSER_FAMILY__ wf left join __WXUSER__ wu on wu.wxaccount_id = wf.wxaccount_id and wu.openid = wf.openid    where wf.parent_2 = $wxuserid)";
+//		$level3SQL = "(select wf.parent_3 from __WXUSER_FAMILY__ wf left join __WXUSER__ wu on wu.wxaccount_id = wf.wxaccount_id and wu.openid = wf.openid   where wf.parent_3 = $wxuserid)";
+//		$level4SQL = "(select wf.parent_4 from __WXUSER_FAMILY__ wf left join __WXUSER__ wu on wu.wxaccount_id = wf.wxaccount_id and wu.openid = wf.openid   where wf.parent_4 = $wxuserid)";
+		$levelSQL = "(select wu.id from __WXUSER_FAMILY__ wf left join __WXUSER__ wu on wu.wxaccount_id = wf.wxaccount_id and wu.openid = wf.openid   where wu.id = $wxuserid or wf.parent_4 = $wxuserid or wf.parent_3 = $wxuserid or wf.parent_2 = $wxuserid  or wf.parent_1 = $wxuserid )";
+		
+		$countsql = "SELECT count(ord.id) as cnt FROM __ORDERS__ as ord where ord.pay_status = '".$paystatus."' and ord.wxuser_id in $levelSQL";// $level1SQL union $level2SQL union $level3SQL union $level4SQL  )";
+		$model = M();
+		$result = $model->query($countsql);
+		
+		if($result === false){			
+			$error = $model->getDbError();
+			return $this->apiReturnErr($error);
+		}else{
+			return $this->apiReturnSuc($result[0]['cnt']);
+		}
+		
+	}
+	
+	
   }

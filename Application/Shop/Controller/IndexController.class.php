@@ -13,9 +13,37 @@ class IndexController extends ShopController {
 	 * 子级会员查看
 	 */
 	public function subMembers(){
+		$userinfo = $this->getUserInfo();
 		//会员级别
 		$level = I('get.level',1);
+		//是否族长		
+		$hasright = $this->hasAuthority($userinfo);
 		
+		$memberid = I('post.memberid',0,"intval");
+		if($memberid > 0){
+			$result = apiCall("Shop/Wxuser/getInfoWithGroupRight", array($userinfo['id'] ,$level ,$memberid));
+			
+			if($result['status']){
+				if(is_array($result['info'][0])){
+					$this->assign("member",$result['info'][0]);	
+				}else{
+					$this->assign("member",array('id'=>$memberid,'notfind'=>1));	
+				}
+			}else{
+				$this->error($result['info']);
+			}
+		}else{
+			
+			$page = array('curpage'=>I('get.p',0),'size'=>10);
+			
+			$result = apiCall("Shop/Wxuser/queryWithGroupRight", array($userinfo['id'] ,$level ,$page));
+			if($result['status']){
+				$this->assign("list",$result['info']['list']);	
+				$this->assign("show",$result['info']['show']);
+			}
+		}
+		$this->assign("hasright",$hasright);		
+		$this->assign("userinfo",$userinfo);		
 		$this->display();
 	}
 	
@@ -39,14 +67,55 @@ class IndexController extends ShopController {
 	 */
 	public function myFamily() {		
 		$userinfo = $this->getUserInfo();
+		//是否族长		
+		$hasright = $this->hasAuthority($userinfo);
+		$paidOrdersCnt=0;
+		$tobepaidOrdersCnt=0;
+		
+		//总订单
+		//已支付
+		$result = apiCall("Shop/Orders/countOrderBy", array($userinfo['id'],\Common\Model\OrdersModel::ORDER_PAID));
+		
+		if($result['status']){
+			$paidOrdersCnt = intval($result['info']);
+		}
+		//待支付
+		$result = apiCall("Shop/Orders/countOrderBy", array($userinfo['id'],\Common\Model\OrdersModel::ORDER_TOBE_PAID));
+		if($result['status']){
+			$tobepaidOrdersCnt = intval($result['info']);
+		}
+		
+		//家族成员数获取
+		$result = apiCall("Shop/WxuserFamily/countMember", array($userinfo['id']));
+		$subMember = array(0,0,0,0);
+		if($result['status'] && is_array($result['info'])){
+			$subMember = $result['info'];
+		}
+		
+		//总销售额、我的佣金
+		
+		//设置推荐人
+		if($userinfo['referrer'] == 0){
+			$this->assign("referrer_name",C("BRAND_NAME"));
+		}else{
+			$result = apiCall("Admin/Wxuser/getInfo",array(array('id'=>$userinfo['referrer'])));
+			if($result['status']){
+				$this->assign("referrer_name",$result['info']['nickname']);
+			}
+		}
+		
+		$this->assign("paidOrdersCnt",$paidOrdersCnt);
+		$this->assign("tobepaidOrdersCnt",$tobepaidOrdersCnt);
+		$this->assign("hasright",$hasright);
+		$this->assign("subMember",$subMember);
 		$this->assign("userinfo",$userinfo);
 		$this -> display();
 	}
 	
 	private function getUserInfo(){
-//		return $this->userinfo;
-		return array('avatar'=>'http://wx.qlogo.cn/mmopen/tyeAQdOFDdrrSiavyCmznWU2NNS5cZl92UzdPAlIR56nnO4nicZicKLDcsnRlB8W2FqMXibC8g7RHTbJQ38lvh90gnIvBRHT7cQt/0',
-		'id'=>'666','subscribe_time'=>"1400346362",'score'=>99,'groupid'=>0);
+		return $this->userinfo;
+//		return array('avatar'=>'http://wx.qlogo.cn/mmopen/tyeAQdOFDdrrSiavyCmznWU2NNS5cZl92UzdPAlIR56nnO4nicZicKLDcsnRlB8W2FqMXibC8g7RHTbJQ38lvh90gnIvBRHT7cQt/0',
+//		'id'=>'1','subscribe_time'=>"1400346362",'score'=>99,'groupid'=>0,'referrer'=>2);
 	}
 	
 	
@@ -59,7 +128,7 @@ class IndexController extends ShopController {
 			if(!	$hasright){
 				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode.jpg";
 			}else{
-				$qrcode = "./Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
+				$qrcode = "./Uploads/Qrcode/qrcode_uid".$userinfo['id'].".jpg";
 				if(!file_exists($qrcode)){
 					
 					$promotionapi = new \Common\Api\PromotioncodeApi(C('PROMOTIONCODE'));
@@ -71,7 +140,7 @@ class IndexController extends ShopController {
 					}
 
 				}
-				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
+				$qrcode = __ROOT__."/Uploads/Qrcode/qrcode_uid".$userinfo['id'].".jpg";
 			}
 			$this->assign("qrcode",$qrcode);
 			$this->display();

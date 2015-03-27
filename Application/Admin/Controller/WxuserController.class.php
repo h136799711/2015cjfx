@@ -135,10 +135,12 @@ class WxuserController extends AdminController {
 
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " subscribe_time desc ";
+		
+		$wxuserid = I('get.id',0);
 
 		//
-		$result = apiCall('Admin/Wxuser/querySubMember', array($map, $page, $order, $params));
-
+		$result = apiCall('Admin/Wxuser/querySubMember', array($wxuserid, $page, $params));
+		
 		//
 		if ($result['status']) {
 			$this -> assign('startdatetime', $startdatetime);
