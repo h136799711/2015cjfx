@@ -63,10 +63,15 @@ class OrdersController extends ShopController {
 	 * 微信支付页面
 	 */
 	public function pay() {
-		$id = I('get.id', '');
+		$id = I('get.id', 0);			
+		addWeixinLog($id,"[订单总金额（单位：分）]");
 		addWeixinLog(I('get.'),'pay get');
+		if($id == 0){
+			$this->error("参数错误！");
+		}
 		$result = apiCall("Shop/Orders/getInfo", array(array('id' => $id)));
 		if ($result['status']) {
+
 			$order = $result['info'];
 			addWeixinLog($order,'pay order info');
 			$payConfig = C('WXPAY_CONFIG');
@@ -74,11 +79,12 @@ class OrdersController extends ShopController {
 			$payConfig['jsapicallurl'] = $this->getCurrentURL();
 			$itemdesc = $items[0]['item'];
 			$trade_no = $order['orderid'];
-			$total_fee = $order['price']*100;
+			$total_fee = $order['price']*100.0;
+			addWeixinLog($order,"[订单总金额（单位：分）]");
+//			addWeixinLog($total_fee,"[支付总金额（单位：分）]");
 			if($total_fee <= 0){
 				$this->error("支付金额不能小于0！");
 			}
-			addWeixinLog($total_fee,"[支付总金额（单位：分）]");
 			$this -> setWxpayConfig($payConfig, $trade_no, $itemdesc, $total_fee);
 			addWeixinLog($payConfig['notifyurl'],"[通知回调url]");
 			$this -> assign("order",$order);

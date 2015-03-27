@@ -68,7 +68,7 @@
 				var cssClass = "am-bg-success";
 				
 				if(paystatus == "待支付"){
-					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{C('SITE_URL')}/index.php/Shop/Orders/pay/id'"+id+">立即支付</a></div>"
+					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id"+id+"' >立即支付</a></div>"
 				}
 				
 				return "<div  >支付状态：<span class='"+cssClass+"'>"+paystatus+"</span>	</div>"
@@ -89,7 +89,7 @@
 			
 			function createItem(obj){
   				$item = $("<li class='am-u-sm-10 am-center item'></li>");
-  				var html = "<div class='am-bg-info'>订单编号："+obj.orderid+"</div>";
+  				var html = "<div class='am-bg-danger'>订单编号："+obj.orderid+"</div>";
   				html = html+ "<div>订单金额："+obj.price+"元</div>";
   				html = html+ "<div>订单时间："+obj.createtime+"</div>";
   				html = html+ getPayStatus(obj.pay_status,obj.id);
