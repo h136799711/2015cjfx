@@ -15,8 +15,8 @@ class OrdersController extends ShopController {
 	}
 
 	private function getUserinfo(){
-		return array('id'=>1);
-//		return $this->userinfo;
+//		return array('id'=>1);
+		return $this->userinfo;
 	}
 	
 	private function formatOrderData($list){
@@ -115,11 +115,12 @@ class OrdersController extends ShopController {
 				'province' => I('post.p_name', ''), 
 				'city' => I('post.c_name', ''), 
 				'area' => I('post.a_name', ''), 
+				'wxno' => I('post.wxno', ''), 
 				'detailinfo' => I('post.address', ''), 
 				'orderid' => $this -> getOrderID(), 
 				'items' => $this -> getItems()
 			 );
-			$result = apiCall("Shop/Orders/add", array($entity));
+			$result = apiCall("Shop/Orders/addOrder", array($entity));
 			
 			if ($result['status']) {
 				$id = $result['info'];	
@@ -160,7 +161,7 @@ class OrdersController extends ShopController {
 	}
 
 	private function getOrderID() {
-		return $this -> wxaccount['id'] . date('YmdHis', time()) . $this -> randInt();
+		return  date('YmdHis', time()). $this -> randInt().$this -> wxaccount['id'];
 	}
 
 	private function randInt() {

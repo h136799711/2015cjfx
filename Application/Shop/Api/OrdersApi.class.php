@@ -17,6 +17,70 @@
   	}
 	
 	/**
+	 * 事务增加订单信息
+	 */
+	public function addOrder($entity){
+		$this->model->startTrans();
+		$flag = true;
+		$error = "";
+		//1. 增加order表记录
+		$order = array(
+				'wxuser_id' => $entity['wxuser_id'], 
+				'price' => $entity['price'], 
+				'note' => $entity['note'], 
+				'orderid' => $entity['orderid'], 
+				'items' => $entity['items']
+			 );
+		$result = $this->add($order);
+		if($result['status']){
+		$orderid = $result['info'];
+		//2. 增加order_contactinfo记录
+		$orderContactInfo = array(
+				'wxuser_id' => $entity['wxuser_id'], 
+				'orderid' => $entity['orderid'], 
+				'mobile' => $entity['mobile'], 
+				'wxno' => $entity['wxno'], 
+				'contactname' => $entity['contactname'], 
+				'country' => $entity['country'], 
+				'province' => $entity['province'], 
+				'city' => $entity['city'], 
+				'area' => $entity['area'], 
+				'wxno' => $entity['wxno'], 
+				'detailinfo' => $entity['detailinfo'], 
+			);
+			 $model = new \Common\Model\OrdersContactinfoModel();
+			 $result = $model->create($orderContactInfo,1);
+			 
+			 if($result){
+			 	$result = $model->add();
+			 	if($result === FALSE){
+			 		//新增失败
+			 		$flag = false;
+					$error = $model->getDbError();
+			 	}
+				
+			 }else{//自动验证失败
+			 	$flag = false;
+				$error = $model->getError();
+			 }
+			 
+		}else{
+			$flag = false;
+			$error = $result['info'];
+		}
+			 
+			 
+		if($flag){
+			$this->model->commit();
+			return $this->apiReturnSuc($orderid);
+		}else{
+			$this->model->rollback();
+			return $this->apiReturnErr($error);
+		}
+		
+	}
+	
+	/**
 	 * 设置支付状态
 	 * TODO：需要锁定数据行写操作
 	 */

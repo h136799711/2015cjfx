@@ -138,6 +138,16 @@ body{
 	color: #FF0000;
 }
 
+.searchForm .form-group{
+	margin: 5px 0px;
+}
+.searchForm .form-group .input-group .input-group-addon{
+	width:120px;
+}
+.searchForm .form-group .input-group{
+	width:640px;
+}
+
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (min-width: 768px) {

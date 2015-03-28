@@ -87,7 +87,7 @@ function data_auth_sign($data) {
 /**
  * 获取一个日期时间段
  * 如果有查询参数包含startdatetime，enddatetime，则优先使用否则生成
- * @param $type 0|1|2|其它
+ * @param $type 0|1|2|3｜其它
  * @return array("0"=>开始日期,"1"=>结束日期)
  */
 function getDataRange($type) {
@@ -95,27 +95,27 @@ function getDataRange($type) {
 	switch($type) {
 		case 0 :
 			//今天之内
-			$result['0'] = I('startdatetime', date('Y/m/d 00:00', time()), 'urldecode');
+			$result['0'] = I('startdatetime', (date('Y-m-d 00:00:00', time())), 'urldecode');
 			break;
 		case 1 :
 			//昨天
-			$result['0'] = I('startdatetime', date('Y/m/d 00:00:00', time()-24*3600), 'urldecode');
-			$result['1'] = I('enddatetime', date('Y/m/d 00:00:00', time()), 'urldecode');
+			$result['0'] = I('startdatetime', (date('Y-m-d 00:00:00', time()-24*3600)), 'urldecode');
+			$result['1'] = I('enddatetime', (date('Y-m-d 00:00:00', time())), 'urldecode');
 			break;
 		case 2 :
 			//最近7天
-			$result['0'] = I('startdatetime', date('Y/m/d H:i:s', time() - 24 * 3600 * 7), 'urldecode');
+			$result['0'] = I('startdatetime', (date('Y-m-d H:i:s', time() - 24 * 3600 * 7)), 'urldecode');
 			break;
 		case 3 :
 			//最近30天
-			$result['0'] = I('startdatetime', date('Y/m/d H:i:s', time() - 24 * 3600 * 30), 'urldecode');
+			$result['0'] = I('startdatetime', (date('Y-m-d H:i:s', time() - 24 * 3600 * 30)), 'urldecode');
 			break;
 		default :
-			$result['0'] = I('startdatetime', date('Y/m/d 00:00:00', time() - 24 * 3600), 'urldecode');
+			$result['0'] = I('startdatetime', (date('Y-m-d 00:00:00', time() - 24 * 3600)), 'urldecode');
 			break;
 	}
 	if(!isset($result['1'])){
-		$result['1'] = I('enddatetime', date('Y/m/d H:i:s', time()+10), 'urldecode');
+		$result['1'] = I('enddatetime', (date('Y-m-d H:i:s', time()+10)), 'urldecode');
 	}
 	return $result;
 }
@@ -276,4 +276,41 @@ function addWeixinLog($data, $operator = '') {
 		$log['operator'] = $operator;
 		$weixinlog = new \Common\Model\WeixinLogModel();
 		$weixinlog->add($log);
+}
+
+/**
+ * 获取订单状态的文字描述
+ */
+function getOrderStatus($status){
+	
+	switch($status){
+		case \Common\Model\OrdersModel::ORDER_COMPLETED:
+			return "已完成";
+		case \Common\Model\OrdersModel::ORDER_RETURNED:
+			return "已退货";
+		case \Common\Model\OrdersModel::ORDER_SHIPPED:
+			return "已发货";
+		case \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED:
+			return "待确认";
+		case \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED:
+			return "待发货";
+		default:
+			return "未知";
+	}
+}
+
+/**
+ * 获取支付状态的文字描述
+ */
+function getPayStatus($status){
+	switch($status){
+		case \Common\Model\OrdersModel::ORDER_PAID:
+			return "已支付";
+		case \Common\Model\OrdersModel::ORDER_TOBE_PAID:
+			return "待支付";
+		case \Common\Model\OrdersModel::ORDER_REFUND:
+			return "已退款";
+		default:
+			return "未知";
+	}
 }
