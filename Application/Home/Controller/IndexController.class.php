@@ -1,5 +1,7 @@
 <?php
 namespace Home\Controller;
+use Common\Model;
+use Common\Model\WxuserWithFamilyViewModel;
 
 class IndexController extends HomeController {
 
@@ -10,6 +12,18 @@ class IndexController extends HomeController {
 	protected function _initialize() {
 		parent::_initialize();
 		$this -> refreshWxaccount();
+	}
+	
+	public function testWxuserFamily(){
+//		$model = new WxuserWithFamilyViewModel();
+//		$result = $model->where(array('id'=>1))->find();
+		$model = new \Common\Model\WxuserWithFamilyViewModel();
+		$result = $model->field("id")->where (array('parent_1'=>1))->select(FALSE);
+		
+		$sql = " select sum(ord.price) as totalFee from __ORDERS__ as ord where ord.wxuser_id in  ".$result;
+		$result = $model->query($sql);
+		
+		dump($result);
 	}
 	
 	public function groupup(){

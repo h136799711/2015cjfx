@@ -474,18 +474,18 @@ class ConnectController extends WeixinController {
 		ifFailedLogRecord($result,'[updateWxuserFamily]'.__LINE__);
 	}
 	
-	private function addCommission(){
-		$wxaccount_id = $this->wxaccount['id'];
-		$openid = $this->getOpenID();
-		
-		$result = apiCall("Weixin/Commission/createOneIfNone",array($wxaccount_id,$openid));
-		addWeixinLog($result,"Commission的粉丝信息 2");
-		if($result['status']){
-			return $result['info'];
-		}else{
-			return -1;
-		}
-	}
+//	private function addCommission(){
+//		$wxaccount_id = $this->wxaccount['id'];
+//		$openid = $this->getOpenID();
+//		
+//		$result = apiCall("Weixin/Commission/createOneIfNone",array($wxaccount_id,$openid));
+//		addWeixinLog($result,"Commission的粉丝信息 2");
+//		if($result['status']){
+//			return $result['info'];
+//		}else{
+//			return -1;
+//		}
+//	}
 	/**
 	 * 插入粉丝信息
 	 */
@@ -540,7 +540,7 @@ class ConnectController extends WeixinController {
 			$dnSendText = true;
 		}
 		addWeixinLog("$newreferrer","newreferrer");
-		$this->addCommission();
+//		$this->addCommission();
 		$wxuser['subscribe_time'] = time();
 		$wxuser['subscribed'] = 1;
 		

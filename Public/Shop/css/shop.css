@@ -133,6 +133,7 @@
 	float:none;
   	border-width: 1px;
   	margin-bottom: 10px;
+  	font-size:0.8em;
 }
 
 .am-bg-success{
@@ -146,6 +147,9 @@
 .am-bg-info{
 	background: #0e90d2;
 	color:#FFFFFF;
+}
+.withdrawcash {
+	font-size: 0.8em;
 }
 
 /* ==========================================================================

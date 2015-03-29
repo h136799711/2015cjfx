@@ -68,7 +68,7 @@
 				var cssClass = "am-bg-success";
 				
 				if(paystatus == "待支付"){
-					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id"+id+"' >立即支付</a></div>"
+					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id/"+id+".shtml?showwxpaytitle=1' >前往支付</a></div>"
 				}
 				
 				return "<div  >支付状态：<span class='"+cssClass+"'>"+paystatus+"</span>	</div>"

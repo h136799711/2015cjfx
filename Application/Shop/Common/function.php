@@ -32,3 +32,23 @@ function toYesOrNo($val){
 	return "否";
 }
 
+/**
+ * 获取提现记录
+ */
+function getWDCStatus($status){
+	$desc = "未知";
+	switch($status){
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT:
+			$desc = "待审核";
+			break;
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_APPROVAL:
+			$desc = "已确认";
+			break;
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_REJECT:
+			$desc = "驳回";
+			break;
+		default:		;
+	}
+	
+	return $desc;
+}

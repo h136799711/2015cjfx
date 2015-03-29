@@ -42,14 +42,15 @@ class WxuserApi extends \Common\Api\Api{
 					return $this -> apiReturnSuc($error);
 				}
 				$nextgroupid = $group['info']['nextgroupid'];
-				$result = $this->model->where(array('id'=>$wxuserid))->save(array('groupid'=>$nextgroupid));
-				if($result === false){
-					$error = $this->model->getDbError();
-					return $this -> apiReturnErr($error);
-				}else{
-					return $this -> apiReturnSuc($result);
+				if($nextgroupid >= 0){
+					$result = $this->model->where(array('id'=>$wxuserid))->save(array('groupid'=>$nextgroupid));
+					if($result === false){
+						$error = $this->model->getDbError();
+						return $this -> apiReturnErr($error);
+					}else{
+						return $this -> apiReturnSuc($result);
+					}
 				}
-				
 			}else{
 				$error = $group['info'];
 				return $this -> apiReturnErr($error);

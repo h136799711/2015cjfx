@@ -129,11 +129,7 @@
 			</div>
 			<else/>
 			<div style="width:100%">
-				<!--<div>
-				昵称：<br/>
-				关注时间：{$userinfo.subscribe_time|date="Y-m-d h:m:s",###}<br/>
-				是否族长：【暂未实现】<br/>
-				</div>-->
+				
 				<div class="body">
 					<img class="img-responsive" src="__IMG__/demo/1.png?v=10" alt="" />
 					<img class="img-responsive" src="__IMG__/demo/2.png?v=10" alt="" />
@@ -144,7 +140,7 @@
 						<img class="fl avatar" src="{$userinfo.avatar}" />
 
 						<span class="nickname"><span style="color:#b3ed3a;">{$userinfo.nickname}</span>
-						<br/><eq name="alloweddistribution" value="1">您已经是族长<else/>请立即购买成为族长</eq>
+						<br/><eq name="groupaccess.alloweddistribution" value="1">您已经是族长<else/>请立即购买成为族长</eq>
 						<!--<img src="__IMG__/loading.gif" style="width:30px;height:30px;" alt="..." />-->
 						</span>
 

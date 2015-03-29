@@ -69,7 +69,7 @@ class OrdersController extends ShopController {
 		if($id == 0){
 			$this->error("参数错误！");
 		}
-		$result = apiCall("Shop/Orders/getInfo", array(array('id' => $id)));
+		$result = apiCall("Admin/Orders/getInfo", array(array('id' => $id)));
 		if ($result['status']) {
 
 			$order = $result['info'];

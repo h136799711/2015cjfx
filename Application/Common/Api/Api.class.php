@@ -197,10 +197,12 @@ abstract class Api {
 	/**
 	 * 获取数据find
 	 */
-	public function getInfo($map) {
-
-		$result = $this -> model -> where($map) -> find();
-
+	public function getInfo($map,$order=false) {
+		if($order === false){
+			$result = $this -> model -> where($map) -> find();
+		}else{
+			$result = $this->model->where($map)->order($order)->find();
+		}
 		if ($result === false) {
 			$error = $this -> model -> getDbError();
 			return $this -> apiReturnErr($error);

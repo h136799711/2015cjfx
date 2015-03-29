@@ -20,15 +20,15 @@
 				</div>
 				<div class="info">
 					昵称：{$userinfo.nickname}
-					<br/> 族长：{$hasright?"是":"立即"}<eq name="hasright" value="true">是<else/><a href="{:U('Shop/Index/index')}">您还不是族长，立即成为族长</a></eq>
+					<br/> 族长：<eq name="hasright" value="true">是<else/><a href="{:U('Shop/Index/index')}">您还不是族长，立即成为族长</a></eq>
 					<br/> 关注时间：{$userinfo.subscribe_time|date='Y-m-d',###}
 					<br/> 会员ID: {$userinfo.id} 积分: {$userinfo.score}
 					<br/>
 				</div>
 			</div>
 			<div class="commission">
-				<div class="am-u-sm-6 am-text-center">销售额：{$total_sales}元</div>
-				<div class="am-u-sm-6 am-text-center">我的佣金：{$commission}元</div>
+				<div class="am-u-sm-6 am-text-center">销售额：{:round($commissions['totalsale'],2)}元</div>
+				<div class="am-u-sm-6 am-text-center">我的佣金：{:round($commissions['allcommission'],2)}元</div>
 			</div>
 
 			<div class="referrer am-vertical-align am-text-center">
@@ -82,10 +82,10 @@
 					<div id="item3" class="am-panel-collapse am-collapse ">
 						<div class="am-panel-bd">
 							<ul class="am-list am-list-static">
- 							 	<li><span>未付款订单佣金</span> <span>0</span></li>
-							 	<li><span>已付款订单佣金</span> <span>1</span></li>
-							 	<li><span>已收货订单佣金</span> <span>2</span></li>
-							 	<li><span>已完成订单佣金</span> <span>3</span></li>
+ 							 	<li><span>未付款订单佣金</span> <span>{:round($commissions['commission_1'],2)}</span></li>
+							 	<li><span>已付款订单佣金</span> <span>{:round($commissions['commission_2'],2)}</span></li>
+							 	<li><span>已收货订单佣金</span> <span>{:round($commissions['commission_3'],2)}</span></li>
+							 	<li><span>已完成订单佣金</span> <span>{:round($commissions['commission_4'],2)}</span></li>
 							 	<li><span>待审核订单佣金</span> <span>4</span></li>
 							 	<li><span>已提现订单佣金</span> <span>5</span></li>
 							 	<li><span>可提现订单佣金</span> <span>6</span></li>

@@ -30,9 +30,9 @@ class ShopController extends  Controller {
 			}
 		}
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
-		$this -> refreshWxaccount();
-		$url = $this->getCurrentURL();
-		$this->getWxuser($url);
+//		$this -> refreshWxaccount();
+//		$url = $this->getCurrentURL();
+//		$this->getWxuser($url);
 
 	}
 	
