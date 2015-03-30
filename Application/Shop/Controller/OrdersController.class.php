@@ -36,7 +36,7 @@ class OrdersController extends ShopController {
 			$userinfo = $this->getUserinfo();
 			$map= array('wxuser_id'=>$userinfo['id']);
 			$page = array('curpage'=>0,'size'=>10);
-			$order = " updatetime desc";
+			$order = "pay_status asc";
 			$params = false;
 			$fields = "id,orderid,price,createtime,pay_status,order_status";
 			$result = apiCall("Shop/Orders/query",array($map,$page,$order,$params,$fields));

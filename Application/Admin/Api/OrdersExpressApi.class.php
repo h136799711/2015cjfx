@@ -6,13 +6,12 @@
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-
-namespace Shop\Api;
+namespace Admin\Api;
 use Common\Api\Api;
-use Common\Model\CommissionWithdrawcashModel;
-class CommissionWithdrawcashApi extends Api{
-	
+use Common\Model\OrdersExpressModel;
+
+class OrdersExpressApi extends Api{
 	protected function _init(){
-		$this->model = new CommissionWithdrawcashModel();
+		$this->model = new OrdersExpressModel();
 	}
 }

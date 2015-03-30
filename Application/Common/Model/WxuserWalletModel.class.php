@@ -12,7 +12,7 @@ use Think\Model;
 /**
  * 用户钱包
  */
-class CommissionWithdrawcashModel  extends  Model{
+class WxuserWalletModel  extends  Model{
 	/**
 	 * 待审核
 	 */

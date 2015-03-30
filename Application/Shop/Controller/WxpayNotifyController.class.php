@@ -62,7 +62,7 @@ class WxpayNotifyController extends Controller {
 					$entity['time_end'] = $notify -> data['time_end'];
 					//此处应该更新一下订单状态，商户自行增删操作
 					addWeixinLog("【支付成功】", "微信支付");
-					LogRecord("out_trade_no ".$entity['out_trade_no'].",transaction_id:".$entity['transaction_id'], "微信支付－[支付成功]");
+//					LogRecord("out_trade_no ".$entity['out_trade_no'].",transaction_id:".$entity['transaction_id'], "微信支付－[支付成功]");
 					
 					$orderid = $entity['out_trade_no'];
 					//1. 根据订单id来更新订单状态
@@ -78,30 +78,33 @@ class WxpayNotifyController extends Controller {
 						if($result['info']['pay_status'] != $paid){//订单不为已支付的情况下更新
 							
 							$wxuserid =  $result['info']['wxuser_id'];
+							//5. 升级用户的用户组
+							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
+							if(!$result['status']){
+								LogRecord($result['info'], "[groupUp]");
+							}
 							
 							//3. 更新为已支付，（对数据行要加写锁）
 							$result = apiCall("Shop/Orders/savePayStatus",array($orderid,$paidStatus));
 							if(!$result['status']){
-								LogRecord($result['info'], __FILE__."[savePayStatus]");
+								LogRecord($result['info'], "[更新订单支付状态]");
 							}else{
 								$map = array('id'=>$wxuserid);
-								$addScore = intval($entity['total_fee']);
+								$addScore = intval(floatval($entity['total_fee'])/100.0);
 								if($addScore > 0){
 									//4. 更新用户积分 ＋ 消费金额
 									$result = apiCall("Admin/Wxuser/setInc", array($map,"score",$addScore));
 									if(!$result['status']){
-										LogRecord($result['info'], __FILE__."[增加用户积分]");							
+										LogRecord($result['info'], "[增加用户积分]");							
 									}
 								}
+								
+								
 							}
 							
-							//5. 升级用户的用户组
-							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
-							if(!$result['status']){
-								LogRecord($result['info'], __FILE__."[groupUp]");
-							}
 
-							
+							//6. TODO: 发送提醒消息给指定微信号
+							// 
 						}
 					}
 				}

@@ -122,6 +122,7 @@ class WeixinApi {
 
 	/**
 	 * 获取用户列表
+	 * @return array(total	关注该公众账号的总用户数,count	拉取的OPENID个数，最大值为10000,data	列表数据，OPENID的列表,next_openid)
 	 */
 	public function getUserList($nextopenid = '') {
 		$accessToken = $this -> getAccessToken();

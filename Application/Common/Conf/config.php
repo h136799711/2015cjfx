@@ -5,6 +5,7 @@
  
 
 return array(
+	'LOAD_EXT_CONFIG' => 'express', 
 	//唯一管理员用户配置	
    'USER_ADMINISTRATOR' => 1, //管理员用户ID
    'MODULE_DENY_LIST'      =>  array('Common','Runtime'),

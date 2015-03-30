@@ -14,5 +14,5 @@ class CommissionModel  extends  Model{
 	protected $_auto = array(
 		array('updatetime',NOW_TIME,self::MODEL_BOTH)
 	);
-		
+	
 }

@@ -40,9 +40,8 @@
 			<!-- 操作按钮 -->
 			<div class="btn-controls row col-lg-12 col-md-12">
 				
-				<a id="btnDeliver"  href="javascript:submitForm();" class="btn btn-primary"><i class="fa fa-bus"></i>批量发货</a>
 			</div>
-			<form action="{:U('Admin/Orders/bulkDeliver')}" method="post" class="deliverForm" >
+			<form action="{:U('Admin/Orders/deliver')}" method="post" class="deliverForm" >
 			<table class="table table-striped table table-hover  table-condensed">
 				<thead>
 					<tr>
@@ -102,13 +101,13 @@
 									{$vo.country},{$vo.province},{$vo.city},{$vo.area},{$vo.detailinfo}
 								</td>
 								<td>
-									[{$vo.pay_status|getPayStatus}]
+									[{$vo.pay_status|getPayStatus}][{$vo.order_status|getOrderStatus}]
 								</td>
 								<td>
 									{$vo.createtime|date='Y-m-d h:i:s',###}
 								</td>
 								<td>
-									<a href="{:U('Admin/Orders/deliver',array('id'=>$vo['id']))}" class="btn btn-primary"><i class="fa fa-bus"></i>编辑发货信息</a>			
+									<a href="{:U('Admin/Orders/returned',array('id'=>$vo['id']))}" class="btn btn-primary confirm ajax-get"><i class="fa fa-bus"></i>已退货</a>			
 								</td>
 							</tr>
 

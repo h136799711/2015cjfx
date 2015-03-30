@@ -87,6 +87,8 @@
 									</td>
 									<!--<td>{$vo.status|getStatus}</td>-->
 									<td>
+										<a href="{:U('Admin/Wxuser/sendText',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-send"></i>发送消息</a>
+									
 										<a href="{:U('Admin/Wxuser/viewFamily',array('id'=>$vo['id']))}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i>查看其家族</a>
 									</td>
 								</tr>

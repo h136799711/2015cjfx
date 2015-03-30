@@ -135,6 +135,12 @@
   	margin-bottom: 10px;
   	font-size:0.8em;
 }
+.am-form-group .am-btn.am-btn-danger{
+	color: #FFFFFF;
+}
+a.am-btn-danger:visited{
+	color: #FFFFFF;
+}
 
 .am-bg-success{
 	background: #5eb95e;
@@ -150,6 +156,9 @@
 }
 .withdrawcash {
 	font-size: 0.8em;
+}
+.error{
+	color:#ff4400;
 }
 
 /* ==========================================================================

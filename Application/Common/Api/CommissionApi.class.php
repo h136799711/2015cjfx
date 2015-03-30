@@ -6,13 +6,103 @@
 // | Copyright (c) 2013-2016, http://www.itboye.com. All Rights Reserved.
 // |-----------------------------------------------------------------------------------
 
-namespace Shop\Api;
+namespace Common\Api;
 use \Common\Model\CommissionModel;
 use Common\Api\Api;
 class CommissionApi extends Api {
 
 	protected function _init() {
 		$this -> model = new CommissionModel();
+	}
+	
+	/**
+	 * 增加返佣金额
+	 * @param $percent 返佣比例数组
+	 * @param $wxuserid 用户id 
+	 */
+	public function addCommission($percent,$wxuserid,$price){
+		$level = count($percent);
+		
+		$model = new \Common\Model\WxuserWithFamilyViewModel();
+		$userModel = new \Common\Model\WxuserModel();
+		$wallet = new \Common\Model\WxuserWalletModel();
+		//统计已付款特殊处理
+		$result = $model->where(array('id'=>$wxuserid))->find();
+		if($result === false){
+			return $this->apiReturnErr($model->getDbError());
+		}
+		$parent = intval($result['parent_1']);
+		$userModel->startTrans();
+		$addedMoney = $percent[0] * $price;
+		$reason = "$wxuserid,$price,".$percent[0].";";//ID,价格,返佣比例
+		$ret = $this->addMoney($parent,$addedMoney,$reason);
+		if($ret['status']){
+			
+			$parent = intval($result['parent_2']);
+			$addedMoney = $percent[1] * $price;
+			$reason = "$wxuserid,$price,".$percent[1].";";//ID,价格,返佣比例
+			$ret = $this->addMoney($parent,$addedMoney,$reason);
+			if($ret['status']){				
+				$parent = intval($result['parent_3']);
+				$addedMoney = $percent[2] * $price;
+				$reason = "$wxuserid,$price,".$percent[2].";";//ID,价格,返佣比例
+				$ret = $this->addMoney($parent,$addedMoney,$reason);
+				if($ret['status']){				
+					$parent = intval($result['parent_4']);
+					$addedMoney = $percent[3] * $price;
+					$reason = "$wxuserid,$price,".$percent[3].";";//ID,价格,返佣比例
+					$ret = $this->addMoney($parent,$addedMoney,$reason);
+				}
+			}
+			
+		}
+		
+		
+		if($ret['status']){
+			$userModel->commit();
+			return $this->apiReturnSuc("返佣成功！");
+		}else{
+			$userModel->rollback();
+			return $this->apiReturnErr($ret['info']);
+		}
+		
+		return $result;
+	}
+		
+	/**
+	 * 给一个用户账号增加金额、可负
+	 * @param $id 用户id
+	 * @param $addedMoney 增加的金额 可负
+	 * @param $reason 原因
+	 * 
+	 */
+	private function addMoney($id,$addedMoney,$reason){
+		if($addedMoney > 0 && $id > 0){
+			$result_1 = $userModel->where(array("id"=>$id))->lock(true)->save(array('money'=>$addedMoney));
+			if($result_1 === false){
+				return array('status'=>false,"info"=>$userModel->getError());
+			}
+			$entity = array(
+				'wxuserid'=>$id,
+				'change'=>$addedMoney,
+				'createtime'=>time(),
+				'status'=>1,
+				'reason'=>$reason,
+			);
+			if($wallet->create($entity)){
+				$addedWalletChangeRecordID = $wallet->add();
+				if($addedWalletChangeRecordID === false){
+					return array('status'=>false,"info"=>$wallet->getError());
+				}else{
+					return array('status'=>true,"info"=>$addedWalletChangeRecordID);
+				}
+			}else{
+				return array('status'=>false,"info"=>$wallet->getError());
+			}
+			
+		}
+		
+		return array('status'=>true,"info"=>'');
 	}
 
 	//		1. 根据openid,wxaccount_id或wxuserid，查询表commission查找updatetime最大的记录

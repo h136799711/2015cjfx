@@ -294,6 +294,10 @@ function getOrderStatus($status){
 			return "待确认";
 		case \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED:
 			return "待发货";
+		case \Common\Model\OrdersModel::ORDER_CANCEL:
+			return "已取消";
+		case \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS:
+			return "已收货";
 		default:
 			return "未知";
 	}

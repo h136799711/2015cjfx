@@ -1,7 +1,6 @@
 <?php
 return array(
 	//'配置项'=>'配置值',
-	'LOAD_EXT_CONFIG' => 'express', 
 	'TMPL_PARSE_STRING'  =>array(
      	'__CDN__' => __ROOT__.'/Public/cdn', // 更改默认的/Public 替换规则
 		'__JS__'     => __ROOT__.'/Public/'.MODULE_NAME.'/js', // 增加新的JS类库路径替换规则

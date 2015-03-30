@@ -11,7 +11,6 @@ namespace Admin\Api;
 
 use Common\Model\WxuserModel;
 use Common\Model\WxuserFamilyModel;
-use Common\Model\CommissionModel;
 
 class WxuserApi extends \Common\Api\Api{
 		

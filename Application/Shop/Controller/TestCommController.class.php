@@ -26,6 +26,14 @@ class TestCommController extends  Controller{
 		}
 	}
 	
+	public function testAdded(){
+		$wxaccount_id = "1"; 
+		$percent = C('COMMISSION_RATIO');
+		$wxuserid = 1;
+		$result = apiCall("Common/Commission/giveCommission", array($percent,$wxuserid,100));
+		dump($result);
+	}
+	
 	public function index(){
 		$token = "";
 		$wxaccount_id = "1"; 

@@ -34,6 +34,7 @@
 			<include file="partial/footermenu" />
 		</div>
 		<script src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<script src="__CDN__/amazeui/2.2.1/js/amazeui.min.js"></script>
 		<!--<script src="__CDN__/amazeui-masonry/3.2.2/masonry.pkgd.min.js"></script>-->
 		<script>
 		
@@ -68,32 +69,36 @@
 				var cssClass = "am-bg-success";
 				
 				if(paystatus == "待支付"){
-					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id/"+id+".shtml?showwxpaytitle=1' >前往支付</a></div>"
+					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id/"+id+".shtml?showwxpaytitle=1' >前往支付>></a></div>"
 				}
 				
 				return "<div  >支付状态：<span class='"+cssClass+"'>"+paystatus+"</span>	</div>"
 			}
 			
-			function getOrderStatusCssClass(orderstatus){
+			function getOrderStatus(orderstatus,id){
 				if(orderstatus == "已完成"){
-					return "am-bg-success";
+					return "<span class='am-bg-success'>"+orderstatus+"</span>";
 				}
 				
 				if(orderstatus == "已退货"){
-					return "am-bg-success";
+					return "<span class='am-bg-success'>"+orderstatus+"</span>";
+				}
+				//已收货
+				var url = "{:U('Shop/Orders/receive')}?id="+id;
+				if(orderstatus == "已发货"){
+					return "<span class='am-bg-info'>"+orderstatus+"<a href='"+url+"' class='ajax-post confirm'>确认收货>></a></span>";
 				}
 				
-				return "am-bg-info";
+				return "<span class='am-bg-info'>"+orderstatus+"</span>";
 				
 			}
-			
 			function createItem(obj){
   				$item = $("<li class='am-u-sm-10 am-center item'></li>");
   				var html = "<div class='am-bg-danger'>订单编号："+obj.orderid+"</div>";
   				html = html+ "<div>订单金额："+obj.price+"元</div>";
   				html = html+ "<div>订单时间："+obj.createtime+"</div>";
   				html = html+ getPayStatus(obj.pay_status,obj.id);
-  				html = html+ "<div '>订单状态：<span class='"+getOrderStatusCssClass(obj.order_status)+"'></span>"+obj.order_status+"</div>";
+  				html = html+ "<div>订单状态："+getOrderStatus(obj.order_status,obj.id)+"</div>";
   				
   				if(obj.expressname){
   					html = html+ "<div>快递公司："+$obj.expressname+"</div>";

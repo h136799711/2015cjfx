@@ -62,9 +62,24 @@ abstract class Api {
 	public function getModel() {
 		return $this -> model;
 	}
-
+	
 	/**
-	 * 统计
+	 * 求和统计
+	 */
+	public function sum($map,$field){
+		
+		$result = $this -> model -> where($map) -> sum($field);
+		
+		if ($result === false) {
+			$error = $this -> model -> getDbError();
+			return $this -> apiReturnErr($error);
+		} else {
+			return $this -> apiReturnSuc($result);
+		}
+	}
+	
+	/**
+	 * 数量统计
 	 */
 	public function count($map, $field = false) {
 		if ($field === false) {

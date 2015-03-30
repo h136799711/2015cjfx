@@ -7,6 +7,11 @@ class IndexController extends ShopController {
 	protected function _initialize() {
 		parent::_initialize();
 		
+		$userinfo = $this->getUserInfo();
+		//是否族长
+		$hasright = $this->hasAuthority($userinfo);
+		$this->assign("hasright",$hasright);
+		$this->assign("userinfo",$userinfo);		
 	}
 	
 	/**
@@ -16,8 +21,6 @@ class IndexController extends ShopController {
 		$userinfo = $this->getUserInfo();
 		//会员级别
 		$level = I('get.level',1);
-		//是否族长		
-		$hasright = $this->hasAuthority($userinfo);
 		
 		$memberid = I('post.memberid',0,"intval");
 		if($memberid > 0){
@@ -42,8 +45,6 @@ class IndexController extends ShopController {
 				$this->assign("show",$result['info']['show']);
 			}
 		}
-		$this->assign("hasright",$hasright);		
-		$this->assign("userinfo",$userinfo);		
 		$this->display();
 	}
 	
@@ -52,10 +53,22 @@ class IndexController extends ShopController {
 	 */
 	public function withDrawcash(){
 		if(IS_GET){
+			if(!is_array($this->userinfo)){
+//				$this->error("用户信息获取失败！");
+			}
+			$map = array('wxuser_id'=>$this->userinfo['id']);
+			$page = array('curpage'=>I('get.p',0),'size'=>10);
+			$fields = "id,wdc_status,withdrawcash";
+			$result = apiCall("Shop/CommissionWithdrawcash/query", array($map,$page,$order,$params,$fields));
+			if($result['status']){
+				$this->assign("history",$result['info']['list']);
+				$this->assign("show",$result['info']['show']);
+			}
 			$this->display();
 		}elseif(IS_POST){
+			$price = I('post.price',0.00,"floatval");
 			$entity = array(
-				'withdrawcash'=>I('post.price',0),
+				'withdrawcash'=>$price,
 				'wxuser_id'=> $this->userinfo['id'],
 				'wxaccount_id'=> $this->wxaccount['id'],
 				'zfbaccount'=>I('post.account',0),
@@ -64,29 +77,51 @@ class IndexController extends ShopController {
 				'wxno'=>I('post.wxno',0),
 				'openid'=>$this->openid,
 			);
-			if($entity['widthdrawcash'] < 50){
+			
+			if($price < 50.0){
 				$this->error("提现金额必须大于50！");
 			}
 			
-			if(!$this->checkAccountBalance()){
-				$this->error("账户余额不够！");
+			if(!$this->checkAccountBalance($entity['withdrawcash'])){
+				$this->error("账户余额不足！");
 			}
 			
-			dump($entity);
-			
+			$result = apiCall("Shop/CommissionWithdrawcash/add", array($entity));
+			if($result['status']){
+				
+				$this->success("提交成功！");
+			}else{
+				$this->error($result['info']);
+			}
 		}
 	}
 	
 	/**
 	 * TODO:检测账号余额是否大于提现金额
 	 */
-	private function checkAccountBalance(){
-		return true;
+	private function checkAccountBalance($money){
+		
+//		$commissions = $this->getCommission();
+//		if($commissions['totalcommission'])
+//		apiCall("Shop/Commission/getCommission",)
+		
+		//总销售额、我的佣金
+		$commissions = $this->getCommission();
+		//获取待审核佣金，已提现佣金。
+		$pendingComm = $this->getWithdrawcash(\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT);
+		
+		$approvalComm = $this->getWithdrawcash(\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_APPROVAL);
+		
+		$canuseComm = $commissions['commission_4'] - $pendingComm - $approvalComm - $money;
+		
+		if($canuseComm >= 0){
+			return true;
+		}
+		
+		return false;
 	}
 	
-	
 		
-	
 	/**
 	 * 我的家族中心
 	 */
@@ -120,6 +155,9 @@ class IndexController extends ShopController {
 		//总销售额、我的佣金
 		$commissions = $this->getCommission();
 		//TODO: 获取待审核佣金，已提现佣金。
+		$pendingComm = $this->getWithdrawcash(\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT);
+		
+		$approvalComm = $this->getWithdrawcash(\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_APPROVAL);
 		
 		//设置推荐人
 		if($userinfo['referrer'] == 0){
@@ -130,7 +168,12 @@ class IndexController extends ShopController {
 				$this->assign("referrer_name",$result['info']['nickname']);
 			}
 		}
-		
+		//TODO: 考虑用wxuser.money 取代其
+		$canuseComm = $commissions['commission_4'] - $pendingComm - $approvalComm;
+//		session("canuseComm",$canuseComm);
+		$this->assign("pendingComm",$pendingComm);
+		$this->assign("canuseComm",$canuseComm);
+		$this->assign("approvalComm",$approvalComm);
 		$this->assign("commissions",$commissions);
 		$this->assign("paidOrdersCnt",$paidOrdersCnt);
 		$this->assign("tobepaidOrdersCnt",$tobepaidOrdersCnt);
@@ -138,6 +181,23 @@ class IndexController extends ShopController {
 		$this->assign("subMember",$subMember);
 		$this->assign("userinfo",$userinfo);
 		$this -> display();
+	}
+
+	/**
+	 * 获取提现金额
+	 * @param $status 提现状态
+	 */
+	private function getWithdrawcash($status){
+		$map = array(
+			'wdc_status' =>$status,
+			'wxuser_id'  => $this->userinfo['id']
+		);
+		$result = apiCall("Shop/CommissionWithdrawcash/sum", array($map,"withdrawcash"));
+		if($result['status']){
+			return $result['info'];
+		}else{
+			return 0;
+		}
 	}
 	
 	private function getCommission(){

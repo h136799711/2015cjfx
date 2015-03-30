@@ -254,13 +254,13 @@ class WxuserController extends AdminController {
 		$model -> startTrans();
 		$error = "";
 		$flag = true;
-						
-		$result = apiCall("Weixin/Commission/createOneIfNone", array($wxaccountid, $openid));
-		
-		if ($result['status'] === false) {
-			$error = $result['info'];
-			$flag = false;
-		}
+//@deprecated 已弃用						
+//		$result = apiCall("Weixin/Commission/createOneIfNone", array($wxaccountid, $openid));
+//		
+//		if ($result['status'] === false) {
+//			$error = $result['info'];
+//			$flag = false;
+//		}
 //		dump("123456");
 //		dump($result);
 		$result = apiCall("Weixin/WxuserFamily/createOneIfNone", array($wxaccountid, $openid));
@@ -299,5 +299,78 @@ class WxuserController extends AdminController {
 		return array('status'=>$flag,'info'=>$error);
 
 	}
+
+	
+	public function sendText(){
+		if(IS_GET){
+			$id = I('get.id',0);
+			$this->assign("uid",$id);
+			$this->display();
+		}elseif(IS_POST){
+			$qf = I('get.qf','');
+			$text = I('post.text','');
+			$wxuserid = I('post.uid',0);
+			if($qf == 1){
+				$this->sendToAll($text);				
+			}else{
+				$this->sendTextTo($wxuserid,$text);
+				$this->success("发送成功！");
+			}
+		}
+	}
+	
+	
+	public function sendToAll($text){
+		
+		$wxaccountid = getWxAccountID();
+//		$result = apiCall("Admin/Wxuser/getInfo",array(array("id"=>$wxuserid)));
+		$wxaccount = apiCall("Admin/Wxaccount/getInfo", array(array("id"=>$wxaccountid)));
+		$openid = "";
+		
+		if($wxaccount['status'] && is_array($wxaccount['info'])){
+			$nextopenid = I('get.nextopenid','');
+			
+			$appid =  $wxaccount['info']['appid'];
+			$appsecret =  $wxaccount['info']['appsecret'];				
+			$wxapi = new \Common\Api\WeixinApi($appid,$appsecret);
+			$result = $wxapi->getUserList($nextopenid);
+			dump($result);
+			$total = $result['total'];
+			$count = $result['count'];
+			$nextopenid = $result['nextopenid'];
+			$openids = $result['data']['openid'];
+			foreach($openids as $openid){
+				$wxapi->sendTextToFans($openid, $text);
+			}
+			
+			if(empty($nextopenid)){
+				$this->redirect("Admin/Wxuser/sendToAll", array('nextopenid'=>$nextopenid,'text' => $text), 2, '发送下一批...');
+			}
+			
+		}
+		
+		
+	}
+
+	
+	
+	private function sendTextTo($wxuserid,$text){
+		//
+		$wxaccountid = getWxAccountID();
+		$result = apiCall("Admin/Wxuser/getInfo",array(array("id"=>$wxuserid)));
+		$wxaccount = apiCall("Admin/Wxaccount/getInfo", array(array("id"=>$wxaccountid)));
+		$openid = "";
+		if($result['status'] && is_array($result['info'])){
+			$openid = $result['info']['openid'];
+		}
+		if($wxaccount['status'] && is_array($wxaccount['info'])){
+			$appid =  $wxaccount['info']['appid'];
+			$appsecret =  $wxaccount['info']['appsecret'];				
+			$wxapi = new \Common\Api\WeixinApi($appid,$appsecret);
+			$wxapi->sendTextToFans($openid, $text);
+			$wxapi->sendTextToFans($openid, $text);//发2次
+		}
+	}
+
 
 }
