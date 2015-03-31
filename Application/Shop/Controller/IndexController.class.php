@@ -54,7 +54,7 @@ class IndexController extends ShopController {
 	public function withDrawcash(){
 		if(IS_GET){
 			if(!is_array($this->userinfo)){
-//				$this->error("用户信息获取失败！");
+				$this->error("用户信息获取失败！");
 			}
 			$map = array('wxuser_id'=>$this->userinfo['id']);
 			$page = array('curpage'=>I('get.p',0),'size'=>10);
@@ -75,7 +75,7 @@ class IndexController extends ShopController {
 				'name'=>I('post.name',0),
 				'mobile'=>I('post.mobile',0),
 				'wxno'=>I('post.wxno',0),
-				'openid'=>$this->openid,
+				'openid'=>$this->userinfo['openid'],
 			);
 			
 			if($price < 50.0){
@@ -208,7 +208,7 @@ class IndexController extends ShopController {
 		$wxuserid = $this->userinfo['id'];
 //		getCommission($percent, $wxaccount_id, $openid, $wxuserid, $cache_time = 7200)
 		
-		$result = apiCall("Shop/Commission/getCommission", array($percent,$wxaccount_id,$openid,$wxuserid));
+		$result = apiCall("Common/Commission/getCommission", array($percent,$wxaccount_id,$openid,$wxuserid));
 		
 		if($result['status']){
 			return $result['info'];
@@ -261,9 +261,9 @@ class IndexController extends ShopController {
 		if($groupid <= 0 ){
 			return false;
 		}
-		addWeixinLog($groupid,"[用户组]");
+//		addWeixinLog($groupid,"[用户组]");
 		$result = apiCall("Admin/GroupAccess/getInfo", array('wxuser_group_id'=>$groupid));
-		addWeixinLog($result,"[用户组信息]");
+//		addWeixinLog($result,"[用户组信息]");
 		if($result['status'] && is_array($result['info'])){
 			if($result['info']['alloweddistribution'] == 1){
 				return true;

@@ -53,7 +53,7 @@
 						
 						<div class="am-form-group">
 							<label for="wdc_mobile">手机号码</label>
-							<input type="text" name="mobile" value="13484379290" class="" id="wdc_mobile" placeholder="请输入手机号码">
+							<input type="tel" name="mobile" value="13484379290" class="" id="wdc_mobile" placeholder="请输入手机号码">
 						</div>
 						
 						<div class="am-form-group">
@@ -90,9 +90,9 @@
 						<else/>
 							<volist name="history" id="vo">
 								<tr>
-									<td>{$vo.id}</td>
-									<td>{$vo.withdrawcash}</td>
-									<td>{$vo.wdc_status|getWDCStatus}</td>
+									<td class="am-text-center">{$vo.id}</td>
+									<td class="am-text-center">{$vo.withdrawcash}</td>
+									<td class="am-text-center">{$vo.wdc_status|getWDCStatus}</td>
 								</tr>
 							</volist>
 						</empty>

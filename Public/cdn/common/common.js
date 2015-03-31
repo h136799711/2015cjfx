@@ -67,7 +67,23 @@
 			}).ajaxComplete(function() {
 				NProgress.inc();
 			});
+			//正常confirm
+			$(".normal-get").click(function(ev){
+				$item = $(ev.target);
+				if ($item.hasClass('confirm')) {
 
+					var conf = $.scojs_confirm({
+						content: '确认要执行该操作吗?',
+						action: function() {
+							$(".normal-get").removeClass("confirm").click();
+						}
+					});
+					conf.show();
+					ev.preventDefault();
+					return false;
+				}
+				
+			});
 			
 			$(".dropdown-toggle.avatar").hover(function() {
 				$(".dropdown-toggle.avatar").dropdown("toggle");

@@ -33,9 +33,9 @@ class WxreplyTextModel extends Model{
 	);
 	
 	protected $_validate = array(
-		array('content',"require","内容必填",self::MUST_VALIDATE),
-		array('wxaccount_id','require','公众号ID必须',self::MUST_VALIDATE),
-		array('keyword','require','关键词必填',self::MUST_VALIDATE),
+		array('content',"require","内容必填",self::EXISTS_VALIDATE),
+		array('wxaccount_id','require','公众号ID必须',self::EXISTS_VALIDATE),
+		array('keyword','require','关键词必填',self::EXISTS_VALIDATE),
 	);
 	
 	

@@ -46,7 +46,7 @@ class DownloadBillApi extends  WxpayClientApi{
 	 */
 	function getResult() 
 	{		
-		$this->postXml();
+		$this->result_xml = $this->postXml();
 		$this->result = $this->xmlToArray($this->result_xml);
 		return $this->result;
 	}

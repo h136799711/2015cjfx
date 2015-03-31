@@ -14,8 +14,10 @@
 	</div>
 	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
 		<ul class="nav navbar-nav">
-			<volist name="topbar_menu" id="vo">
-				<li class="{:isActiveMenuURL($vo['id'])}"><a href="{:getURL($vo['url'].'?activemenuid='.$vo['id'])}">{$vo.title}</a></li>
+			<volist name="topbar_menu" id="vo">				
+				<if condition="!isset($vo['dynamic_hide'])">
+					<li class="{:isActiveMenuURL($vo['id'])}"><a href="{:getURL($vo['url'].'?activemenuid='.$vo['id'])}">{$vo.title}</a></li>		
+				</if>
 			</volist>
 		</ul>
 		<ul class="nav navbar-nav navbar-right" style="margin-right: 10px;">
@@ -25,15 +27,14 @@
 					<img class="img-circle " src="{$user.avatar|default='__CDN__/common/avatar.jpg'}" />&nbsp;{$user.username}&nbsp;<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
-<!--    <li><a href="javascript:myUtils.alertTODO();"><i class="fa fa-user"></i> {:L('BTN_MY_CENTER')}</a></li>-->
-    <li><a href="{:U('Admin/Account/updatepassword')}"><i class="fa fa-key"></i> {:L('BTN_MODIFY_PWD')}</a></li>
-    <li class="divider"></li>
-    <li><a href="{:U('Admin/Public/logout')}"><i class="fa fa-power-off"></i> {:L('BTN_EXIT')}</a></li>
-  </ul>
+				    <li><a href="{:U('Admin/Wxaccount/change')}"><i class="fa fa-exchange"></i>切换公众号[当前:{:getWxAccountID()}]</a></li>
+				    <li><a href="{:U('Admin/Account/updatepassword')}"><i class="fa fa-key"></i> {:L('BTN_MODIFY_PWD')}</a></li>
+				    <li class="divider"></li>
+				    <li><a href="{:U('Admin/Public/logout')}"><i class="fa fa-power-off"></i> {:L('BTN_EXIT')}</a></li>
+  				</ul>
 			</li>
-			<li><a href="javascript:;" id="admin-fullscreen"><i class="fa fa-arrows-alt"></i> <span class="admin-fullText">{:L('BTN_FULLSCREEN')}</span>
-
-			</a>
+			<li>
+				<a href="javascript:;" id="admin-fullscreen"><i class="fa fa-arrows-alt"></i> <span class="admin-fullText">{:L('BTN_FULLSCREEN')}</span>	</a>
 			</li>
 
 		</ul>

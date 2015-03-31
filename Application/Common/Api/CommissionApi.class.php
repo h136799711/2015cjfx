@@ -16,7 +16,8 @@ class CommissionApi extends Api {
 	}
 	
 	/**
-	 * 增加返佣金额
+	 * TODO: 暂未调用过
+	 * 增加返佣金额，触发性增加返佣佣金
 	 * @param $percent 返佣比例数组
 	 * @param $wxuserid 用户id 
 	 */
@@ -189,7 +190,7 @@ class CommissionApi extends Api {
 		'commission_4' => 0, //已付款、已完成；
 		'totalsale'=>0.00,//总销售额
 		'allcommission'=>0.00,//总佣金
-		'openid' => $openid, 'wxaccount_id' => $wxaccount_id);
+		'openid' => $openid, 'wxaccount_id' => $wxaccount_id,'wxuserid'=>$wxuserid);
 		$oderstatus = \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED;
 		$paystatus = 	\Common\Model\OrdersModel::ORDER_TOBE_PAID;
 		$commission_1 = $this -> sumCommission($percent, $wxuserid,$paystatus,$oderstatus);

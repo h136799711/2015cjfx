@@ -14,8 +14,8 @@ class WxuserGroupModel extends Model{
 	
 	
 	protected $_validate = array(
-		array('name','require','用户组名称必须！',self::MUST_VALIDATE ),		
-	    array('name','','用户组名称必须唯一！',0,'unique',self::MUST_VALIDATE), // 在新增的时候验证name字段是否唯一
+		array('name','require','用户组名称必须！',self::EXISTS_VALIDATE ),		
+	    array('name','','用户组名称必须唯一！',0,'unique',self::EXISTS_VALIDATE), // 在新增的时候验证name字段是否唯一
 	);
 	
 	

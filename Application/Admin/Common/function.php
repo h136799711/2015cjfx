@@ -93,10 +93,13 @@ function isNight(){
 	}
 }
 /**
- * TODO: 从session中取WxAccountID
+ * 从session中取WxAccountID
  */
 function getWxAccountID(){
-	return 1;
+	if(session("?wxaccountid")){
+		return session("wxaccountid");
+	}
+	return -1;
 }
 
 function getLogInfo($info){
@@ -130,4 +133,19 @@ function getLogInfo($info){
 	}
 	
 	return $str;
+}
+
+function getWDCStatus($status){
+	switch($status){
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT:
+			return "待审核";
+			break;		
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_APPROVAL:
+			return "通过";
+			break;		
+		case \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_REJECT:
+			return "驳回";
+			break;
+		default:break;
+	}
 }

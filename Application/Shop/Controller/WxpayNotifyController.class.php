@@ -78,6 +78,7 @@ class WxpayNotifyController extends Controller {
 						if($result['info']['pay_status'] != $paid){//订单不为已支付的情况下更新
 							
 							$wxuserid =  $result['info']['wxuser_id'];
+							$entity['wxuserid'] = $wxuserid;
 							//5. 升级用户的用户组
 							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
 							if(!$result['status']){

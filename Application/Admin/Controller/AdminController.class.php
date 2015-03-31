@@ -50,10 +50,66 @@ class AdminController extends CheckLoginController {
 		if ($this -> checkAuthority() === false) {
 			$this -> error(L('ERR_NO_PERMISSION'));
 		}
+		$this->get_current_usermenu();
+		$this->getWxaccount();
 	}
 
 	//===================权限相关START=======================
+	
+	/**
+	 * 获取当前用户的菜单列表ID
+	 */
+	private function get_current_usermenu() {
 
+		if (session("?CURRENT_USER_" . UID . "_MENU")) {
+			return session("CURRENT_USER_" . UID . "_MENU");
+		}
+		
+		$map = array('uid' => UID);
+		
+		$result = apiCall('Admin/AuthGroupAccess/queryNoPaging', array($map));
+		
+		$menulist = "";
+		if ($result['status']) {
+			$group_ids = '';
+			foreach ($result['info'] as $groupaccess) {
+				$group_ids .= $groupaccess['group_id'] . ',';
+			}
+			unset($map['uid']);
+			if (!empty($group_ids)) {
+				$map = array('id' => array('in', rtrim($group_ids, ",")));
+				$result = apiCall('Admin/AuthGroup/queryNoPaging', array($map));
+
+				if ($result['status'] && is_array($result['info'])) {
+					//TODO:未测试过多角色的情况下,menulist字段必须,号结尾
+					foreach ($result['info'] as $group) {
+						$menulist .= $group['menulist'];
+					}
+
+				}
+			} else {
+					
+			}
+		}
+
+		session("CURRENT_USER_" . UID . "_MENU", $menulist);
+		return $menulist;
+	}
+	
+	/**
+	 * 获取公众号信息
+	 */
+	private function getWxaccount(){
+		$wxaccountid = getWxAccountID();
+		if($wxaccountid == -1){
+			$map = array("uid"=>UID);
+			$result = apiCall("Admin/Wxaccount/getInfo",array($map));
+			if($result['status'] && is_array($result['info'])){
+				session("wxaccountid",$result['info']['id']);
+			}
+		}
+	}
+	
 	public function checkAuthority() {
 		//是系统管理员则都可以访问
 		if (IS_ROOT) {
@@ -91,10 +147,10 @@ class AdminController extends CheckLoginController {
 		if (!$Auth) {
 			$Auth = new \Think\Auth();
 		}
-
-		if (!$Auth -> check($rule, UID, 2, $mode)) {
-			return false;
-		}
+		//TODO: 暂时去除检测API访问
+//		if (!$Auth -> check($rule, UID, 2, $mode)) {
+//			return false;
+//		}
 
 		return true;
 	}

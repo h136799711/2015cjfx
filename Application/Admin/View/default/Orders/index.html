@@ -29,7 +29,7 @@
 					<div class="form-group row   col-lg-12 col-md-12">
 						<div class="input-group" >
 							<div class="input-group-addon">订单编号</div>
-							<input type="text" name="orderid" placeholder="输入12015，可查询前缀为12015的订单" class="form-control" value="{$orderid}" />
+							<input type="text" name="orderid" placeholder="输入2015，可查询前缀为2015的订单" class="form-control" value="{$orderid}" />
 							
 						</div>
 					</div>
@@ -135,6 +135,9 @@
 						<th>
 							下单时间
 						</th>
+						<th>
+							操作
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -168,6 +171,9 @@
 								</td>
 								<td>
 									{$vo.createtime|date='Y-m-d h:i:s',###}
+								</td>
+								<td>
+									<a href="{:U('Admin/Wxpay/orderQuery',array('orderid'=>$vo['orderid']))}" class="btn btn-default btn-sm "><i class="fa fa-credit-card"></i>查询订单支付记录</a>
 								</td>
 							</tr>
 

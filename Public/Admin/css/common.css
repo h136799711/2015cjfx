@@ -147,7 +147,18 @@ body{
 .searchForm .form-group .input-group{
 	width:640px;
 }
-
+.padding-xs{
+	padding:2px;
+}
+.padding-sm{
+	padding:5px;
+}
+.padding-md{
+	padding: 10px;
+}
+.padding-lg{
+	padding:15px;
+}
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (min-width: 768px) {

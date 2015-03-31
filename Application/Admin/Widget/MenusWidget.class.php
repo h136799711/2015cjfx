@@ -23,6 +23,7 @@ class MenusWidget extends AdminController {
 			//缓存，activesubmenuid
 			$list = session('left_menu'. session('activemenuid'));
 			
+			session('left_menu'. session('activemenuid'),null);
 			if ($list === false || is_null($list)) {//未缓存、或过期
 				
 				$map = array('pid' => session('activemenuid'));
@@ -35,8 +36,14 @@ class MenusWidget extends AdminController {
 					$list = $result['info'];
 					$hasSubmenuID = false;
 					//TODO: 为了速度 可以考虑把 二级菜单，三级菜单一起查询出来，再来组合成需要的数据结构,而不必如下，进行多次查询
+					$current_menus = session("CURRENT_USER_".UID."_MENU");	
 					
 					foreach ($list as &$vo) {
+						
+						//不在菜单id中且非超级管理员	
+						if(strpos($current_menus, $vo['id'].',') === false  && !IS_ROOT){							
+							$vo['dynamic_hide'] = 1;
+						}
 						$map['pid'] = $vo['id'];
 						$result = apiCall('Admin/Menu/queryShowingMenu', array($map, ' sort desc '));
 						if ($result['status']) {
@@ -46,7 +53,6 @@ class MenusWidget extends AdminController {
 							}
 						}
 					}
-
 					//					if (!defined('APP_DEBUG') || !APP_DEBUG) {
 					//处于非开发模式下，则缓存，根据activemenuid
 					session('left_menu'. session('activemenuid'), $list);
@@ -69,6 +75,7 @@ class MenusWidget extends AdminController {
 	 * 顶部
 	 */
 	public function topbar() {
+		session('topbar_menu',null);
 		$list = session('topbar_menu');
 		if ($list === false || is_null($list)) {
 			$develop_mode = C('DEVELOP_MODE');
@@ -80,6 +87,18 @@ class MenusWidget extends AdminController {
 
 			if ($result['status']) {
 				$list = $result['info'];
+				$current_menus = session("CURRENT_USER_".UID."_MENU");	
+				
+				foreach ($list as &$vo) {
+//				dump($vo['id'].',');
+					//不在菜单id中且非超级管理员					
+					if(strpos($current_menus, $vo['id'].',') === false && !IS_ROOT){
+						//dump($vo['id'].',');
+						//动态隐藏无权限的菜单												
+						$vo['dynamic_hide'] = 1;
+					}
+				}
+//				dump($list);
 				session('topbar_menu', $list);
 			} else {
 				echo $result['info'];

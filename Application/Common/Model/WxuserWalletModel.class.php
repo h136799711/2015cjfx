@@ -32,7 +32,7 @@ class WxuserWalletModel  extends  Model{
 	);
 	
 	protected $_validate = array(
-		array("wxuser_id","require","wxuser_id必须",self::MUST_VALIDATE),
+		array("wxuser_id","require","wxuser_id必须",self::EXISTS_VALIDATE),
 	);
 		
 }

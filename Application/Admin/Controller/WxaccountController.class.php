@@ -16,6 +16,25 @@ class WxaccountController extends AdminController{
 			
 	}
 	
+	public function set(){
+		$id = I('get.id',0);
+		session("wxaccountid",$id);
+		
+		$this->success("操作成功！");
+	}
+	
+	public function change(){
+		$map = array('uid'=>UID);
+		$page = array('curpage'=>I('get.p',0),'size'=>C("LIST_ROWS"));
+		$params = array();
+		$list = apiCall("Admin/Wxaccount/query", array($map,$page,"createtime desc",$params));
+		if($list['status']){
+			$this->assign("list",$list['info']['list']);
+			$this->assign("show",$list['info']['show']);
+			$this->display();
+		}
+	}
+	
 	/**
 	 * 首次关注时响应关键词管理
 	 */

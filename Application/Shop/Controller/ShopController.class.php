@@ -46,6 +46,7 @@ class ShopController extends  Controller {
 		$this -> userinfo = null;
 		if (session("?userinfo")) {
 			$this -> userinfo = session("userinfo");
+			$this -> openid = $this->userinfo['openid'];
 		}
 		
 		if (!is_array($this -> userinfo)) {

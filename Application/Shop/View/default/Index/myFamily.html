@@ -28,7 +28,7 @@
 			</div>
 			<div class="commission">
 				<div class="am-u-sm-6 am-text-center">销售额：{:round($commissions['totalsale'],2)}元</div>
-				<div class="am-u-sm-6 am-text-center">我的佣金：{:round($commissions['allcommission'],2)}元</div>
+				<div class="am-u-sm-6 am-text-center">我的佣金：{:round($commissions['commission_4'],2)}元</div>
 			</div>
 
 			<div class="referrer am-vertical-align am-text-center">
@@ -88,7 +88,7 @@
 							 	<li><span>已完成订单佣金</span> <span>{:round($commissions['commission_4'],2)}</span></li>
 							 	<li><span>待审核订单佣金</span> <span>{:round($pendingComm,2)}</span></li>
 							 	<li><span>已提现订单佣金</span> <span>{:round($approvalComm,2)}</span></li>
-							 	<li><span>可提现订单佣金</span> <span>{:round($commissions['commission_4']-$approvalComm,2)}</span></li>
+							 	<li><span>可提现订单佣金</span> <span>{:round($commissions['commission_4']-$pendingComm-$approvalComm,2)}</span></li>
 							</ul>
 						</div>
 					</div>

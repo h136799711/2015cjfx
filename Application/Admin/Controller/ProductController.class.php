@@ -15,33 +15,39 @@ class ProductController extends AdminController {
 
 	public function index() {
 
-		$startdatetime = I('startdatetime', date('Y-m-d', time() - 24 * 3600), 'urldecode');
-		$enddatetime = I('enddatetime', date('Y-m-d', time()+24*3600), 'urldecode');
+//		$startdatetime = I('startdatetime', date('Y-m-d', time() - 24 * 3600), 'urldecode');
+//		$enddatetime = I('enddatetime', date('Y-m-d', time()+24*3600), 'urldecode');
 
 		//分页时带参数get参数
-		$params = array('startdatetime' => $startdatetime, 'enddatetime' => $enddatetime);
-
-		$startdatetime = strtotime($startdatetime);
-		$enddatetime = strtotime($enddatetime);
-
-		if ($startdatetime === FALSE || $enddatetime === FALSE) {
-			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
-			$this -> error(L('ERR_DATE_INVALID'));
-		}
+		$params = array(
+//			'startdatetime' => $startdatetime, 'enddatetime' => $enddatetime
+		);
+		
+//		$startdatetime = strtotime($startdatetime);
+//		$enddatetime = strtotime($enddatetime);
+		
+//		if ($startdatetime === FALSE || $enddatetime === FALSE) {
+//			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
+//			$this -> error(L('ERR_DATE_INVALID'));
+//		}
 
 		$map = array();
-
-		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
+		$productname = I('post.name','');
+		if(!empty($productname)){
+			$map['name'] = array('like',$productname.'%');
+		}
+//		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
 
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
-		$order = " createtime desc ";
+//		$order = " createtime desc ";
 		//
 		$result = apiCall('Admin/Product/query', array($map, $page, $order, $params));
 
 		//
 		if ($result['status']) {
-			$this -> assign('startdatetime', $startdatetime);
-			$this -> assign('enddatetime', $enddatetime);
+			$this -> assign('productname', $productname);
+//			$this -> assign('startdatetime', $startdatetime);
+//			$this -> assign('enddatetime', $enddatetime);
 			$this -> assign('show', $result['info']['show']);
 			$this -> assign('list', $result['info']['list']);
 			$this -> display();
@@ -94,5 +100,18 @@ class ProductController extends AdminController {
 			}
 		}
 	}
-
+	public function view(){
+		if (IS_GET) {
+			$id = I('get.id', 0);
+			//thumbnailurl
+			$result = apiCall("Admin/Product/getInfoWithThumbnail", array($id));
+			if($result['status']){
+				$result['info']['tburl'] = getPictureURL($result['info']['thumbnaillocal'],$result['info']['thumbnailremote']);
+				$this->assign("product",$result['info']);
+				$this -> display();
+			}else{
+				$this->error($result['info']);
+			}
+		}
+	}
 }

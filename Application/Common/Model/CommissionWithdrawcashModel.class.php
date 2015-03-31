@@ -29,10 +29,11 @@ class CommissionWithdrawcashModel  extends  Model{
 	protected $_auto = array(
 		array('status',1,self::MODEL_INSERT),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
+		array('updatetime','time',self::MODEL_BOTH,"function"),
 	);
 	
 	protected $_validate = array(
-		array("wxuser_id","require","wxuser_id必须",self::MUST_VALIDATE),
+		array("wxuser_id","require","wxuser_id必须",self::EXISTS_VALIDATE),
 	);
 		
 }

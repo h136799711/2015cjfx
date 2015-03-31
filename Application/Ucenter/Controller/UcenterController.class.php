@@ -27,8 +27,6 @@ class UcenterController extends CheckLoginController {
 		}
 		//获取配置
 		$this -> getConfig();
-		//获取配置
-		$this -> getConfig();
 		//对页面一些配置赋值
 		$this -> assignPageVars();
 		// 是否是超级管理员

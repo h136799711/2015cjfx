@@ -161,7 +161,7 @@ class AuthManageController extends AdminController {
 			}
 			$tree = list_to_tree($menulist['info']);
 			$tree = $this -> createTree($tree, $menus);
-			$this -> assign("tree", $tree);
+			$this -> assign("tree", $tree['child']);
 		} else {
 			$this -> error('获取数据失败！');
 		}
@@ -207,33 +207,36 @@ class AuthManageController extends AdminController {
 	 * @param $menus 当前用户组的所对应的菜单，字符串
 	 */
 	private function createTree($tree, $menus) {
-
+		$allchecked	= true;//所有子菜单都选中了
 		$ul = "<ul>";
 		foreach ($tree as $vo) {
 			$ul .= "<li ";
-			if (strpos($menus, $vo['id'] . ",") === false) {
+			$childUL['allchecked'] = true;
+			if (is_array($vo['_child'])) {
+				$childUL = $this -> createTree($vo['_child'],$menus);
+			}
+			
+			if (strpos($menus, $vo['id'] . ",") === false || !$childUL['allchecked']	) {
+				$allchecked = false;
 				$selected = 'false';
 			} else {
+				
 				$selected = 'true';
 			}
-
+			
 			if ($vo['pid'] == 0) {
 				$jstree = '{ "selected" : ' . $selected . ', "opened" :  true}';
 			} else {
 				$jstree = '{ "selected" : ' . $selected . ', "opened" : false }';
 			}
 			$ul .= "data-jstree='".$jstree."' id=\"jstree_" . $vo['id'] . "\" >" . $vo['title'];
-
-			if (is_array($vo['_child'])) {
-				$childUL = $this -> createTree($vo['_child'],$menus);
-			}
-
-			$ul .= $childUL;
+			
+			$ul .= $childUL['child'];
 			$ul .= "</li>";
 		}
 
 		$ul .= "</ul>";
-		return $ul;
+		return array('child'=>$ul,'allchecked'=>$allchecked);
 	}
 
 	

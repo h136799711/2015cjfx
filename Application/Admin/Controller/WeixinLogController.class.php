@@ -18,12 +18,13 @@ class WeixinLogController extends AdminController {
 	public function index() {
 
 		//get.startdatetime
-		$startdatetime = I('startdatetime', date('Y/m/d H:i', time() - 24 * 3600), 'urldecode');
-		$enddatetime = I('enddatetime', date('Y/m/d H:i', time()), 'urldecode');
+		$startdatetime = I('startdatetime', date('Y-m-d H:i', time() - 24 * 3600), 'urldecode');
+		$enddatetime = I('enddatetime', date('Y-m-d H:i', time()), 'urldecode');
 
+		$startdatetime = urldecode($startdatetime);
+		$enddatetime = urldecode($enddatetime);
 		//分页时带参数get参数
 		$params = array('startdatetime' => $startdatetime, 'enddatetime' => $enddatetime);
-
 		$startdatetime = strtotime($startdatetime);
 		$enddatetime = strtotime($enddatetime);
 
@@ -63,6 +64,19 @@ class WeixinLogController extends AdminController {
 			$this->error($model->getDbError());
 		}else{
 			$this->success(L('RESULT_SUCCESS'));
+		}
+	}
+	
+	public function view(){
+		if(IS_GET){
+			$id = I('get.id',0);
+			$log = apiCall("Admin/WeixinLog/getInfo",array(array("id"=>$id)));
+			if($log['status']){
+				$this->assign("log",$log['info']);
+				$this->display();
+			}else{
+				$this->error($log['result']);
+			}
 		}
 	}
 

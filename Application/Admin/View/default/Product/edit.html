@@ -27,27 +27,27 @@
 						<label for="inputname" class="col-md-2 col-lg-2 control-label">商品名称</label>
 						<div class="col-md-10 col-lg-10">
 							<input value="{$product.name}" type="text" class="required form-control " name="name"  placeholder="请输入商品名称" id="inputname" >
-							<div class="help-block">(商品名称，不要不超过50个字)</div>
+							<div class="help-block">(商品名称，不要超过50个字)</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="inputprice" class="col-md-2 col-lg-2 control-label">销售价格</label>
 						<div class="col-md-10 col-lg-10">
-							<input value="{$product.price}" type="text" class="required form-control input-short" name="price"  placeholder="请输入销售价格" id="inputprice" value="0.00">
+							<input value="{$product.price}" type="text" class="required form-control input-short" name="price"  placeholder="请输入销售价格" id="inputprice" >
 							<div class="help-block">(销售价格)</div>
 						</div>
 					</div>
 					<div class="form-group hidden">
 						<label for="inputdis_price" class="col-md-2 col-lg-2 control-label">促销价格</label>
 						<div class="col-md-10 col-lg-10">
-							<input  value="{$product.dis_price}" type="text" class="required form-control input-short" name="dis_price" id="inputdis_price"  placeholder="请输入促销价格" value="0.00">
+							<input  value="{$product.dis_price}" type="text" class="required form-control input-short" name="dis_price" id="inputdis_price"  placeholder="请输入促销价格">
 							<div class="help-block">(促销价格)</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="input_stock" class="col-md-2 col-lg-2 control-label">库存量</label>
 						<div class="col-md-10 col-lg-10">
-							<input  value="{$product.stock}" type="text" class="required form-control input-short" name="stock"  placeholder="请输入库存量" id="input_stock" value="0">
+							<input  value="{$product.stock}" type="text" class="required form-control input-short" name="stock"  placeholder="请输入库存量" id="input_stock" >
 							<div class="help-block">(库存量)</div>
 						</div>
 					</div>
@@ -55,7 +55,7 @@
 					<div class="form-group">
 						<label for="inputsale_num" class="col-md-2 col-lg-2 control-label">销量</label>
 						<div class="col-md-10 col-lg-10">
-							<input  value="{$product.sale_num}" type="text" class="required form-control input-short" name="sale_num"  id="inputsale_num" placeholder="请输入销量" value="0">
+							<input  value="{$product.sale_num}" type="text" class="required form-control input-short" name="sale_num"  id="inputsale_num" placeholder="请输入销量">
 							<div class="help-block">(销量，初始销售量)</div>
 						</div>
 					</div>

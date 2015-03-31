@@ -12,7 +12,7 @@ class ProductModel extends Model{
 	
 	protected $_validate = array(
 		array('wxuserid','require','所属用户ID必须'),
-		array('stock','chkInt','必须大于等于0',self::MUST_VALIDATE,'function'),
+		array('stock','chkInt','必须大于等于0',self::EXISTS_VALIDATE,'function'),
 	);
 	
 	protected $_auto = array(

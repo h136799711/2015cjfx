@@ -91,7 +91,7 @@
 								</div>
 							
 							<div class="form-group">
-								<a target-form="rulesForm" href="{:U('Admin/AuthGroup/writeRules')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
+								<a target-form="rulesForm" href="{:U('Admin/AuthGroup/writeMenuList')}" class="ajax-post btn btn-sm btn-primary"><i class="fa fa-save"></i>{:L('BTN_SAVE')}</a>
 								<a href="{:U('Admin/AuthGroup/index')}" class="btn btn-sm btn-default"><i class="fa fa-close"></i>{:L('BTN_CANCEL')}</a>
 							</div>
 							</fieldset>
@@ -126,16 +126,35 @@
 			
 			$(".menuTree") // listen for event
 			  .on('changed.jstree', function (e, data) {
-			    var i, j, r = [];
-			    for(i = 0, j = data.selected.length; i < j; i++) {
-			    	var id = data.instance.get_node(data.selected[i]).id;
-			    	id = id.replace("jstree_","");
-			      r.push(id);
-			    }
-			    $("#menulist").val(r.join(",")+",");
+			    var i, j, r = [],k,hash=[];
 			    
+//			    console.log(data);
+			    for(i = 0, j = data.selected.length; i < j; i++) {
+				    	var ele = data.instance.get_node(data.selected[i]);
+				    var parents = ele.parents;
+//				    console.log(parents);
+				    	var id = data.selected[i];
+				    	id = id.replace("jstree_","");
+			      	r.push(id);
+			      	hash[id]=1;
+				    	for(k=0;k<parents.length;k++){
+				    		id = parents[k].replace("jstree_","");
+				    		if(hash[id] == 1 || id == '#'){
+				    			continue;
+				    		}
+			      		r.push(id);
+			      		hash[id]=1;
+			      		
+				    	}
+				    	
+			    }
+			    
+			    $("#menulist").val(r.join(",")+",");
+//			    console.log($("#menulist").val());
 			  }).jstree({
-				
+				 "checkbox" : {
+				    "keep_selected_style" : false
+				  },
 				"types" : {
 //				    "#" : {
 //				      "max_children" : 1, 

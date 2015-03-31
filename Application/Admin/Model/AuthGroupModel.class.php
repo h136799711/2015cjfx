@@ -19,7 +19,7 @@ class AuthGroupModel extends Model{
 	//自动验证
 	protected $_validate = array(
 		array('title', 'require', '{%MV_AUTHGROUP_TITLE}'),
-		array('title', 'unique', '已经存在相同的名称'),
+		array('title','', '已经存在相同的名称',self::MUST_VALIDATE,"unique"),
 		array('rules', 200 , '长度不能超过200个字符',self::VALUE_VALIDATE,'length')
 	);
 	
