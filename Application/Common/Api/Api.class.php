@@ -275,34 +275,46 @@ abstract class Api {
 	 * @param $fields 只获取指定字段
 	 */
 	public function queryNoPaging($map = null, $order = false, $fields = false) {
-		if (is_null($map)) {
-			if ($order === false) {
-				if ($fields === false) {
-					$list = $this -> model -> select();
-				} else {
-					$list = $this -> model -> field($fields) -> select();
-				}
-			} else {
-				if ($fields === false) {
-					$list = $this -> model -> order($order) -> select();
-				} else {
-					$list = $this -> model -> field($fields) -> order($order) -> select();
-				}
-			}
-		} elseif ($order === false) {
-			if ($fields === false) {
-				$list = $this -> model -> where($map) -> select();
-			} else {
-				$list = $this -> model -> field($fields) -> where($map) -> select();
-			}
-		} else {
-			if ($fields === false) {
-				$list = $this -> model -> where($map) -> order($order) -> select();
-			} else {
-				$list = $this -> model -> field($fields) -> where($map) -> order($order) -> select();
-			}
-
+		$query = $this->model;
+		if(!is_null($map)){
+			$query = $query->where($map);
 		}
+		if(!($order === false)){
+			$query = $query->order($order);
+		}
+		if(!($fields === false)){
+			$query = $query->field($fields);
+		}
+		$list = $query -> select();
+		//旧
+//		if (is_null($map)) {
+//			if ($order === false) {
+//				if ($fields === false) {
+//					$list = $this -> model -> select();
+//				} else {
+//					$list = $this -> model -> field($fields) -> select();
+//				}
+//			} else {
+//				if ($fields === false) {
+//					$list = $this -> model -> order($order) -> select();
+//				} else {
+//					$list = $this -> model -> field($fields) -> order($order) -> select();
+//				}
+//			}
+//		} elseif ($order === false) {
+//			if ($fields === false) {
+//				$list = $this -> model -> where($map) -> select();
+//			} else {
+//				$list = $this -> model -> field($fields) -> where($map) -> select();
+//			}
+//		} else {
+//			if ($fields === false) {
+//				$list = $this -> model -> where($map) -> order($order) -> select();
+//			} else {
+//				$list = $this -> model -> field($fields) -> where($map) -> order($order) -> select();
+//			}
+//
+//		}
 
 		if ($list === false) {
 			$error = $this -> model -> getDbError();
@@ -321,37 +333,48 @@ abstract class Api {
 	 * @param params 点击分页时带参数
 	 */
 	public function query($map = null, $page = array('curpage'=>0,'size'=>10), $order = false, $params = false, $fields = false) {
-
-		if ($fields === false) {
-
-			if ($order === false) {
-				if (is_null($map)) {
-					$list = $this -> model -> page($page['curpage'] . ',' . $page['size']) -> select();
-				} else {
-					$list = $this -> model -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				}
-			} else {
-				if (is_null($map)) {
-					$list = $this -> model -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				} else {
-					$list = $this -> model -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				}
-			}
-		} else {
-			if ($order === false) {
-				if (is_null($map)) {
-					$list = $this -> model -> field($fields) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				} else {
-					$list = $this -> model -> field($fields) -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				}
-			} else {
-				if (is_null($map)) {
-					$list = $this -> model -> field($fields) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				} else {
-					$list = $this -> model -> field($fields) -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
-				}
-			}
+		$query = $this->model;
+		if(!is_null($map)){
+			$query = $query->where($map);
 		}
+		if(!($order === false)){
+			$query = $query->order($order);
+		}
+		if(!($fields === false)){
+			$query = $query->field($fields);
+		}
+		$list = $query -> page($page['curpage'] . ',' . $page['size']) -> select();
+		//旧
+//		if ($fields === false) {
+//
+//			if ($order === false) {
+//				if (is_null($map)) {
+//					$list = $this -> model -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				} else {
+//					$list = $this -> model -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				}
+//			} else {
+//				if (is_null($map)) {
+//					$list = $this -> model -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				} else {
+//					$list = $this -> model -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				}
+//			}
+//		} else {
+//			if ($order === false) {
+//				if (is_null($map)) {
+//					$list = $this -> model -> field($fields) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				} else {
+//					$list = $this -> model -> field($fields) -> where($map) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				}
+//			} else {
+//				if (is_null($map)) {
+//					$list = $this -> model -> field($fields) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				} else {
+//					$list = $this -> model -> field($fields) -> where($map) -> order($order) -> page($page['curpage'] . ',' . $page['size']) -> select();
+//				}
+//			}
+//		}
 
 		if ($list === false) {
 			$error = $this -> model -> getDbError();
