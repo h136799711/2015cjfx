@@ -200,7 +200,13 @@ abstract class Api {
 	 */
 	public function save($map, $entity) {
 
-		$result = $this -> model -> where($map) -> save($entity);
+		$result = $this -> model -> create($entity, 2);
+		if($result === false){
+			$error = $this -> model -> getError();
+			return $this -> apiReturnErr($error);
+		}
+		
+		$result = $this -> model -> where($map) -> save();
 		if ($result === false) {
 			$error = $this -> model -> getDbError();
 			return $this -> apiReturnErr($error);
