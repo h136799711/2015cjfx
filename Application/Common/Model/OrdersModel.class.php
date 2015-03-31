@@ -124,6 +124,6 @@ class OrdersModel extends Model{
 		array('pay_status',self::ORDER_TOBE_PAID,self::MODEL_INSERT),
 		array('order_status',self::ORDER_TOBE_CONFIRMED,self::MODEL_INSERT),
 		array('createtime',NOW_TIME,self::MODEL_INSERT),
-		array('updatetime',"time",self::MODEL_BOTH,"function"),
+		array('updatetime','time',self::MODEL_BOTH,"function"),
 	);
 }

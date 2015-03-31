@@ -68,7 +68,7 @@ class OrdersController extends AdminController {
 		//		}
 
 		//
-		$result = apiCall('Admin/Orders/query', array($map, $page, $order, $params));
+		$result = apiCall('Admin/OrdersInfoView/query', array($map, $page, $order, $params));
 
 		//
 		if ($result['status']) {
@@ -108,7 +108,7 @@ class OrdersController extends AdminController {
 		}
 
 		//
-		$result = apiCall('Admin/Orders/query', array($map, $page, $order, $params));
+		$result = apiCall('Admin/OrdersInfoView/query', array($map, $page, $order, $params));
 
 		//
 		if ($result['status']) {
@@ -129,7 +129,7 @@ class OrdersController extends AdminController {
 	public function deliverGoods() {
 		//		$arr = getDataRange(3);
 		//		$payStatus = I('post.paystatus','');
-		//		$orderStatus = I('post.orderstatus','2');
+		$orderStatus = I('post.orderstatus','3');
 		$orderid = I('post.orderid', '');
 		$userid = I('post.uid', 0);
 		//		$startdatetime = urldecode($arr[0]); //I('startdatetime', , 'urldecode');
@@ -153,12 +153,10 @@ class OrdersController extends AdminController {
 		//		if($payStatus != ''){
 		//			$map['pay_status'] = $payStatus;
 		//		}
-		//		if($orderStatus != ''){
-		//			$map['order_status'] = $orderStatus;
-		//		}else{
-		//			$map['order_status'] = array('ELT',\Common\Model\OrdersModel::ORDER_TOBE_SHIPPED);
-		//		}
-		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED;
+		if($orderStatus != ''){
+			$map['order_status'] = $orderStatus;
+		}
+//		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED;
 		//		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
 		$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
 
@@ -170,7 +168,7 @@ class OrdersController extends AdminController {
 		}
 
 		//
-		$result = apiCall('Admin/Orders/query', array($map, $page, $order, $params));
+		$result = apiCall('Admin/OrdersInfoView/query', array($map, $page, $order, $params));
 
 		//
 		if ($result['status']) {
@@ -192,7 +190,7 @@ class OrdersController extends AdminController {
 		if (IS_GET) {
 			$id = I('get.id', 0);
 			$map = array('id' => $id);
-			$result = apiCall("Admin/Orders/getInfo", array($map));
+			$result = apiCall("Admin/OrdersInfoView/getInfo", array($map));
 			if ($result['status']) {
 				$this -> assign("items", unserialize($result['info']['items']));
 				$this -> assign("order", $result['info']);
@@ -211,7 +209,7 @@ class OrdersController extends AdminController {
 		if (IS_GET) {
 			$id = I('get.id',0);
 			$map = array('id'=>$id);
-			$result = apiCall("Admin/Orders/getInfo", array($map));
+			$result = apiCall("Admin/OrdersInfoView/getInfo", array($map));
 			if($result['status']){
 				$this->assign("order",$result['info']);
 			}else{
@@ -263,6 +261,8 @@ class OrdersController extends AdminController {
 				// 1.发送提醒信息给指定用户
 				$this->sendTextTo($wxuserid,$text);
 				// 2. 修改订单状态为已发货
+				$orderstatus = \Common\Model\OrdersModel::ORDER_SHIPPED;
+				$result = apiCall("Admin/Orders/saveOrderStatus", array($entity['orderid'],$orderstatus));
 				
 				$this->success(L('RESULT_SUCCESS'));
 			}else{
@@ -276,15 +276,16 @@ class OrdersController extends AdminController {
 	 * 退货管理
 	 */
 	public function returned() {
-		if (IS_GET) {
+//		if (IS_GET) {
 			$orderid = I('post.orderid', '');
 			$userid = I('post.uid', 0);
+			$orderStatus = I('post.orderstatus',\Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS);
 			$params = array();
 			$map = array();
 			if (!empty($orderid)) {
 				$map['orderid'] = array('like', $orderid . '%');
 			}
-			$map['order_status'] = \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS;
+			$map['order_status'] = $orderStatus;
 			$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
 			
 			$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
@@ -295,7 +296,7 @@ class OrdersController extends AdminController {
 			}
 
 			//
-			$result = apiCall('Admin/Orders/query', array($map, $page, $order, $params));
+			$result = apiCall('Admin/OrdersInfoView/query', array($map, $page, $order, $params));
 
 			//
 			if ($result['status']) {
@@ -308,11 +309,25 @@ class OrdersController extends AdminController {
 				LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
 				$this -> error($result['info']);
 			}
-		} elseif (IS_POST) {
+//		} elseif (IS_POST) {
+//			
+//		}
+	}
+	
+	/**
+	 * 单个退货操作
+	 */
+	public function returnGoods(){
+		if(IS_GET){
 			$id = I('get.id',0);
-			$result = apiCall("Admin/Orders/savePayStatus",array($id,\Common\Model\OrdersModel::ORDER_RETURNED) );
+			$this->assign("id",$id);
+			$this->display();
+		}elseif(IS_POST){
+			$id = I('post.id',0);
+			$entity = array('order_status'=>\Common\Model\OrdersModel::ORDER_RETURNED,'status_note'=>'|[退货]'.I('post.note',''));
+			$result = apiCall("Admin/Orders/saveByID",array($id,$entity) );
 			if($result['status']){
-				$this->success($result['info']);
+				$this->success("操作成功！",U('Admin/Orders/returned'));
 			}else{
 				$this->error($result['info']);
 			}

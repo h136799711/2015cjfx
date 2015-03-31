@@ -9,27 +9,13 @@
 
   namespace Admin\Api;
   use Common\Api\Api;
-  use Common\Model\OrdersModel;
+  use Common\Model\OrdersInfoViewModel;
   
-  class OrdersApi extends Api{
+  class OrdersInfoViewApi extends Api{
   	
   	protected function _init(){
-  		$this->model = new OrdersModel();
+  		$this->model = new OrdersInfoViewModel();
   	}
 	
-	/**
-	 * 设置订单状态
-	 * TODO：需要锁定数据行写操作
-	 */
-	public function saveOrderStatus($orderid,$orderstatus){
-		$model = new OrdersModel();
-		$result = $model->where(array('orderid'=>$orderid))->save(array('order_status'=>$orderstatus));
-		if($result === FALSE){
-			$error = $model->getDbError();
-			return $this->apiReturnErr($error);
-		}else{
-			return $this->apiReturnSuc($result);
-		}
-	}
 	
  }

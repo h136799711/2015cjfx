@@ -86,7 +86,7 @@
 				//已收货
 				var url = "{:U('Shop/Orders/receive')}?id="+id;
 				if(orderstatus == "已发货"){
-					return "<span class='am-bg-info'>"+orderstatus+"<a href='"+url+"' class='ajax-post confirm'>确认收货>></a></span>";
+					return "<span class='am-bg-info'>"+orderstatus+"</span><a href='"+url+"' class='ajax-post confirm am-bg-warning'>确认收货>></a>";
 				}
 				
 				return "<span class='am-bg-info'>"+orderstatus+"</span>";

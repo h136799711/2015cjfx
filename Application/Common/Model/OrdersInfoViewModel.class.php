@@ -11,7 +11,7 @@ namespace Common\Model;
 
 use Think\Model\ViewModel;
 
-class OrderInfoViewModel extends ViewModel{
+class OrdersInfoViewModel extends ViewModel{
 	
 	public $viewFields = array(
 		"Orders"=>array('_table'=>'__ORDERS__','_type'=>'LEFT','id','orderid','createtime','updatetime','wxuser_id','price','items','status','pay_status','order_status'),

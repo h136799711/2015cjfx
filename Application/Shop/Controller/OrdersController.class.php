@@ -69,7 +69,7 @@ class OrdersController extends ShopController {
 		if($id == 0){
 			$this->error("参数错误！");
 		}
-		$result = apiCall("Admin/Orders/getInfo", array(array('id' => $id)));
+		$result = apiCall("Admin/OrdersInfoVoew/getInfo", array(array('id' => $id)));
 		if ($result['status']) {
 
 			$order = $result['info'];
@@ -266,6 +266,20 @@ class OrdersController extends ShopController {
 
 	}
 	
+	/**
+	 * 确认收货操作
+	 */
+	public function receive(){
+			$id = I('get.id',0);
+			$entity = array('order_status'=>\Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS);
+			$result = apiCall("Shop/Orders/saveByID",array($id,$entity));
+			if($result['status']){
+				$this->success("操作成功！",U('Shop/Index/orders'));
+			}else{
+				LogRecord($result['info'],"[确认收货操作]订单ID=$id");
+				$this->error($result['info']);
+			}
+	}
 	
 	
 
