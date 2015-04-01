@@ -64,11 +64,13 @@ return array(
 		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 	),
 	'PROMOTIONCODE'=>array(
-		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode.jpg',
+		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode_default.jpg',
 		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置
 		'downloadFolder'=>'./Uploads/Qrcode',   //
 		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！', //
 		'codeprefix'=>'UID_',//推广码所带前缀
+		'tmpFolder'=>'./Temp',//临时文件夹可以删除里面的内容
+		'bgImg'=>'./Uploads/QrcodeMerge/qrcode_template.jpg',//背景
 	)
 	
 );
