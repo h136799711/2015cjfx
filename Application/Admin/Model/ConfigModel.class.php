@@ -22,7 +22,9 @@ class ConfigModel extends Model {
 
 	protected $_auto = array(
 	//array(完成字段1,完成规则,[完成条件,附加规则]),
-	array('status', '1', self::MODEL_INSERT), array('create_time', 'time', self::MODEL_INSERT, 'function'), array('update_time', 'time', self::MODEL_BOTH, 'function'));
+	array('status', '1', self::MODEL_INSERT), 
+	array('create_time', 'time', self::MODEL_INSERT, 'function'), 
+	array('update_time', 'time', self::MODEL_BOTH, 'function'));
 
 	/**
 	 * 设置 

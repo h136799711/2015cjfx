@@ -33,18 +33,25 @@ class OrdersController extends ShopController {
 	 */
 	public function orderList(){
 //		if(IS_POST){
+			$p = I('p',0);
 			$userinfo = $this->getUserinfo();
 			$map= array('wxuser_id'=>$userinfo['id']);
-			$page = array('curpage'=>0,'size'=>10);
+			$page = array('curpage'=>$p,'size'=>10);
 			$order = "pay_status asc";
 			$params = false;
-			$fields = "id,orderid,price,createtime,pay_status,order_status";
-			$result = apiCall("Shop/Orders/query",array($map,$page,$order,$params,$fields));
+			$fields = "id,orderid,price,createtime,pay_status,order_status,expressname,expressno";
+			$result = apiCall("Shop/OrdersWithExpress/query",array($map,$page,$order,$params,$fields));
 			if($result['status']){
+				
 //				$json = json_encode($result['info']);
 //				dump($result);
-				$format = $this->formatOrderData($result['info']['list']);
-				$this->success($format);
+//				if(count($result['info']['list']) == 0){
+//					$this->success("0");
+//				}else{
+					$format = $this->formatOrderData($result['info']['list']);
+//					dump($format);
+					$this->success($format);
+//				}
 			}else{
 				$this->error($result['info']);
 			}
@@ -69,7 +76,7 @@ class OrdersController extends ShopController {
 		if($id == 0){
 			$this->error("参数错误！");
 		}
-		$result = apiCall("Admin/OrdersInfoVoew/getInfo", array(array('id' => $id)));
+		$result = apiCall("Admin/OrdersInfoView/getInfo", array(array('id' => $id)));
 		if ($result['status']) {
 
 			$order = $result['info'];
@@ -105,6 +112,7 @@ class OrdersController extends ShopController {
 		if (IS_POST && is_array($userinfo)) {
 			addWeixinLog($userinfo,'[session]saveispost');
 			$entity = array(
+				'wxaccountid'=>$this->wxaccount['id'],
 				'wxuser_id' => $userinfo['id'], 
 				'price' => I('post.totalprice', 0), 
 				'mobile' => I('post.mobile', ''), 

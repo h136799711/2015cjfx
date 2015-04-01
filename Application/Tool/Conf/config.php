@@ -17,9 +17,9 @@ return array(
      	'__IMG__'     => __ROOT__.'/Public/'.MODULE_NAME.'/imgs', // 增加新的JS类库路径替换规则	
      
 	),	
-	
+	'TASK_KEY'=>'hebidu',
     // 数据库配置
     'DB_TYPE'                   =>  'mysql',
     'DB_PORT'                   =>  '3306',
-    'DB_PREFIX'                 =>  'common_',
+    'DB_PREFIX'                 =>  'cjfx_',
 );

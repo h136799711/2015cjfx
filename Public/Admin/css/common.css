@@ -159,6 +159,9 @@ body{
 .padding-lg{
 	padding:15px;
 }
+.input-large{
+	width: 100%;
+}
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (min-width: 768px) {

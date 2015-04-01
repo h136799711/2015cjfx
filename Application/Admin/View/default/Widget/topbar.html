@@ -27,7 +27,7 @@
 					<img class="img-circle " src="{$user.avatar|default='__CDN__/common/avatar.jpg'}" />&nbsp;{$user.username}&nbsp;<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
-				    <li><a href="{:U('Admin/Wxaccount/change')}"><i class="fa fa-exchange"></i>切换公众号[当前:{:getWxAccountID()}]</a></li>
+				    <!--<li><a href="{:U('Admin/Wxaccount/change')}"><i class="fa fa-exchange"></i>切换公众号[当前:{:getWxAccountID()}]</a></li>-->
 				    <li><a href="{:U('Admin/Account/updatepassword')}"><i class="fa fa-key"></i> {:L('BTN_MODIFY_PWD')}</a></li>
 				    <li class="divider"></li>
 				    <li><a href="{:U('Admin/Public/logout')}"><i class="fa fa-power-off"></i> {:L('BTN_EXIT')}</a></li>

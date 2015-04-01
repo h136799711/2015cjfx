@@ -26,6 +26,7 @@ class WxpayNotifyController extends Controller {
 
 		addWeixinLog($xml, '[notify]xml');
 		$entity = array();
+		$flag = false;
 		if ($notify -> checkSign() == TRUE) {
 			if ($notify -> data["return_code"] == "FAIL") {
 
@@ -78,6 +79,7 @@ class WxpayNotifyController extends Controller {
 						if($result['info']['pay_status'] != $paid){//订单不为已支付的情况下更新
 							
 							$wxuserid =  $result['info']['wxuser_id'];
+							$wxaccountid =  $result['info']['wxaccountid'];
 							$entity['wxuserid'] = $wxuserid;
 							//5. 升级用户的用户组
 							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
@@ -103,9 +105,7 @@ class WxpayNotifyController extends Controller {
 								
 							}
 							
-
-							//6. TODO: 发送提醒消息给指定微信号
-							// 
+							$flag = true;
 						}
 					}
 				}
@@ -129,7 +129,34 @@ class WxpayNotifyController extends Controller {
 		$returnXml = $notify -> returnXml();
 
 		echo $returnXml;
+		
+		if($flag){			
+			//6. TODO: 发送提醒消息给指定微信号		
+			
+			$text = "用户ID:$wxuserid,时间:".$entity['time_end'].",订单号:".$entity['out_trade_no'] .",已支付,请关注订单。";
+			$this->sendTextTo($text,$wxaccountid);
+		}
 
+	}
+	/**
+	 * TODO: 后期考虑使用消息队列方式。循环查数据库
+	 */
+	private function sendTextTo($text,$wxaccountid){
+		$result = apiCall("Admin/Wxaccount/getInfo", array(array('id'=>$wxaccountid)));
+		if($result['status']){
+			$wxapi = new \Common\Api\WeixinApi($result['info']['appid'],$result['info']['appsecret']);
+			$map = array('name'=>"WXPAY_OPENID");
+			$result =apiCall("Admin/Config/getInfo", array($map));
+			if($result['status']){
+				$openidlist = split(",",$result['info']['value']);
+				addWeixinLog($openidlist,"接收订单支付成功的OPENID");
+				foreach($openidlist as $openid){
+					$wxapi->sendTextToFans($openid,$text);
+				}
+			}
+		}else{
+			LogRecord($result['info'], __FILE__.__LINE__."发送支付成功消息失败");
+		}
 	}
 
 }

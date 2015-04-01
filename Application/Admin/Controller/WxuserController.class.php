@@ -65,7 +65,7 @@ class WxuserController extends AdminController {
 		$page = array('curpage' => 0, 'size' => 20);
 		$order = " subscribe_time desc ";
 
-		$result = apiCall("Admin/Wxuser/query", array($map, $page, $order, false, 'id,nickname,avatar'));
+		$result = apiCall("Admin/Wxuser/query", array($map, $page, $order, false, 'id,nickname,avatar,openid'));
 
 		if ($result['status']) {
 			$list = $result['info']['list'];
@@ -334,7 +334,7 @@ class WxuserController extends AdminController {
 			$appsecret =  $wxaccount['info']['appsecret'];				
 			$wxapi = new \Common\Api\WeixinApi($appid,$appsecret);
 			$result = $wxapi->getUserList($nextopenid);
-			dump($result);
+//			dump($result);
 			$total = $result['total'];
 			$count = $result['count'];
 			$nextopenid = $result['nextopenid'];

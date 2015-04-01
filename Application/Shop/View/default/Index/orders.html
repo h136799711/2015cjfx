@@ -29,6 +29,7 @@
 				<ul id="container" class="am-list">
 					
 				</ul>
+				<div class=""><a class="am-btn am-btn-block more" href="javascript:query();">加载更多</a></div>
 			</div>
 			<assign name="active" value="2" />
 			<include file="partial/footermenu" />
@@ -39,16 +40,19 @@
 		<script>
 		
 			window.dt = new Date();
+			window.page  = 1;
 //			var isFirst = true;
 			
 			function query(){
-		       		$data = {};
-					$.post("{:U('Shop/Orders/orderList')}",$data).done(function(data){
+		       		var data = {p:window.page++};
+					$.post("{:U('Shop/Orders/orderList')}",data).done(function(data){
 						console.log(data);
 						if(data.status){
+							
 							var cont = $("#container");
 							var list = data.info;
 							if(list == null){
+								$(".more").text("没有了！").hide(2000);
 								return ;
 							}
 							for(var i=0;i<list.length;i++){
@@ -101,8 +105,8 @@
   				html = html+ "<div>订单状态："+getOrderStatus(obj.order_status,obj.id)+"</div>";
   				
   				if(obj.expressname){
-  					html = html+ "<div>快递公司："+$obj.expressname+"</div>";
-  					html = html+ "<div>快递单号："+$obj.expressno+"</div>";
+    					html = html+ "<div>快递公司："+obj.expressname+"</div>";
+    					html = html+ "<div>快递单号："+obj.expressno+"</div>";
   				}
   				$item.html(html);
   				return $item;

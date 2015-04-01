@@ -14,11 +14,15 @@ class WxpayController extends AdminController {
 		if (empty($out_trade_no)) {
 			$out_trade_no = I('post.orderid', '');
 		}
+		
 		//退款的订单号
 		if (empty($out_trade_no)) {
 			$out_trade_no = " ";
 			$this -> error("订单号无效！");
 		} else {
+			if(!$this->check($out_trade_no)){
+				$this -> error("订单号无效！");
+			}
 			$appid = "";
 			$appsecrect = "";
 			$config = C("WXPAY_CONFIG");
@@ -71,7 +75,7 @@ class WxpayController extends AdminController {
 	}
 
 	static $WXPAY_TRADE_STATE = array('SUCCESS' => '支付成功', 'REFUND' => '转入退款', 'NOTPAY' => '未支付', 'CLOSED' => '已关闭', 'REVOKED' => '已撤销', 'USERPAYING' => '用户支付中', 'NOPAY' => '未支付(输入密码或 确认支付超时)', 'PAYERROR' => '支付失败(其他 原因,如银行返回失败)', );
-
+	
 	/**
 	 * 下载对账单某天
 	 */
@@ -84,6 +88,9 @@ class WxpayController extends AdminController {
 			if (empty($bill_date)) {
 				$bill_date = date('Ymd', time() - 24 * 3600);
 			} else {
+//				if(!$this->check($out_trade_no)){
+//					$this -> error("订单号无效！");
+//				}
 				//使用对账单接口
 				$config = C("WXPAY_CONFIG");
 				//使用订单查询接口
@@ -184,6 +191,16 @@ class WxpayController extends AdminController {
 			$result['footer'] = array("title" => $footer_title, "cont" => $footer_cont);
 		}
 		return $result;
+	}
+	
+	private function check($orderid){
+		$map = array("orderid"=>$orderid,"wxaccount"=>getWxAccountID());
+		$result = apiCall("Admin/Orders/getInfo", array($map));
+		if($result['status'] && is_array($result['info'])){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

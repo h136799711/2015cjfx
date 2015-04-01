@@ -30,6 +30,7 @@ class CommWithdrawcashController extends AdminController {
 		}
 
 		$map = array();
+		$map['wxaccountid'] = getWxAccountID();
 		if (!empty($orderid)) {
 			$map['orderid'] = array('like', $orderid . '%');
 			$params['orderid'] = $orderid;
@@ -65,8 +66,8 @@ class CommWithdrawcashController extends AdminController {
 
 	public function query() {
 		$arr = getDataRange(3);
-		$payStatus = I('paystatus', '');
-		$orderid = I('post.orderid', '');
+		$wdcstatus = I('wdcstatus', '');
+		$orderid = I('orderid', '');
 		$userid = I('uid', 0);
 		$startdatetime = urldecode($arr[0]);
 		$enddatetime = urldecode($arr[1]);
@@ -83,11 +84,15 @@ class CommWithdrawcashController extends AdminController {
 		}
 
 		$map = array();
+		$map['wxaccount_id'] = getWxAccountID();
 		if (!empty($orderid)) {
 			$map['orderid'] = array('like', $orderid . '%');
 			$params['orderid'] = $orderid;
 		}
-
+		if(!empty($wdcstatus)){
+			$map['wdcstatus'] = $wdcstatus;
+			$params['wdcstatus'] = $wdcstatus;
+		}
 		//			$map['wdc_status'] = \Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT;
 		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
 
@@ -103,8 +108,7 @@ class CommWithdrawcashController extends AdminController {
 		//
 		if ($result['status']) {
 			$this -> assign('orderid', $orderid);
-			$this -> assign('orderStatus', $orderStatus);
-			$this -> assign('payStatus', $payStatus);
+			$this -> assign('wdcstatus', $wdcstatus);
 			$this -> assign('startdatetime', $startdatetime);
 			$this -> assign('enddatetime', $enddatetime);
 			$this -> assign('show', $result['info']['show']);

@@ -11,6 +11,23 @@ use Think\Controller;
 
 class OrderqueryController extends Controller {
 	
+	public function index(){
+		addWeixinLog("OrderQuery".date("Y-m-d H:i:s",time()),"OrderqueryController");
+		echo "index";
+		
+	}
+	
+	public function testIndex(){
+		$map= array('wxuser_id'=>1);
+		$page = array('curpage'=>0,'size'=>10);
+		$order = "pay_status asc";
+		$params = false;
+		$fields = "id,orderid,price,createtime,pay_status,order_status,expressname,expressno";
+		$result = apiCall("Shop/OrdersWithExpress/query",array($map,$page,$order,$params,$fields));
+		dump($result);
+	}
+	
+	
 	public function test(){
 		$str = "交易时间,公众账号ID,商户号,子商户号,设备号,微信订单号,商户订单号,用户标识,交易类型,交易状态,付款银行,货币种类,总金额,企业红包金额,微信退款单号,商户退款单号,退款金额,企业红包退款金额,退款类型,退款状态,商品名称,商户数据包,手续费,费率
 `2015-03-30 21:25:32,`wx58aea38c0796394d,`10027619,`0,`,`1009360611201503300040393756,`20150330212520177109431,`oqMIVt3Ouq-2Vm0kZOZmZ2rTDlP8,`JSAPI,`SUCCESS,`CFT,`CNY,`0.01,`0.00,`0,`0,`0,`0,`,`,`COS-洁面慕斯+精华套装,`,`0.00020,`2.00%
@@ -41,11 +58,11 @@ class OrderqueryController extends Controller {
 		
 	}
 
-	public function index() {
-		
-		dump(C("WXPAY_CONFIG"));
-		$this -> display();
-	}
+//	public function index() {
+//		
+//		dump(C("WXPAY_CONFIG"));
+//		$this -> display();
+//	}
 
 	public function query() {
 

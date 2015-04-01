@@ -25,6 +25,7 @@
 		$error = "";
 		//1. 增加order表记录
 		$order = array(
+				'wxaccountid'=>$entity['wxaccountid'],
 				'wxuser_id' => $entity['wxuser_id'], 
 				'price' => $entity['price'], 
 				'note' => $entity['note'], 

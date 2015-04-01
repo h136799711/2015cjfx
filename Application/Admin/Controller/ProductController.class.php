@@ -36,6 +36,7 @@ class ProductController extends AdminController {
 		if(!empty($productname)){
 			$map['name'] = array('like',$productname.'%');
 		}
+		$map['wxaccountid'] = getWxAccountID();
 //		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
 
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));

@@ -54,7 +54,7 @@
 				<!-- 购买 -->
 				<div class="fr">
 					<button class="ui-btn ui-btn-danger btnplus">+</button>
-					<input type="text" class="spin item-cnt" value="1" style="width:24px;" />
+					<input type="text" class="spin item-cnt" value="1" readonly="readonly" style="width:24px;" />
 					<button class="ui-btn ui-btn-danger btnminus">-</button>
 				</div>
 			</div>
@@ -286,6 +286,7 @@
 			var isAjaxing = false;
 			$(function(){
 				
+				$(".item-cnt").val(1);
 				$("#pcaloading").hide();
 				$(".btnplus").tap(function(){ plus(); });
 				

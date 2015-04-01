@@ -15,6 +15,14 @@ class OrdersController extends AdminController {
 	protected function _initialize() {
 		parent::_initialize();
 	}
+	
+	/**
+	 * 统计
+	 */
+	public function statics(){
+		
+		$this->display();
+	}
 
 	/**
 	 * 订单管理
@@ -31,7 +39,7 @@ class OrdersController extends AdminController {
 		//I('enddatetime',   , 'urldecode');
 
 		//分页时带参数get参数
-		$params = array('startdatetime' => $startdatetime, 'enddatetime' => ($enddatetime));
+		$params = array('startdatetime' => $startdatetime, 'enddatetime' => ($enddatetime),'wxaccountid'=>getWxAccountID());
 
 		$startdatetime = strtotime($startdatetime);
 		$enddatetime = strtotime($enddatetime);
@@ -42,6 +50,7 @@ class OrdersController extends AdminController {
 		}
 
 		$map = array();
+		$map['wxaccountid'] = getWxAccountID();
 		if (!empty($orderid)) {
 			$map['orderid'] = array('like', $orderid . '%');
 
@@ -90,21 +99,23 @@ class OrdersController extends AdminController {
 	 * 订单确认
 	 */
 	public function sure() {
-		$orderid = I('post.orderid', '');
-		$userid = I('post.uid', 0);
+		$orderid = I('orderid', '');
+		$userid = I('uid', 0);
 		$params = array();
 		$map = array();
-		if (!empty($orderid)) {
-			$map['orderid'] = array('like', $orderid . '%');
-		}
 		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED;
 		$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
-
+		$map['wxaccountid']=getWxAccountID();
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " createtime desc ";
 
+		if (!empty($orderid)) {
+			$map['orderid'] = array('like', $orderid . '%');
+			$params['orderid'] = $orderid;
+		}
 		if ($userid > 0) {
 			$map['wxuser_id'] = $userid;
+			$params['uid'] = $userid;
 		}
 
 		//
@@ -127,34 +138,24 @@ class OrdersController extends AdminController {
 	 * 发货
 	 */
 	public function deliverGoods() {
-		//		$arr = getDataRange(3);
-		//		$payStatus = I('post.paystatus','');
-		$orderStatus = I('post.orderstatus','3');
-		$orderid = I('post.orderid', '');
-		$userid = I('post.uid', 0);
-		//		$startdatetime = urldecode($arr[0]); //I('startdatetime', , 'urldecode');
-		//		$enddatetime = urldecode($arr[1]); //I('enddatetime',   , 'urldecode');
-
-		//分页时带参数get参数
-		//		$params = array('startdatetime' => $startdatetime, 'enddatetime' => ($enddatetime));
+		$orderStatus = I('orderstatus','3');
+		$orderid = I('orderid', '');
+		$userid = I('uid', 0);
 		$params = array();
-		//		$startdatetime = strtotime($startdatetime);
-		//		$enddatetime = strtotime($enddatetime);
-
-		//		if ($startdatetime === FALSE || $enddatetime === FALSE) {
-		//			LogRecord('INFO:' . $result['info'], '[FILE] ' . __FILE__ . ' [LINE] ' . __LINE__);
-		//			$this -> error(L('ERR_DATE_INVALID'));
-		//		}
 
 		$map = array();
+		$map['wxaccountid']=getWxAccountID();
+		$params['wxaccountid'] = $map['wxaccountid'];
 		if (!empty($orderid)) {
 			$map['orderid'] = array('like', $orderid . '%');
+			$params['orderid'] = $orderid;
 		}
 		//		if($payStatus != ''){
 		//			$map['pay_status'] = $payStatus;
 		//		}
 		if($orderStatus != ''){
 			$map['order_status'] = $orderStatus;
+			$params['order_status'] = $orderStatus;
 		}
 //		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED;
 		//		$map['createtime'] = array( array('EGT', $startdatetime), array('elt', $enddatetime), 'and');
@@ -257,7 +258,7 @@ class OrdersController extends AdminController {
 			if($result['status']){
 				
 				$text = "亲，您订单($orderid)已经发货，快递单号：$expressno,快递公司：".$expresslist[$expresscode].",请注意查收";
-				//TODO: 
+				//DONE:
 				// 1.发送提醒信息给指定用户
 				$this->sendTextTo($wxuserid,$text);
 				// 2. 修改订单状态为已发货
@@ -277,17 +278,20 @@ class OrdersController extends AdminController {
 	 */
 	public function returned() {
 //		if (IS_GET) {
-			$orderid = I('post.orderid', '');
-			$userid = I('post.uid', 0);
-			$orderStatus = I('post.orderstatus',\Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS);
+			$orderid = I('orderid', '');
+			$userid = I('uid', 0);
+			$orderStatus = I('orderstatus',\Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS);
 			$params = array();
 			$map = array();
 			if (!empty($orderid)) {
 				$map['orderid'] = array('like', $orderid . '%');
+				$params['orderid'] = $orderid;
 			}
+			$map['wxaccountid'] = getWxAccountID();
 			$map['order_status'] = $orderStatus;
 			$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
 			
+			$params['order_status'] = $orderStatus;
 			$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 			$order = " createtime desc ";
 

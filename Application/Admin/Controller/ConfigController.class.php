@@ -14,7 +14,7 @@ class ConfigController extends AdminController {
 		parent::_initialize();
 		$this -> assignTitle(L('C_CONFIG'));
 	}
-
+	
 	/**
 	 * 配置
 	 */
