@@ -66,8 +66,9 @@ class WxpayNotifyController extends Controller {
 //					LogRecord("out_trade_no ".$entity['out_trade_no'].",transaction_id:".$entity['transaction_id'], "微信支付－[支付成功]");
 					
 					$orderid = $entity['out_trade_no'];
+					
 					//1. 根据订单id来更新订单状态
-					$result = apiCall("Shop/Orders/getInfo", array('orderid'=>$orderid));
+					$result = apiCall("Shop/Orders/getInfo", array(array('orderid'=>$orderid)));
 					//清除缓存
 					$fanskey = "appid_".$entity['appid']."_" . $entity['openid'];
 					S($fanskey,null);
@@ -84,7 +85,7 @@ class WxpayNotifyController extends Controller {
 							//5. 升级用户的用户组
 							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
 							if(!$result['status']){
-								LogRecord($result['info'], "[groupUp]");
+								LogRecord($wxuserid, "[升级用户的用户组失败]");
 							}
 							
 							//3. 更新为已支付，（对数据行要加写锁）
@@ -105,6 +106,7 @@ class WxpayNotifyController extends Controller {
 								
 							}
 							
+							addWeixinLog($result,"[处理微信支付成功通知的处理都已成功！]");
 							$flag = true;
 						}
 					}
@@ -115,6 +117,8 @@ class WxpayNotifyController extends Controller {
 			$result = apiCall("Shop/OrderHistory/add",array($entity));
 			if(!$result['status']){
 				LogRecord($result['info'].";out_trade_no ".$entity['out_trade_no'].",transaction_id:".$entity['transaction_id'], "OrderHistory－[写入数据库失败]");
+			}else{
+				addWeixinLog($result,"[纪录支付回发消息成功！]");
 			}
 						
 			$notify -> setReturnParameter("return_code", "SUCCESS");
@@ -134,6 +138,8 @@ class WxpayNotifyController extends Controller {
 			//6. TODO: 发送提醒消息给指定微信号		
 			
 			$text = "用户ID:$wxuserid,时间:".$entity['time_end'].",订单号:".$entity['out_trade_no'] .",已支付,请关注订单。";
+			
+				addWeixinLog($text,"[发送支付成功提醒消息给指定微信号！]");
 			$this->sendTextTo($text,$wxaccountid);
 		}
 

@@ -29,7 +29,7 @@ class WxuserApi extends \Common\Api\Api{
 		$subsql = "SELECT wxaccount_id,openid FROM  __WXUSER_FAMILY__
 where parent_$level = $wxuserid";
 		
-		$sql = "select wg.alloweddistribution,wg.allowedcomment, wu.groupid,wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.costmoney,wu.status
+		$sql = "select wg.alloweddistribution,wg.allowedcomment, wu.groupid,wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.status
 from ($subsql) as wf left join __WXUSER__ as wu on wf.wxaccount_id = wu.wxaccount_id and wf.openid = wu.openid LEFT JOIN __GROUP_ACCESS__ as wg on wu.groupid = wg.id where wu.status =  1  and wu.id = $id ";
 		
 		$result = M()->query($sql);
@@ -59,7 +59,7 @@ where parent_$level = $wxuserid";
 		$subsql = "SELECT wxaccount_id,openid FROM  __WXUSER_FAMILY__
 where parent_$level = $wxuserid";
 		
-		$sql = "select wg.alloweddistribution,wg.allowedcomment, wu.groupid,wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.costmoney,wu.status
+		$sql = "select wg.alloweddistribution,wg.allowedcomment, wu.groupid,wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.status
 from ($subsql) as wf left join __WXUSER__ as wu on wf.wxaccount_id = wu.wxaccount_id and wf.openid = wu.openid LEFT JOIN __GROUP_ACCESS__ as wg on wu.groupid = wg.id where wu.status =  1 limit ".$page['curpage'] . ',' . $page['size'];
 		
 		$model = M();

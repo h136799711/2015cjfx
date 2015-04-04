@@ -15,12 +15,19 @@ use Think\Controller;
 class TaskController extends Controller{
 	
 	protected function _initialize(){
-		$key = I('get.key','');
-		
-		if(!($key === C('TASK_KEY'))){
-			echo "error";
-			exit();
+//		$key = I('get.key','');
+
+		//20分钟
+		$prev_pro_time = S('TASK_PROCESS_TIME');
+		if($prev_pro_time === false){
+			S('TASK_PROCESS_TIME',time(),20*60);
+		}else{
+			exit("CACHE_PROCESS");
 		}
+//		if(!($key === C('TASK_KEY'))){
+//			echo "error";
+//			exit();
+//		}
 	}
 	
 	/**

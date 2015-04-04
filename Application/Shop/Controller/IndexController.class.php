@@ -236,7 +236,7 @@ class IndexController extends ShopController {
 			if(!	$hasright){
 				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode.jpg";
 			}else{
-				$qrcode = "./Uploads/Qrcode/qrcode_uid".$userinfo['id'].".jpg";
+				$qrcode = "./Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
 				if(!file_exists($qrcode)){
 					
 					$promotionapi = new \Common\Api\PromotioncodeApi(C('PROMOTIONCODE'));
@@ -248,7 +248,7 @@ class IndexController extends ShopController {
 					}
 
 				}
-				$qrcode = __ROOT__."/Uploads/Qrcode/qrcode_uid".$userinfo['id'].".jpg";
+				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
 			}
 			$this->assign("qrcode",$qrcode);
 			$this->display();

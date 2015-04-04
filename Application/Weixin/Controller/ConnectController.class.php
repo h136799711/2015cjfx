@@ -627,27 +627,27 @@ class ConnectController extends WeixinController {
 					}elseif($vo['id'] == $family['parent_2']){
 						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族二级成员";
 						if($dnSendText){
-							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族一级成员";
+							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族二级成员";
 						}
 						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}elseif($vo['id'] == $family['parent_3']){
 						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族三级成员";
 						if($dnSendText){
-							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族一级成员";
+							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族三级成员";
 						}
 						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}elseif($vo['id'] == $family['parent_4']){
 						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族四级成员";
 						if($dnSendText){
-							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族一级成员";
+							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族四级成员";
 						}
 						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}elseif($vo['id'] == $family['parent_5']){
-						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族四级成员";
-						if($dnSendText){
-							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族一级成员";
-						}
-						$this->wxapi->sendTextToFans($vo['openid'],$text);
+//						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族五级成员";
+//						if($dnSendText){
+//							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族五级成员";
+//						}
+//						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}
 				}
 			}	
