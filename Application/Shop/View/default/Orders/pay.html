@@ -25,6 +25,8 @@
 			  width: 100%;
 			  z-index: 10;
 			  background-color: #f8f9fa;
+			  background:#00bc0c;
+			  color: #FFFFFF;
 			}
 			.ui-border-b {
 			  border-bottom: 1px solid #e0e0e0;
@@ -148,6 +150,25 @@ li {
 .contactinfo .ui-list-info{
 	padding:5px;
 }
+.ui-btn-weixin{
+	background:#00bc0c;
+	color: #FFFFFF;
+}
+#submit{
+	width: 100%;
+	padding: 0 13px;
+	min-width: 55px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	font-size: 15px;
+	border-radius: 3px;
+	vertical-align: top;
+	color: #00a5e0;
+	-webkit-box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}
 		</style>
 	</head>
 
@@ -189,10 +210,12 @@ li {
 		</volist>
 				<li><span class="ui-txt-warning">订单总价：{$order.price}元</span></li>
 		</ul>
+		
 		<div class="ui-form">
 			<div class="">
 				<div class="ui-btn-wrap">
-					<a id="submit" href="javascript:callpay();" class="ui-btn-lg ui-btn-danger ">微信支付</a>
+					<!--<a id="submit" href="javascript:callpay();" class="ui-btn-lg ui-btn-weixin ">微信安全支付</a>-->
+					<a id="submit" href="javascript:callpay();" ><img alt="微信安全支付" style="width: 160px;height: auto;" src="__IMG__/btn/weixin-pay.jpg?v=1" /></a>
 				</div>
 			</div>
 		</div>
