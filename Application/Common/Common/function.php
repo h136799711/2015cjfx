@@ -295,7 +295,7 @@ function getOrderStatus($status){
 		case \Common\Model\OrdersModel::ORDER_TOBE_SHIPPED:
 			return "待发货";
 		case \Common\Model\OrdersModel::ORDER_CANCEL:
-			return "已取消";
+			return "已关闭";
 		case \Common\Model\OrdersModel::ORDER_RECEIPT_OF_GOODS:
 			return "已收货";
 		default:
