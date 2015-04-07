@@ -100,15 +100,17 @@ class OrdersController extends AdminController {
 	 */
 	public function sure() {
 		$orderid = I('orderid', '');
+		$paystatus = I('paystatus', \Common\Model\OrdersModel::ORDER_PAID);
 		$userid = I('uid', 0);
 		$params = array();
 		$map = array();
 		$map['order_status'] = \Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED;
-		$map['pay_status'] = \Common\Model\OrdersModel::ORDER_PAID;
+		$map['pay_status'] = $paystatus;
 		$map['wxaccountid']=getWxAccountID();
 		$page = array('curpage' => I('get.p', 0), 'size' => C('LIST_ROWS'));
 		$order = " createtime desc ";
-
+		
+		$params['paystatus'] = $paystatus;
 		if (!empty($orderid)) {
 			$map['orderid'] = array('like', $orderid . '%');
 			$params['orderid'] = $orderid;
@@ -125,6 +127,7 @@ class OrdersController extends AdminController {
 		if ($result['status']) {
 			$this -> assign('orderid', $orderid);
 			$this -> assign('orderStatus', $orderStatus);
+			$this -> assign('payStatus', $paystatus);
 			$this -> assign('show', $result['info']['show']);
 			$this -> assign('list', $result['info']['list']);
 			$this -> display();

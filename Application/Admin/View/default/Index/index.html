@@ -1,6 +1,5 @@
 <extend name="template/base_index" />
 
-
 <block name="area_header">
 
 </block>
@@ -11,6 +10,33 @@
 		{:W('Menus/left')}
 		<div class="admin-main-content">
 			{:W('Menus/breadcrumb')}
+
+			<div class="col-lg-12 col-md-12">
+
+				<div class="col-lg-6 col-md-6 text-center"><a href="{:U('Admin/Orders/deliverGoods')}"><span><i class="fa fa-bus fa-lg"></i>{$paidCnt}</span><p>待确认订单</p></a>
+				</div>
+				<div class="col-lg-6 col-md-6 text-center"><a href="{:U('Admin/CommWithdrawcash/index')}"><span><i class="fa fa-pencil fa-lg"></i>{$checkCnt}</span><p>待审核提现</p></a>
+				</div>
+
+			</div>
+			<div class="table-responsive col-lg-12 col-md-12 well">
+				<table class="table table-condensed table-striped  col-lg-12 col-md-12 text-center">
+					<thead>
+						<th colspan="2" class="text-left">关键指标
+						</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td  class="">订单数</td>
+							<td  class="">访问人数</td>
+						</tr>
+						<tr>
+							<td  class="">{$ordersCnt}</td>
+							<td  class="">{$pageView}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 	</div>

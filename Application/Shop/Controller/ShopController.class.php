@@ -33,7 +33,14 @@ class ShopController extends  Controller {
 		$this -> refreshWxaccount();
 		$url = $this->getCurrentURL();
 		$this->getWxuser($url);
-
+		$this->pageview();
+	}
+	
+	private function pageview(){
+		//TODO: 
+		
+		$result = apiCall("Shop/PageView/inc", array());
+		ifFailedLogRecord($result, __LINE__.__LINE__);
 	}
 	
 	protected function getCurrentURL(){
