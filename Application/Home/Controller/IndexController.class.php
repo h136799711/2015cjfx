@@ -46,8 +46,8 @@ class IndexController extends HomeController {
 	
 	public function index() {
 //		dump('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);	
-		$this->display();
-//		$this->redirect(U('Shop/Index/index'));
+//		$this->display();
+		$this->redirect('Admin/Public/login');
 //		if (IS_GET) {
 //			session("userinfo", null);
 //			$userinfo = null;
