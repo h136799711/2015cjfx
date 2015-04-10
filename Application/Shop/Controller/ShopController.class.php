@@ -15,9 +15,10 @@ class ShopController extends  Controller {
 	protected $wxaccount;
 	protected $wxapi;
 	protected $openid;
+	protected $hasSubscribe = 1;
 	
 	protected function _initialize() {
-
+		
 		// 获取配置
 		$this -> getConfig();
 
@@ -32,13 +33,38 @@ class ShopController extends  Controller {
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
 		$this -> refreshWxaccount();
 		$url = $this->getCurrentURL();
-		$this->getWxuser($url);
+		if(!is_null($this->getWxuser($url))){
+			
+			if($this->hasSubscribe == 0){
+				//未关注公众号的情况下
+				$referrer = I('referrer',0);
+				if($referrer > 0){
+					addWeixinLog($referrer,"未关注！");
+					$promotionApi = new \Common\Api\PromotioncodeApi(C('PROMOTIONCODE'));
+					$result = $promotionApi->isExists($referrer);
+					redirect(U("Shop/Index/referrer",array('qrcode'=>urlencode($result['path']))));
+				}
+//				$this->assign("qrcode",$result['path']);
+//				$this->display("Index:referrer");
+//				exit();
+			}
+			
+			//设置分享链接/标题
+			$shareURL = C("SITE_URL").U('Shop/Index/index',array('token'=>$this->token,'referrer'=>$this->userinfo['id']));
+			
+			$shareImg = C("SITE_URL")."/Public/Shop/imgs/share.png";
+			$this->assign("shareUrl",$shareURL);
+			$this->assign("shareImg",$shareImg);
+			
+		}
 		$this->pageview();
 	}
 	
 	private function pageview(){
 		//TODO: 
-		
+		$bdtj = new \Common\Api\BaiduTjApi(C('BAIDU_TJ_WAP'));
+		$_hmtPixel = $bdtj->trackPageView();
+		$this->assign("hmtPixel",$_hmtPixel);
 		$result = apiCall("Shop/PageView/inc", array());
 		ifFailedLogRecord($result, __LINE__.__LINE__);
 	}
@@ -80,6 +106,10 @@ class ShopController extends  Controller {
 				}
 			}
 		}
+		
+		$this->hasSubscribe = $this -> userinfo['subscribed'];
+		
+		return $this->userinfo;
 	}
 
 	/**
@@ -95,7 +125,7 @@ class ShopController extends  Controller {
 		$wxuser['sex'] = $userinfo['sex'];
 		$wxuser['avatar'] = $userinfo['headimgurl'];
 		$wxuser['subscribe_time'] = $userinfo['subscribe_time'];
-
+		
 		if (!empty($this -> openid) && is_array($this -> wxaccount)) {
 			
 			$map = array('openid' => $this -> openid, 'wxaccount_id' => $this -> wxaccount['id']);
@@ -121,20 +151,21 @@ class ShopController extends  Controller {
 	 * 刷新
 	 */
 	private function refreshWxaccount() {
-		$token = I('get.token', '');
-		if (!empty($token)) {
-			session("shop_token", $token);
+		$this->token = I('get.token', '');
+		if (!empty($this->token)) {
+			session("shop_token", $this->token);
 		} elseif (session("?shop_token")) {
-			$token = session("shop_token");
+			$this->token = session("shop_token");
 		}
 		
-		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $token)));
+		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $this->token)));
 		if ($result['status'] && is_array($result['info'])) {
 			$this -> wxaccount = $result['info'];
 			$this -> wxapi = new \Common\Api\WeixinApi($this -> wxaccount['appid'], $this -> wxaccount['appsecret']);
 		} else {
 			exit("公众号信息获取失败，请重试！");
 		}
+		$this->assign("token",$this->token);
 	}
 
 	/**

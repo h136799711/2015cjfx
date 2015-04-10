@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title>我的推广二维码</title>
+    <style type="text/css">
+	    body{
+	    		padding: 0px;
+    			margin: 0px;
+	    }
+	    div,h2,strong{
+	    		padding: 0px;
+    			margin: 0px;
+	    }
+    		.wrapper{
+    			width:100%;
+    			background: #e94567;
+    			color: #FFFFFF;
+    		}
+    		.wrapper h2,.wrapper h4{
+    			text-align: center;
+    			font-weight: normal;
+    		}
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+	   	<h2>[<strong>{$name}</strong>]</h2>
+	   	<h4>请长按下图，识别图中二维码来关注公众号</h4>
+	   <div class="qrcode">
+	   		<img src="__ROOT__/{$qrcode}" alt="我的二维码" style="width: 100%;"/>
+	   </div>
+    		<include file="partial/tongji" />
+    </div>
+    {__NORUNTIME__}
+</body>
+</html>

@@ -226,6 +226,14 @@ class IndexController extends ShopController {
 //		'id'=>'1','subscribe_time'=>"1400346362",'score'=>99,'groupid'=>0,'referrer'=>2);
 	}
 	
+	public function referrer(){
+		$qrcode = I('qrcode','','urldecode');
+		$qrcode = urldecode($qrcode);
+		$name  = C('BRAND_NAME');
+		$this->assign("name",$name);
+		$this->assign("qrcode",$qrcode);
+		$this->display();
+	}
 	
 	public function myQrcode(){
 		if(IS_GET){
