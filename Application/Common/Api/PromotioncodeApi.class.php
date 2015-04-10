@@ -16,10 +16,11 @@ namespace Common\Api;
 class PromotioncodeApi {
 	
 	private $config = array( //./相对于网站根目录
-		'downloadFolder'=>'./Uploads/Qrcode',//下载的永久二维码
-		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！',
+		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode_default.jpg',
+		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置
+		'downloadFolder'=>'./Uploads/Qrcode',   //
+		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！', //
 		'codeprefix'=>'UID_',//推广码所带前缀
-		'mergeFolder'=>'./Uploads/QrcodeMerge', // 合成后的文件夹
 		'tmpFolder'=>'./Temp',//临时文件夹可以删除里面的内容
 		'bgImg'=>'./Uploads/QrcodeMerge/qrcode_template.jpg',//背景
 	);
@@ -29,6 +30,20 @@ class PromotioncodeApi {
 		if(is_array($config)){
 			$this->config = $config;
 		}
+	}
+	/**
+	 * 指定粉丝的推广二维码
+	 * 
+	 */
+	public function isExists($id){
+		
+		$savefilename = $this->config['mergeFolder'] .'/qrcode_uid'.$id . ".jpg";
+		
+		if(file_exists(realpath($savefilename))){
+			return array('status'=>true,'path'=>$savefilename);
+		}
+		
+		return array('status'=>false,'path'=>$this->config['defaultQrcode']);
 	}
 	/**
 	 * @param $data 通常包含是微信服务器返回来的信息
