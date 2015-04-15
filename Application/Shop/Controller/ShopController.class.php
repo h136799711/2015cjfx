@@ -82,6 +82,9 @@ class ShopController extends  Controller {
 			$this -> openid = $this->userinfo['openid'];
 		}
 		
+		
+		
+		
 		if (!is_array($this -> userinfo)) {
 
 			$code = I('get.code', '');
@@ -108,6 +111,13 @@ class ShopController extends  Controller {
 		}
 		
 		$this->hasSubscribe = $this -> userinfo['subscribed'];
+		//每次都重新从数据库中获取   
+		$map = array('openid' => $this -> openid, 'wxaccount_id' => $this -> wxaccount['id']);
+		$result = apiCall('Weixin/Wxuser/getInfo', array($map));
+		if($result['status']){
+			$this -> userinfo = $result['info'];
+			session("userinfo", $result['info']);
+		} 
 		
 		return $this->userinfo;
 	}

@@ -69,10 +69,12 @@
 						$(".loading").addClass("am-hide");
 					});
 		    	}
-			function getPayStatus(paystatus,id){
+			function getPayStatus(paystatus,id,order_status){
 				var cssClass = "am-bg-success";
-				
 				if(paystatus == "待支付"){
+					if(order_status == "已关闭"){    
+						return "<div >支付状态：<span class='am-bg-warning' >未支付</span></div>";
+					}
 					return "<div >支付状态：<span class='am-bg-warning' >"+paystatus+"</span><a  href='{:C('SITE_URL')}/index.php/Shop/Orders/pay/id/"+id+".shtml?showwxpaytitle=1' >前往支付>></a></div>"
 				}
 				
@@ -101,7 +103,7 @@
   				var html = "<div class='am-bg-danger'>订单编号："+obj.orderid+"</div>";
   				html = html+ "<div>订单金额："+obj.price+"元</div>";
   				html = html+ "<div>订单时间："+obj.createtime+"</div>";
-  				html = html+ getPayStatus(obj.pay_status,obj.id);
+  				html = html+ getPayStatus(obj.pay_status,obj.id,obj.order_status);
   				html = html+ "<div>订单状态："+getOrderStatus(obj.order_status,obj.id)+"</div>";
   				
   				if(obj.expressname){
