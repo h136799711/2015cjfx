@@ -516,9 +516,9 @@ class ConnectController extends WeixinController {
 		if($result['status'] && is_array($result['info']) && $family['status'] && !$this->checkReferrer($result['info']['id'],$family['info'])){
 			$this->wxapi->sendTextToFans($this->getOpenID(),"推荐人无效！");
 			$referrer = $result['info']['referrer'];
+			
 //			return ;
 		}
-		
 		$wxuser = array();
 		$wxuser['wxaccount_id'] = intval($this->wxaccount['id']);
 		$wxuser['openid'] = $openid;
@@ -561,8 +561,10 @@ class ConnectController extends WeixinController {
 				
 		//判断是否已记录
 		if (is_array($result['info'])) {
+			$currentID=$result['info']['id'];
 			//更新
 			$result = apiCall('Weixin/Wxuser/save', array($map, $wxuser));
+			$wxuser['id'] = $currentID;//为后面sendTextToFans调用需要
 		} else {
 			//新增
 			$result = apiCall('Weixin/Wxuser/add', array($wxuser));
@@ -574,6 +576,9 @@ class ConnectController extends WeixinController {
 			//发送消息给父辈们相关人员
 			$family = apiCall("Weixin/WxuserFamily/getInfo",array($map));//当前的家族关系
 			if($family['status']){
+				if(!isset($wxuser['id'])){
+					$wxuser['id'] = $result['info'];
+				}
 				$this->sendTextToFans($wxuser,$family['info'],$dnSendText);
 				return ;
 			}
@@ -613,7 +618,8 @@ class ConnectController extends WeixinController {
 			
 			$map['id'] = array('in',array($family['parent_1'],$family['parent_2'],$family['parent_3'],$family['parent_4'],$family['parent_5']));	
 			
-			$result = apiCall("Weixin/Wxuser/queryNoPaging",array($map,));	
+			addWeixinLog($wxuser,"[发送关注消息给相关用户]");
+			$result = apiCall("Weixin/Wxuser/queryNoPaging",array($map));	
 			if($result['status']){
 				$wxusers =  $result['info'];
 				$levels = array("一","二","三","四","五");
@@ -624,6 +630,12 @@ class ConnectController extends WeixinController {
 							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族一级成员";
 						}
 						$this->wxapi->sendTextToFans($vo['openid'],$text);
+						
+//						$this->wxapi->sendTextToFans($wxuser['openid'],$wxuser['openid']);
+						
+						$text = "恭喜您由【".$vo['nickname']."】推荐成为【".C('BRAND_NAME')."】的第".$wxuser['id'].'位会员！';						
+						$this->wxapi->sendTextToFans($wxuser['openid'],$text);
+						
 					}elseif($vo['id'] == $family['parent_2']){
 						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族二级成员";
 						if($dnSendText){
