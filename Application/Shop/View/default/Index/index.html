@@ -3,14 +3,13 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>COS-洁面慕斯+精华</title>
+		<title>{:C('BRAND_NAME')}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<!-- Set render engine for 360 browser -->
 		<meta name="renderer" content="webkit">
 		
 		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		
-		<!--<script type="text/javascript" src="{:U('Weixin/Weixinjs/index',array('tk'=>$token))}?url="+location.href.split('#')[0]></script>-->
 		
 		 <script type="text/javascript">
 		 	
@@ -98,11 +97,18 @@
 			.img-responsive{
 				max-width: 100%;
 				width:100%;
+				width:640px;
 			}
 			.body{
 				padding-bottom: 60px;
+				width: 100%;
+				max-width: 100%;
 			}
 		</style>
+		<!--<script type="text/javascript" src="__CDN__/imagesloaded/3.1.8/imagesloaded.pkgd.min.js"></script>-->
+		<script type="text/javascript" src="__CDN__/jquery/2.1.1/jquery.min.js"></script>
+		<script type="text/javascript" src="__CDN__/jquery-lazyload/1.9.5/jquery.lazyload.min.js"></script>
+		
 	</head>
 
 	<body>
@@ -126,9 +132,11 @@
 			<div style="width:100%">
 				
 				<div class="body">
-					<img class="img-responsive" src="__IMG__/demo/1.png?v=10" alt="" />
-					<img class="img-responsive" src="__IMG__/demo/2.png?v=10" alt="" />
-					<img class="img-responsive" src="__IMG__/demo/3.png?v=10" alt="" />
+					<for start="1" end="8">
+					<a  href="{:U('Shop/Index/buy',array('pid'=>1))}" >
+						<img class="img-responsive lazy"  src="__CDN__/common/loading-1.gif" data-original="__IMG__/demo/1-{$i}.jpg" alt="图片" />
+					</a>
+					</for>
 				</div>
 				<div class="footer">
 					<div class="fl">
@@ -153,6 +161,10 @@
 		<input type="hidden" id="wxshareDesc" value="赢在一秒！" />
 		<include file="partial/tongji" />
 		{__NORUNTIME__}
+		<script type="text/javascript">
+			$(function(){
+				$("img.lazy").lazyload();
+			})	
+		</script>
 	</body>
-
-</html>
+	</html>
