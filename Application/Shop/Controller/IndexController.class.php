@@ -242,7 +242,7 @@ class IndexController extends ShopController {
 			
 			$realpath = realpath("./Uploads/QrcodeMerge/");
 			if(!	$hasright){
-				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode.jpg";
+				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode.jpg?v=1.2";
 			}else{
 				$qrcode = "./Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg";
 				if(!file_exists($qrcode)){
