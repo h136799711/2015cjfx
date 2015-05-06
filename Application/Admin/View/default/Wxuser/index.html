@@ -15,7 +15,7 @@
 			<div class="table-responsive well">
 				
 				<div class="filter-controls">
-					<a href="{:U('Admin/Wxuser/syncUser')}" class="btn btn-sm btn-primary"><i class="fa fa-refresh"></i>同步公众号会员</a>
+					<a href="{:U('Admin/Wxuser/syncUser')}" class="btn btn-sm btn-danger"><i class="fa fa-refresh"></i>同步会员[请勿随意点击]</a>
 				</div>
 				<!--,array('startdatetime'=>I('get.startdatetime',''),'enddatetime'=>I('get.enddatetime',''))-->
 				<!-- 过滤\查询按钮 -->
@@ -23,6 +23,14 @@
 					<!-- 日期查询 -->
 					<form action="{:U('Admin/Wxuser/index')}" method="post" class="form-inline">
 						<div class="form-group">
+							<div class="input-group">
+								<div class="input-group-addon">
+									昵称
+								</div>
+								<input type="text" name="nickname" value="{$nickname}" class="form-control input-short" />
+							</div>
+						</div>
+						<!--<div class="form-group">
 							<div class="input-group">
 								<div class="input-group-addon">
 									关注时间
@@ -34,7 +42,7 @@
 								</div>
 								<input type="text" name="enddatetime" id="enddatetime" class="form-control input-short" value="{:date('Y-m-d',$enddatetime)}" />
 							</div>
-						</div>
+						</div>-->
 						<button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i>{:L('BTN_SEARCH')}</button>
 					</form>
 				</div>
@@ -102,16 +110,16 @@
 
 			<script type="text/javascript">
 				$(function() {
-						$('#startdatetime').datetimepicker({
-							lang: 'ch',
-							format:'Y-m-d',
-							timepicker:false,
-						});
-						$('#enddatetime').datetimepicker({
-							lang: 'ch',
-							format:'Y-m-d',
-							timepicker:false,
-						});
+//						$('#startdatetime').datetimepicker({
+//							lang: 'ch',
+//							format:'Y-m-d',
+//							timepicker:false,
+//						});
+//						$('#enddatetime').datetimepicker({
+//							lang: 'ch',
+//							format:'Y-m-d',
+//							timepicker:false,
+//						});
 				});
 			</script>
 

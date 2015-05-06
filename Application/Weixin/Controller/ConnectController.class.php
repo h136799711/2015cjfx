@@ -462,12 +462,25 @@ class ConnectController extends WeixinController {
 	 * 更新微信用户家族关系
 	 */
 	private function updateWxuserFamily($id,$parentFamily){
+		$family_level = C("FAMILY_LEVEL");
+		$family_level = intval($family_level);
+		
 		$family = array(
 			'parent_1'=>$parentFamily['wxuserid'],
-			'parent_2'=>$parentFamily['parent_1'],
-			'parent_3'=>$parentFamily['parent_2'],
-			'parent_4'=>$parentFamily['parent_3'],//4级
+//			'parent_2'=>$parentFamily['parent_1'],
+//			'parent_3'=>$parentFamily['parent_2'],
+//			'parent_4'=>$parentFamily['parent_3'],//4级
 		);
+		if($family_level < 1){
+			$family_level = 1;
+		}
+		if($family_level > 5){
+			$family_level = 5;
+		}
+		for($i = 2;$i<=$family_level;$i++){
+			$family['parent_'.$i] = $parentFamily['parent_'.($i-1)];
+		}
+		
 		addWeixinLog($family,$id.'[updateWxuserFamily]');
 		
 		$result = apiCall("Weixin/WxuserFamily/saveByID",array($id,$family));

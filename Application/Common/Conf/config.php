@@ -5,6 +5,7 @@
  
 
 return array(
+	'FAMILY_LEVEL'=>3,//分销级数
 	'LOAD_EXT_CONFIG' => 'express', 
 	//唯一管理员用户配置	
    'USER_ADMINISTRATOR' => 1, //管理员用户ID

@@ -139,7 +139,7 @@ where parent_1 = $wxuserid or parent_2 = $wxuserid or parent_3 = $wxuserid or pa
 		$subsql = "SELECT wxaccount_id,openid FROM  __WXUSER_FAMILY__
 where parent_1 = $wxuserid or parent_2 = $wxuserid or parent_3 = $wxuserid or parent_4 = $wxuserid";
 		
-		$sql = "select wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.costmoney,wu.status
+		$sql = "select wu.subscribe_time, wu.wxaccount_id,wu.id,wu.nickname,wu.avatar,wu.referrer,wu.openid,wu.score,wu.money,wu.status
 from ($subsql) as wf 
 left join __WXUSER__ as wu on wf.wxaccount_id = wu.wxaccount_id and wf.openid = wu.openid
 where wu.status =  1 limit ".$page['curpage'] . ',' . $page['size'];
