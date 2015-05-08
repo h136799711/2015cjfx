@@ -13,6 +13,7 @@ class IndexController extends AdminController {
 		$checkCnt = $this->countWithDrawcash();
 		$ordersCnt = $this->countOrders();
 		$pageView = $this->getPageView();
+		
 		$this->assign("pageView",$pageView);
 		$this->assign("paidCnt",$paidCnt);
 		$this->assign("ordersCnt",$ordersCnt);
@@ -25,7 +26,7 @@ class IndexController extends AdminController {
 	}
 	
 	private function countPaidOrders(){
-		$map = array('pay_status'=>\Common\Model\OrdersModel::ORDER_PAID,'order_status'=>\Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED);
+		$map = array('wxaccountid'=>getWxAccountID(),'pay_status'=>\Common\Model\OrdersModel::ORDER_PAID,'order_status'=>\Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED);
 		$result = apiCall("Admin/Orders/count", array($map));
 		if($result['status']){
 			return $result['info'];
@@ -37,7 +38,7 @@ class IndexController extends AdminController {
 	
 	private function countOrders(){
 		$map = array('test'=>'test');
-		$map = array('pay_status'=>\Common\Model\OrdersModel::ORDER_PAID,'order_status'=>\Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED);
+		$map = array('wxaccountid'=>getWxAccountID(),'pay_status'=>\Common\Model\OrdersModel::ORDER_PAID,'order_status'=>\Common\Model\OrdersModel::ORDER_TOBE_CONFIRMED);
 		$result = apiCall("Admin/Orders/count", array($map));
 		if($result['status']){
 			return $result['info'];
@@ -48,7 +49,7 @@ class IndexController extends AdminController {
 	}
 	
 	private function countWithDrawcash(){
-		$map = array('wdc_status'=>\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT);
+		$map = array('wxaccountid'=>getWxAccountID(),'wdc_status'=>\Common\Model\CommissionWithdrawcashModel::WDC_STATUS_PENDING_AUDIT);
 		$result = apiCall("Admin/CommissionWithdrawcash/count", array($map));
 		if($result['status']){
 			return $result['info'];
