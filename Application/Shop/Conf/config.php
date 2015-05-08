@@ -12,7 +12,6 @@ return array(
 	'SESSION_PREFIX'=>'Shop_',
     // 数据库配置
     'DB_TYPE'                   =>  'mysql',
-    'DB_NAME'                   =>  'boye_2015cjfx',
     'DB_PORT'                   =>  '3306',
     'DB_PREFIX'                 =>  'cjfx_',
     

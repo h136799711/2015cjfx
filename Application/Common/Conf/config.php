@@ -30,10 +30,10 @@ return array(
     'URL_MODEL'                 =>  1, // 如果你的环境不支持PATHINFO 请设置为3
     // 数据库配置
     'DB_TYPE'                   =>  'mysql',
-    'DB_HOST'                   =>  'localhost',
-    'DB_NAME'                   =>  'boye_2015cjfx', //微信api数据库
-    'DB_USER'                   =>  'root',
-    'DB_PWD'                    =>  '1',
+    'DB_HOST'                   =>  'rdsrrbifmrrbifm.mysql.rds.aliyuncs.com',
+    'DB_NAME'                   =>  'boye_20150508', //微信api数据库
+    'DB_USER'                   =>  'boye',
+    'DB_PWD'                    =>  'bo-ye2015BO-YE',
     'DB_PORT'                   =>  '3306',
     'DB_PREFIX'                 =>  'common_',
    //调试
@@ -41,7 +41,7 @@ return array(
     'LOG_TYPE'              =>  'Db',
 	'LOG_LEVEL'  =>'EMERG,ALERT,CRIT,ERR', // 只记录EMERG ALERT CRIT ERR 错误
     'LOG_DB_CONFIG'=>array(
-		'dsn'=>'mysql://root:1@127.0.0.1:3306/boye_2015cjfx' //本地日志数据库
+		'dsn'=>'mysql://boye:bo-ye2015BO-YE@rdsrrbifmrrbifm.mysql.rds.aliyuncs.com:3306/boye_20150508' //本地日志数据库
 	),
     // Session 配置
     'SESSION_PREFIX' => 'oauth_',
@@ -58,9 +58,9 @@ return array(
 		'appid'=>'wx58aea38c0796394d',
 		'appsecret'=>'3e1404c970566df55d7314ecfe9ff437',
 		'mchid'=>'10027619',
-		'notifyurl'=>'http://1.test.8raw.com/index.php/Shop/WxpayNotify/index',
+		'notifyurl'=>'http://20150508.itboye.com/index.php/Shop/WxpayNotify/index',
 		'key'=>'755c9713b729cd82467ac592ded397ee',//在微信发送的邮件中查看,patenerkey
-		'jsapicallurl'=>'http://1.test.8raw.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
+		'jsapicallurl'=>'http://20150508.itboye.com/index.php/Shop/Orders/pay?showwxpaytitle=1',
 		'sslcertpath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 		'sslkeypath'=>'/alidata/8rawcert/10027619/apiclient_cert.pem',
 	),

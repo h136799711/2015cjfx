@@ -17,6 +17,55 @@ class WxuserApi extends \Common\Api\Api{
 		$this->model = new WxuserModel();
 	}
 	
+	/**
+	 * 升级用户组
+	 */
+	public function groupUp($wxuserid){
+		
+		$result = $this->model->where(array('id'=>$wxuserid))->find();
+		
+		if($result === FALSE){
+			$error = $this->model->getDbError();
+			return $this -> apiReturnErr($error);
+			
+		}else{
+			$groupid = $result['groupid'];
+//			dump($groupid);
+			addWeixinLog("用户组升级","groupUp");
+			addWeixinLog($groupid,"groupUp");
+			addWeixinLog($result,"groupUp");
+			// 获取用户组信息
+			$group = apiCall("Shop/WxuserGroup/getInfo",array(array('id'=>$groupid)));
+//			dump($group);
+
+			addWeixinLog($group,"groupUp");
+			if($group['status']){
+				if(is_null($group['info'])){
+					$error = false;
+					return $this -> apiReturnErr($error);
+				}
+				$nextgroupid = $group['info']['nextgroupid'];
+				if($nextgroupid >= 0){
+					
+					$result = $this->model->where(array('id'=>$wxuserid))->save(array('groupid'=>$nextgroupid));
+					addWeixinLog(serialize($result).$wxuserid.'-'.$nextgroupid,"groupUp save");
+					if($result === false){
+						$error = $this->model->getDbError();
+						return $this -> apiReturnErr($error);
+					}else{
+						return $this -> apiReturnSuc($result);
+					}
+				}else{
+						return $this -> apiReturnSuc($nextgroupid);
+				}
+			}else{
+				$error = $group['info'];
+				return $this -> apiReturnErr($error);
+			}
+		}
+	
+	}
+	
 	
 	/**
 	 * 查询子级会员

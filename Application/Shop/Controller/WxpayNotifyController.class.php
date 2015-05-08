@@ -83,7 +83,7 @@ class WxpayNotifyController extends Controller {
 							$wxaccountid =  $result['info']['wxaccountid'];
 							$entity['wxuserid'] = $wxuserid;
 							//5. 升级用户的用户组
-							$result = apiCall("Admin/Wxuser/groupUp",array($wxuserid));
+							$result = apiCall("Shop/Wxuser/groupUp",array($wxuserid));
 							if(!$result['status']){
 								LogRecord($wxuserid, "[升级用户的用户组失败]");
 							}
