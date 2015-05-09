@@ -108,7 +108,7 @@ class ConnectController extends WeixinController {
 					S($fanskey,  $result['info'],600);//10分钟
 					$this -> fans = $result['info'];
 				} else {
-					//$this->addWxuser();
+					$this->addWxuser();
 					$this -> fans = null;
 					S($fanskey,  null);//清除
 				}

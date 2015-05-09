@@ -31,8 +31,11 @@ class PromotioncodePlugin extends  WeixinPlugin{
 			LogRecord("wxaccount参数为empty", "[PromotioncodePlugin]".__LINE__);
 			return array("2二维码推广插件[调用失败]","text");
 		}
-		
+		if(!isset($data['regenerate'])){
+			$data['regenerate'] = false;
+		}
 		$result = $promotionapi->process($data['wxaccount']['appid'], $data['wxaccount']['appsecret'],$data['fans'],$data['regenerate']);
+
 		if($result['status']){
 			return array($result['info'],"image");
 		}else{
