@@ -222,7 +222,15 @@ class ConnectController extends WeixinController {
 				addWeixinLog($this->getPluginParams(),"[Promotioncode]");
 				$return = pluginCall($this->Plugins['_promotioncode_'],array($this->getPluginParams()));
 				
+				addWeixinLog($return,"[Promotioncode return]");
 //				$return = pluginCall("Promotioncode",array($this->getPluginParams()));
+				break;
+			case 'regenerate_qrcode' :
+				addWeixinLog('重新生成二维码',"[Promotioncode]");
+				$params = $this->getPluginParams();
+				$params['regenerate'] = true;
+				$return = pluginCall($this->Plugins['_promotioncode_'],array($params));
+				
 				break;
 			default :
 				//TODO: 可以检测用户请求数

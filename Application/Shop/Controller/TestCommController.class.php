@@ -26,6 +26,11 @@ class TestCommController extends  Controller{
 		}
 	}
 	
+	public function testImage(){
+		
+		$this->display("index");
+	}
+	
 	public function testAdded(){
 		$wxaccount_id = "1"; 
 		$percent = C('COMMISSION_RATIO');

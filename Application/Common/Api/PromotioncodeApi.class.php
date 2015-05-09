@@ -47,9 +47,10 @@ class PromotioncodeApi {
 	}
 	/**
 	 * @param $data 通常包含是微信服务器返回来的信息
+	 * @param $regenerate 重新生成
 	 * @return 返回 Wechat可处理的数组
 	 */
-	function process($appid,$appsecret,$fans){
+	function process($appid,$appsecret,$fans,$regenerate=false){
 		
 		//检测是否有权限生成二维码
 		if(!$this->hasAuthorized($fans)){
@@ -66,11 +67,12 @@ class PromotioncodeApi {
 			return array('status'=>false,'info'=>'获取失败，请重试！');
 		}
 		//
-		$realfile = $this->getPublicityPicture($fans,$relativefile);
+		$realfile = $this->getPublicityPicture($fans,$relativefile,$regenerate);
 //		addWeixinLog($realfile,"推广二维码[realfile]");
 		
 		$media_id = S("PromotioncodePlugin_".$fans['id']);
-		if(empty($media_id)){
+		
+		if(empty($media_id) && $regenerate === false){
 			$media_id = $this -> wxapi->uploadMaterial($realfile);
 			if($media_id['status']){
 				$media_id = $media_id['msg']->media_id;
@@ -87,7 +89,7 @@ class PromotioncodeApi {
 	 * 生成更完善效果的带推广二维码的宣传图片
 	 * TODO:生成宣传图片
 	 */
-	private function getPublicityPicture($fans,$relativefile){
+	private function getPublicityPicture($fans,$relativefile,$regenerate=false){
 		$nickname = $fans['nickname'];//昵称
 		$avatar = $fans['avatar'];
 		$brandName = C('BRAND_NAME');//品牌名称
@@ -97,33 +99,30 @@ class PromotioncodeApi {
 		$tmppath = realpath($this->config['tmpFolder']) . '/';
 		
 		$savefilename = $this->config['mergeFolder'] .'/qrcode_uid'.$fans['id'] . ".jpg";
+		
+		if(file_exists(realpath($savefilename)) && $regenerate === false){
+			//取缓存的
+			return realpath($savefilename);	
+		}
+		
 		//TODO: 判断是否已生成过，是则返回
 		//需要合成的图片
 		$arr = array( 
 			array("resource" => $avatar, 
-		"isremote" => true, "x" => 180, "y" => 70, "w" => 70, "h" => 70, 'type' => 'image'), 
+		"isremote" => true, "x" => 45, "y" => 45, "w" => 150, "h" => 150, 'type' => 'image'), 
 			array("resource" => $relativefile, 
-			"isremote" => false, "x" => 205, "y" => 545, "w" => 240, "h" => 240, 'type' => 'image'), 
-			array("resource" => $avatar, 
-		"isremote" => true, "x" => 300, "y" => 640, "w" => 45, "h" => 45, 'type' => 'image'), 
+			"isremote" => false, "x" => 175, "y" => 470, "w" => 295, "h" => 295, 'type' => 'image'), 
+//			array("resource" => $avatar, 
+//		"isremote" => true, "x" => 280, "y" => 570, "w" => 45, "h" => 45, 'type' => 'image'), 
 			array("resource" => $nickname, 					
-					"x" => 322, 
-					"y" => 94, 
+					"x" => 262, 
+					"y" => 115, 
 					'type' => 'text',
 					'font'=>realpath('./Public/cdn/fonts/daheiti.ttf'),
 					'size'=>15,
 					'angle'=>0,
-					'color'=>array(255,255,155),
+					'color'=>array(255,255,133),
 				),
-			array("resource" => $brandName, 					
-				"x" => 325, 
-				"y" => 125, 
-				'type' => 'text',
-				'font'=>realpath('./Public/cdn/fonts/daheiti.ttf'),
-				'size'=>14,
-				'angle'=>0,
-				'color'=>array(255,255,155),
-			),
 		 );
 		
 //		addWeixinLog("2","推广二维码");

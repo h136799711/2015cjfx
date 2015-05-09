@@ -16,5 +16,5 @@ return array(
     'DB_PREFIX'                 =>  'cjfx_',
     
 	'SHOW_PAGE_TRACE'=>false,
-	
+	'SHOP_TOKEN'=>'aestpjof1431088862',
 );

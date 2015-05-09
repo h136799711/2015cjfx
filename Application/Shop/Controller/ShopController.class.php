@@ -33,6 +33,8 @@ class ShopController extends  Controller {
 		C('SHOW_PAGE_TRACE', false);//设置不显示trace
 		$this -> refreshWxaccount();
 		$url = $this->getCurrentURL();
+		
+		
 		if(!is_null($this->getWxuser($url))){
 			
 			if($this->hasSubscribe == 0){
@@ -59,6 +61,9 @@ class ShopController extends  Controller {
 		}
 		$this->pageview();
 	}
+	
+	
+	
 	
 	private function pageview(){
 		//TODO: 
@@ -166,6 +171,10 @@ class ShopController extends  Controller {
 			session("shop_token", $this->token);
 		} elseif (session("?shop_token")) {
 			$this->token = session("shop_token");
+		}
+		
+		if(empty($this->token)){
+			$this->token = C("SHOP_TOKEN");
 		}
 		
 		$result = apiCall('Weixin/Wxaccount/getInfo', array( array('token' => $this->token)));

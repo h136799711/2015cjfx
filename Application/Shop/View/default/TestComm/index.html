@@ -116,23 +116,12 @@
 
 	<body>
 		
-		<empty name="userinfo">
-			<div>
-				无法获取您的信息，请使用微信打开！
-			</div>
-			<else/>
 			<div style="width:100%">
 				
 				<div class="body">
-					<a  href="{:U('Shop/Index/buy',array('pid'=>1))}" >
-						<img class="img-responsive " style="display: block;"  src="__IMG__/demo/640_1.jpg" alt="图片" />
-					</a>
-					<a  href="{:U('Shop/Index/buy',array('pid'=>1))}" >
-						<img class="img-responsive " style="display: block;"  src="__IMG__/demo/640_2.jpg" alt="图片" />
-					</a>
-					<for start="3" end="9">
+					<for start="1" end="9">
 						<a  href="{:U('Shop/Index/buy',array('pid'=>1))}" >
-							<img class="img-responsive lazy" style="display: block;"  src="__CDN__/common/loading-1.gif" data-original="__IMG__/demo/640_{$i}.jpg" alt="图片" />
+							<img class="img-responsive lazy"  src="__CDN__/common/loading-1.gif" data-original="__IMG__/demo/640_{$i}.jpg" alt="图片" />
 						</a>
 					</for>
 				</div>
@@ -151,7 +140,6 @@
 					</div>
 				</div>
 			</div>
-		</empty>
 		<!-- 微信分享内容-->
 		<input type="hidden" id="wxshareTitle" value="加入我们" />
 		<input type="hidden" id="wxshareLink" value="{$shareUrl}" />
