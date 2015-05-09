@@ -32,7 +32,7 @@ class PromotioncodePlugin extends  WeixinPlugin{
 			return array("2二维码推广插件[调用失败]","text");
 		}
 		
-		$result = $promotionapi->process($data['wxaccount']['appid'], $data['wxaccount']['appsecret'],$data['fans']);
+		$result = $promotionapi->process($data['wxaccount']['appid'], $data['wxaccount']['appsecret'],$data['fans'],$data['regenerate']);
 		if($result['status']){
 			return array($result['info'],"image");
 		}else{

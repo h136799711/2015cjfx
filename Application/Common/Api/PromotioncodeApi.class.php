@@ -71,8 +71,8 @@ class PromotioncodeApi {
 //		addWeixinLog($realfile,"推广二维码[realfile]");
 		
 		$media_id = S("PromotioncodePlugin_".$fans['id']);
-		
-		if(empty($media_id) && $regenerate === false){
+		//
+		if(empty($media_id) || $regenerate === true){
 			$media_id = $this -> wxapi->uploadMaterial($realfile);
 			if($media_id['status']){
 				$media_id = $media_id['msg']->media_id;
