@@ -68,7 +68,7 @@ return array(
 		'defaultQrcode'=>'./Uploads/QrcodeMerge/qrcode_default.jpg',
 		'mergeFolder'=>'./Uploads/QrcodeMerge', //合并后的二维码存储位置
 		'downloadFolder'=>'./Uploads/Qrcode',   //
-		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！', //
+		'noAuthorizedMsg'=>'您还未成为族长，不能生成专属二维码！请<a href="http://20150508.itboye.com/index.php/Shop/Index/index">立即点击购买</a>成为族长!', //
 		'codeprefix'=>'UID_',//推广码所带前缀
 		'tmpFolder'=>'./Temp',//临时文件夹可以删除里面的内容
 		'bgImg'=>'./Uploads/QrcodeMerge/qrcode_template.jpg',//背景
