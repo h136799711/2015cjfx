@@ -670,11 +670,11 @@ class ConnectController extends WeixinController {
 						}
 						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}elseif($vo['id'] == $family['parent_4']){
-						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族四级成员";
-						if($dnSendText){
-							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族四级成员";
-						}
-						$this->wxapi->sendTextToFans($vo['openid'],$text);
+//						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族四级成员";
+//						if($dnSendText){
+//							$text = "【".$wxuser['nickname']."】通过二维码重新关注了本公众号，重新成为您的家族四级成员";
+//						}
+//						$this->wxapi->sendTextToFans($vo['openid'],$text);
 					}elseif($vo['id'] == $family['parent_5']){
 //						$text = "【".$wxuser['nickname']."】通过二维码关注了本公众号，成为您的家族五级成员";
 //						if($dnSendText){

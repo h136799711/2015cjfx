@@ -318,3 +318,13 @@ function getPayStatus($status){
 			return "未知";
 	}
 }
+
+function getSex($sex){
+	if($sex == 0){
+		return "女";
+	}elseif($sex == 1){
+		return "男";
+	}else{
+		return "未知";
+	}
+}
