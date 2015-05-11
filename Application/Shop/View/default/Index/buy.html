@@ -270,7 +270,7 @@
 					$cnt = $(".shopcart-item-cnt").text();
 					$(".shopcart-item-cnt").text(parseInt($cnt)+1);
 					$(".item-cnt").val(parseInt($cnt)+1);
-					$(".shopcart-total-price").text((parseInt($cnt)+1)*price);
+					$(".shopcart-total-price").text(((parseInt($cnt)+1)*price).toFixed(2));
 			}
 			//减数量
 			function minus(){
@@ -281,7 +281,7 @@
 					}
 					$(".shopcart-item-cnt").text(parseInt($cnt)-1);
 					$(".item-cnt").val(parseInt($cnt)-1);
-					$(".shopcart-total-price").text((parseInt($cnt)-1)*price);
+					$(".shopcart-total-price").text(((parseInt($cnt)-1)*price).toFixed(2));
 			}
 			var isAjaxing = false;
 			$(function(){
