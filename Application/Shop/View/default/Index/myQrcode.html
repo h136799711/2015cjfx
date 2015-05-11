@@ -13,9 +13,13 @@
 </head>
 <body>
     <div class="wrapper">
-	   <div class="qrcode">
+    		<eq name="tip" value="1">
+    		<div class="am-text-danger am-text-center">您尚未成为族长，不能生成专属二维码！</div>
+    		<else/>
+	   	<div class="qrcode">
 	   		<img src="{$qrcode}" alt="我的二维码" style="width: 100%;"/>
-	   </div>
+	   	</div>
+    		</eq>
     		
     		<assign name="active" value="4" />
         <include file="partial/footermenu"  />

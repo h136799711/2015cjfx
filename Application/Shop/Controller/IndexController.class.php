@@ -243,7 +243,9 @@ class IndexController extends ShopController {
 			$realpath = realpath("./Uploads/QrcodeMerge/");
 			if(!	$hasright){
 				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode_default.jpg";
+				$tip = 1;
 			}else{
+				$tip = 0;
 				$qrcode = "./Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg?v=".time();
 				if(!file_exists($qrcode)){
 					
@@ -258,7 +260,9 @@ class IndexController extends ShopController {
 				}
 				$qrcode = __ROOT__."/Uploads/QrcodeMerge/qrcode_uid".$userinfo['id'].".jpg?v=".time();
 			}
+			
 			$this->assign("qrcode",$qrcode);
+			$this->assign("tip",$tip);
 			$this->display();
 		}
 	}
@@ -266,7 +270,7 @@ class IndexController extends ShopController {
 	private function hasAuthority($userinfo){
 		if(empty($userinfo) || !isset($userinfo['groupid'])){return false;}
 		$groupid = $userinfo['groupid'];
-		if($groupid <= 0 ){
+		if($groupid != C('ROLE_ZUZHANG') ){
 			return false;
 		}
 //		addWeixinLog($groupid,"[用户组]");

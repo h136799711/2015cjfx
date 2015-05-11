@@ -51,9 +51,9 @@ class PromotioncodeApi {
 	 * @return 返回 Wechat可处理的数组
 	 */
 	function process($appid,$appsecret,$fans,$regenerate=false){
-		
+		$hasright = $this->hasAuthorized($fans);
 		//检测是否有权限生成二维码
-		if(!$this->hasAuthorized($fans)){
+		if($hasright === false){
 			return array('status'=>false,'info'=>$this->config['noAuthorizedMsg']);
 		}
 		
@@ -138,9 +138,10 @@ class PromotioncodeApi {
 	private function hasAuthorized($fans){
 		if(empty($fans) || !isset($fans['groupid'])){return false;}
 		$groupid = $fans['groupid'];
-		if($groupid == 0){
+		if($groupid != C('ROLE_ZUZHANG')){
 			return false;
 		}
+		
 		$result = apiCall("Admin/GroupAccess/getInfo", array('wxuser_group_id'=>$groupid));
 		if($result['status'] && is_array($result['info'])){
 			if($result['info']['alloweddistribution'] == 1){

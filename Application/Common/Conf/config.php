@@ -72,6 +72,6 @@ return array(
 		'codeprefix'=>'UID_',//推广码所带前缀
 		'tmpFolder'=>'./Temp',//临时文件夹可以删除里面的内容
 		'bgImg'=>'./Uploads/QrcodeMerge/qrcode_template.jpg',//背景
-	)
-	
+	),
+	'ROLE_ZUZHANG'=>11,
 );
